@@ -42,11 +42,11 @@ namespace TDFramework.UI
     public class UIManager : MonoBehaviour, ISingleton
     {
 
-        [SerializeField]  private Camera mUICamera;
+        #region propertity
+
+        [SerializeField] private Camera mUICamera;
         [SerializeField] private Canvas mUICanvas;
         [SerializeField] private Transform[] mUILayers;
-
-        #region propertity
         private Stack<UIPanelInfo> mStacks;
         private Dictionary<string, IPanel> mLoadPanels;
         #endregion
@@ -54,7 +54,7 @@ namespace TDFramework.UI
         public Camera UICamera { get => mUICamera; }
         public Canvas UICanvas { get => mUICanvas; }
 
-        public Transform GetTransformByUILevel(UILevel level)
+        private Transform GetTransformByUILevel(UILevel level)
         {
             return mUILayers[level.GetHashCode()];
         }
@@ -63,6 +63,7 @@ namespace TDFramework.UI
         {
             mLoadPanels = new Dictionary<string, IPanel>();
             mStacks = new Stack<UIPanelInfo>();
+            GetTransformByUILevel(UILevel.Design).gameObject.SetActive(false);
         }
 
         private static UIManager instance;
@@ -104,7 +105,6 @@ namespace TDFramework.UI
             return GetPanel(panelName);
         }
 
-
         public  void OpenPanel(string panelName, UILevel uilevel,IUIData uidata=null)
         {
             if (string.IsNullOrEmpty(panelName))
@@ -115,19 +115,26 @@ namespace TDFramework.UI
             {
               
                Res.InstanceAsync(panelName, panel =>
-                  {
+               {
                       if (!mLoadPanels.TryGetValue(panelName, out uipanel))
                       {
-                          Transform trans = GetTransformByUILevel(uilevel);
-                          panel.transform.SetParent(trans);
-                          uipanel = panel.GetComponent<UIPanel>();
-                          panel.GetComponent<RectTransform>().localScale = new Vector3(1, 1, 1);
-                          panel.GetComponent<RectTransform>().offsetMin = new Vector2(0, 0);
-                          panel.GetComponent<RectTransform>().offsetMax = new Vector2(0, 0);
-                          uipanel.OnOpen(uidata);
+                       Transform trans = GetTransformByUILevel(uilevel);
+                       panel.transform.SetParent(trans);
+                       uipanel = panel.GetComponent<UIPanel>();
+                       panel.GetComponent<RectTransform>().localScale = new Vector3(1, 1, 1);
+                       panel.GetComponent<RectTransform>().offsetMin = new Vector2(0, 0);
+                       panel.GetComponent<RectTransform>().offsetMax = new Vector2(0, 0);
+                       uipanel.PanelInfo = new UIPanelInfo()
+                       {
+                           mPanelLevel = uilevel,
+                           mPanelData = uidata,
+                           mPanelName = panelName,
+                       };
+
+                       uipanel.OnOpen(uidata);
                           uipanel.OnShow();
                           mLoadPanels.Add(panelName,uipanel);
-
+                          
                       }
                   });
             }
@@ -171,9 +178,45 @@ namespace TDFramework.UI
             ShowPanel(typeof(T).Name);
         }
 
+        public void HidePanel(string panelName)
+        {
+            IPanel panel = GetPanel(panelName);
+            if (panel != null)
+                panel.OnHide();
+        }
 
+        public void HidePanel<T>()
+        {
+            HidePanel(typeof(T).Name);
+        }
 
+        public void PushPanel(IPanel panel)
+        {
+            if (panel.PanelInfo != null)
+            {
+                mStacks.Push(panel.PanelInfo);
+                panel.OnClose();
+                mLoadPanels.Remove(panel.PanelInfo.mPanelName);
+            }
+               
+        }
 
+        public void PushPanel<T>()where T:IPanel
+        {
+           IPanel panel=GetPanel<T>();
+            if (panel != null)
+                PushPanel(panel);
+        }
+
+        public void BackPanel(string curPanelName)
+        {
+            if (!string.IsNullOrEmpty(curPanelName))
+            {
+                ClosePanel(curPanelName);
+            }
+            var uiPanelData = mStacks.Pop();
+            OpenPanel(uiPanelData.mPanelName, uiPanelData.mPanelLevel, uiPanelData.mPanelData);
+        }
     }
 
     

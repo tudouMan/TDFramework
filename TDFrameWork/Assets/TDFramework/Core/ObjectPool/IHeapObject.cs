@@ -8,7 +8,7 @@ namespace TDFramework.HeapPool
 {
     public interface IHeapObject
     {
-        void OnInit(object[]parmas=null);
+        void OnInit(object[] parmas=null);
 
         void Pop(object[] parmas = null);
 

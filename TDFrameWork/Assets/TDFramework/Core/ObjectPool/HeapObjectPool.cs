@@ -27,6 +27,14 @@ namespace TDFramework.HeapPool
             }
         }
 
+        public bool IsPoolSizeFull
+        {
+            get
+            {
+                return mQueue.Count > mPoolSize;
+            }
+        }
+
         public T Pop(object[] parmas = null)
         {
             T obj;
@@ -67,6 +75,15 @@ namespace TDFramework.HeapPool
         private Queue<T> mQueue;
         private int mPoolSize;
         private GameObject mPrefab;
+
+        public bool IsPoolSizeFull
+        {
+            get
+            {
+                return mQueue.Count > mPoolSize;
+            }
+        }
+
 
         public int CurCount
         {

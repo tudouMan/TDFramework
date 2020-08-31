@@ -20,6 +20,10 @@ namespace TDFramework.UI
 
     public abstract class UIPanel:MonoBehaviour,IPanel
     {
+        protected UIPanelInfo mUIPanelInfo;
+
+
+        public UIPanelInfo PanelInfo { get => mUIPanelInfo; set => mUIPanelInfo = value; }
 
         public virtual void OnInit(IUIData uidata=null) { }
 
@@ -33,7 +37,7 @@ namespace TDFramework.UI
         {
             Res.ReleaseInstance(this.gameObject);
             GameObject.Destroy(this.gameObject);
-          
+            mUIPanelInfo = null;
         }
 
         /// <summary>
@@ -41,6 +45,15 @@ namespace TDFramework.UI
         /// </summary>
         public virtual void OnEventListenerRegister() { }
 
+        public virtual void CloseSelf()
+        {
+            UIManager.Instance.ClosePanel(mUIPanelInfo.mPanelName);
+        }
+
+        public void Back()
+        {
+            UIManager.Instance.BackPanel(mUIPanelInfo.mPanelName);
+        }
 
         /// <summary>
         /// event remove register on  destory
@@ -63,6 +76,8 @@ namespace TDFramework.UI
 
 public interface IPanel
 {
+    UIPanelInfo PanelInfo { get; set; }
+
     void OnInit(IUIData uidata = null);
 
     void OnOpen(IUIData uidata = null);

@@ -42,7 +42,7 @@ namespace TDFramework.Data
         private void Load()
         {
 
-            Res.LoadAAssetsync<TextAsset>(string.Format("Data/{0}.json",FileName) ,fileStr=> 
+            Res.LoadAssetAsync<TextAsset>(string.Format("Data/{0}.json",FileName) ,fileStr=> 
             {
                 string jsonData = Tool.StringEncryption.DecryptDES(fileStr.text);
                 JsonData data = JsonMapper.ToObject(jsonData);

@@ -19,7 +19,7 @@ namespace TDFramework.Resource
         /// <typeparam name="T">类型</typeparam>
         /// <param name="_path">地址或者Label/param>
         /// <param name="_loaded">回调</param>
-        public static AsyncOperationHandle<T> LoadAAssetsync<T>(string _path, Action<T> _loaded = null)
+        public static AsyncOperationHandle<T> LoadAssetAsync<T>(string _path, Action<T> _loaded = null)
         {
            return ResManager.Instance.LoadAssetAsync<T>(_path, _loaded);
         }
