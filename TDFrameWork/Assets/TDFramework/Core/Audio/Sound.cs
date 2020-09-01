@@ -44,10 +44,13 @@ namespace TDFramework.Audio
 
         public bool IsLoop { get => mIsLoop; set => mIsLoop = value; }
 
-        private void Play(AudioClip clip,bool isLoop,float vol)
+        public void Play(AudioClip clip,bool isLoop,float vol,AudioSource source=null, HeapScriptsPool<Sound>heap=null)
         {
             mIsLoop = isLoop;
             mCurAudioClip = clip;
+            if (source != null)
+                mCurAudioSource = source;
+
             if (mCurAudioSource != null)
             {
                 mCurAudioSource.clip = clip;
@@ -65,7 +68,10 @@ namespace TDFramework.Audio
         public void Pause()
         {
             if (mCurAudioSource != null)
+            {
                 mCurAudioSource.Pause();
+            }
+               
         }
 
         public void ContinuePlay()
@@ -85,15 +91,10 @@ namespace TDFramework.Audio
                
         }
 
-        public void OnInit(object[] parmas = null)
-        {
-            mCurAudioSource = parmas[3] as AudioSource;
-            mSoundHeap = parmas[4] as HeapScriptsPool<Sound>;
-        }
-
+       
         public void Pop(object[] parmas = null)
         {
-            Play(parmas[0] as AudioClip, Convert.ToBoolean(parmas[1]), Convert.ToSingle(parmas[2]));
+          
         }
 
         public void Push()
@@ -107,6 +108,11 @@ namespace TDFramework.Audio
            {
                Stop();
            });
+        }
+
+        public void OnInit(object[] parmas = null)
+        {
+           
         }
     }
 }

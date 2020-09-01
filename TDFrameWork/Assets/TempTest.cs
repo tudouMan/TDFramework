@@ -12,24 +12,35 @@ using TDFramework.Resource;
 using TDFramework.HeapPool;
 using TDFramework.UI;
 using TDFramework.Audio;
+using TDFramework.Extention;
 
 public class TempTest : MonoBehaviour
 {
+    public Image mObj;
     private void OnGUI()
     {
-       if(GUI.Button(new Rect(100, 100, 100, 100), "play"))
+        if(GUI.Button(new Rect(100, 100, 100, 100), "play"))
         {
-            SoundManager.Instance.PlaySound("monsterBorn", 1);
+            UIMgr.OpenPanel<TempView>(UILevel.Bg);
         }
 
         if (GUI.Button(new Rect(100, 200, 100, 100), "music"))
         {
-            SoundManager.Instance.PlayMusic("backroom", 1);
+            UIMgr.OpenPanel<BackView>(UILevel.Pop);
         }
 
         if (GUI.Button(new Rect(100, 300, 100, 100), "music"))
         {
-            SoundManager.Instance.PlayMusic("LoadSpace", 1);
+            UIMgr.PushPanel<TempView>();
+        }
+        if (GUI.Button(new Rect(100, 400, 100, 100), "music"))
+        {
+            UIMgr.PushPanel<BackView>();
+        }
+
+        if (GUI.Button(new Rect(100, 500, 100, 100), "music"))
+        {
+            UIMgr.BackPanel();
         }
     }
 

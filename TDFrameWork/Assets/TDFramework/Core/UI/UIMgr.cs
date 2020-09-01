@@ -75,7 +75,7 @@ namespace TDFramework.UI
         }
 
 
-        public static void BackPanel(string panelName)
+        public static void BackPanel(string panelName=null)
         {
             UIManager.Instance.BackPanel(panelName);
         }

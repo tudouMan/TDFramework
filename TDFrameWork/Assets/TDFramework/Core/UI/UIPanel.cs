@@ -69,6 +69,8 @@ namespace TDFramework.UI
         {
             OnEventListenerRemoveRegister();
         }
+
+       
     }
 
 }

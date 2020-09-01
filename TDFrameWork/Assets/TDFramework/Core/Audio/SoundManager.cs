@@ -43,7 +43,8 @@ namespace TDFramework.Audio
             {
                 Res.LoadAssetAsync<AudioClip>(soundName, p => 
                 {
-                   Sound sound=mSoundHeap.Pop(new object[] { p, isLoop, vol });
+                   Sound sound=mSoundHeap.Pop();
+                   sound.Play(p, isLoop, vol);
                     if (isLoop)
                         mBgSound = sound;
                     mCurSounds.Add(sound);
@@ -57,7 +58,8 @@ namespace TDFramework.Audio
                     GameObject newObj = new GameObject(soundName);
                     newObj.transform.SetParent(this.transform);
                     AudioSource source= newObj.AddComponent<AudioSource>();
-                    Sound sound=mSoundHeap.Pop(new object[] { p, isLoop, vol, source,mSoundHeap });
+                    Sound sound=mSoundHeap.Pop();
+                    sound.Play(p, isLoop, vol, source, mSoundHeap);
                     if (isLoop)
                         mBgSound = sound;
                     mCurSounds.Add(sound);
