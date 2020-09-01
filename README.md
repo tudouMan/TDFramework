@@ -7,4 +7,6 @@
 
 #支持Xlua进行热跟,但是现在不支持Dll进行加载，没有解决Addressable加载DLL问题,后续解决
 
-#TODO 粒子管理器，各种扩展
+#各种扩展方法，常用方法
+
+#TODO 准备接入Editor Console Prop
