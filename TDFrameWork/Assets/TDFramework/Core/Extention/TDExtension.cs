@@ -5,6 +5,7 @@ using System.IO;
 using System.Text.RegularExpressions;
 using System.Reflection;
 using System.Text;
+using UnityEngine.EventSystems;
 
 #if UNITY_5_6_OR_NEWER
 using UnityEngine;
@@ -81,6 +82,95 @@ namespace TDFramework.Extention
         /// </summary>
         public static Color Grad = new Color(125f / 255, 125f / 255, 125f / 255);
     }
+
+
+    public static class ButtonExtention
+    {
+        /// <summary>
+        /// 拓展UI Event  PointEnter
+        /// </summary>
+        /// <param name="btn"></param>
+        /// <param name="callback"></param>
+        public static void PointEnter(this Button btn, Action callback)
+        {
+            if (btn == null) return;
+            EventTriggerListener.Get(btn.gameObject).onEnter = (GameObject go) =>
+            {
+                if (go == btn.gameObject)
+                    callback?.Invoke();
+            };
+        }
+
+        /// <summary>
+        /// 拓展UI Event PointExit
+        /// </summary>
+        /// <param name="btn"></param>
+        /// <param name="callback"></param>
+        public static void PointExit(this Button btn, Action callback)
+        {
+            if (btn == null) return;
+            EventTriggerListener.Get(btn.gameObject).onExit = (GameObject go) =>
+            {
+                if (go == btn.gameObject)
+                        callback?.Invoke();
+
+            };
+        }
+
+        /// <summary>
+        /// 扩展UI Event Select
+        /// </summary>
+        /// <param name="btn"></param>
+        /// <param name="callback"></param>
+        public static void OnSelect(this Button btn, Action callback)
+        {
+            if (btn == null || btn.enabled == false) return;
+            EventTriggerListener.Get(btn.gameObject).onSelect = (GameObject go) =>
+            {
+                if (go == btn.gameObject)
+                        callback?.Invoke();
+            };
+        }
+
+        /// <summary>
+        /// 扩展UI Event DeSelect
+        /// </summary>
+        /// <param name="btn"></param>
+        /// <param name="callback"></param>
+        public static void OnDeSelect(this Button btn, Action callback)
+        {
+            if (btn == null || btn.enabled == false) return;
+            EventTriggerListener.Get(btn.gameObject).onDeSelect = (GameObject go) =>
+            {
+                if (go == btn.gameObject)
+                    callback?.Invoke();
+
+            };
+        }
+
+        /// <summary>
+        /// 扩展Button Click事件
+        /// </summary>
+        /// <param name="btn"></param>
+        /// <param name="callBack"></param>
+        public static void OnClick(this Button btn,Action callback)
+        {
+            if (btn == null || btn.enabled == false) return;
+            EventTriggerListener.Get(btn.gameObject).onClick = (GameObject go) =>
+            {
+                if (go == btn.gameObject)
+                {
+                    if (go == btn.gameObject)
+                        callback?.Invoke();
+                }
+
+            };
+        }
+
+
+       
+    }
+
 
     /// <summary>
     /// GameObject's Util/Static This Extension
@@ -1087,5 +1177,62 @@ namespace TDFramework.Extention
 
     }
 #endif
+
+
+    #region EventTriggerListener
+    public class EventTriggerListener : UnityEngine.EventSystems.EventTrigger
+    {
+        public delegate void VoidDelegate(GameObject go);
+        public VoidDelegate onClick;
+        public VoidDelegate onDown;
+        public VoidDelegate onEnter;
+        public VoidDelegate onExit;
+        public VoidDelegate onUp;
+        public VoidDelegate onSelect;
+        public VoidDelegate onUpdateSelect;
+        public VoidDelegate onDeSelect;
+
+        static public EventTriggerListener Get(GameObject go)
+        {
+            EventTriggerListener listener = go.GetComponent<EventTriggerListener>();
+            if (listener == null) listener = go.AddComponent<EventTriggerListener>();
+            return listener;
+        }
+        public override void OnPointerClick(PointerEventData eventData)
+        {
+            if (onClick != null) onClick(gameObject);
+        }
+        public override void OnPointerDown(PointerEventData eventData)
+        {
+            if (onDown != null) onDown(gameObject);
+        }
+        public override void OnPointerEnter(PointerEventData eventData)
+        {
+            if (onEnter != null) onEnter(gameObject);
+        }
+        public override void OnPointerExit(PointerEventData eventData)
+        {
+            if (onExit != null) onExit(gameObject);
+        }
+        public override void OnPointerUp(PointerEventData eventData)
+        {
+            if (onUp != null) onUp(gameObject);
+        }
+        public override void OnSelect(BaseEventData eventData)
+        {
+            if (onSelect != null) onSelect(gameObject);
+        }
+        public override void OnUpdateSelected(BaseEventData eventData)
+        {
+            if (onUpdateSelect != null) onUpdateSelect(gameObject);
+        }
+
+        public override void OnDeselect(BaseEventData eventData)
+        {
+            base.OnDeselect(eventData);
+            if (onDeSelect != null) onDeSelect(gameObject);
+        }
+    }
+    #endregion
 }
 

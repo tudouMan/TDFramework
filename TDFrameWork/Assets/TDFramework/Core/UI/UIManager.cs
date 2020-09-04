@@ -8,7 +8,7 @@ using TDFramework.Resource;
 using UnityEngine;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.UI;
-
+using UniRx;
 namespace TDFramework.UI
 {
     public enum UILevel
@@ -44,13 +44,13 @@ namespace TDFramework.UI
     {
 
         #region propertity
-
         [SerializeField] private Camera mUICamera;
         [SerializeField] private Canvas mUICanvas;
         [SerializeField] private Transform[] mUILayers;
         private Stack<UIPanelInfo> mStacks;
         private Dictionary<string, IPanel> mLoadPanels;
         #endregion
+
 
         public Camera UICamera { get => mUICamera; }
         public Canvas UICanvas { get => mUICanvas; }
@@ -111,20 +111,25 @@ namespace TDFramework.UI
             if (string.IsNullOrEmpty(panelName))
                 throw new Exception("panelName is null");
 
-            Action<IPanel> openAction = panel =>
+            IPanel loadpanel = null;
+            if(!mLoadPanels.TryGetValue(panelName,out loadpanel))
             {
-                panel.OnOpen(uidata);
-                panel.OnShow();
-            };
+                CreatPanel(panelName, uilevel, uidata);
+            }
+           
 
-            if (mLoadPanels.ContainsKey(panelName))
-                openAction(mLoadPanels[panelName]);
-            else
-                CreatPanel(panelName, uilevel, uidata, openAction);
+            Observable.EveryUpdate().
+                Where(_ => loadpanel != null )
+                .Subscribe(_ => 
+                {
+                    loadpanel.OnOpen(uidata);
+                    loadpanel.OnShow();
+
+                }).AddTo(this);
 
         }
 
-        private void CreatPanel(string panelName, UILevel uilevel, IUIData uidata = null,Action<IPanel> ac=null)
+        private void CreatPanel(string panelName, UILevel uilevel, IUIData uidata = null)
         {
             Res.InstanceAsync(panelName, panel =>
             {
@@ -139,14 +144,11 @@ namespace TDFramework.UI
                       p.PanelInfo = new UIPanelInfo(uilevel, uidata, panelName);
                       p.OnInit(uidata);
                       mLoadPanels.Add(panelName, p);
-                      ac?.Invoke(p);
+                     
                   });
 
                 }
-                else
-                {
-                    ac?.Invoke(outPanel);
-                }
+               
             });
         }
 

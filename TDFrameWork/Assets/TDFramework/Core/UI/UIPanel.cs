@@ -22,7 +22,6 @@ namespace TDFramework.UI
     {
         protected UIPanelInfo mUIPanelInfo;
 
-
         public UIPanelInfo PanelInfo { get => mUIPanelInfo; set => mUIPanelInfo = value; }
 
         public virtual void OnInit(IUIData uidata=null) { }
@@ -39,6 +38,9 @@ namespace TDFramework.UI
             GameObject.Destroy(this.gameObject);
             mUIPanelInfo = null;
         }
+
+
+
 
         /// <summary>
         /// event register on  awake
@@ -70,7 +72,6 @@ namespace TDFramework.UI
             OnEventListenerRemoveRegister();
         }
 
-       
     }
 
 }
