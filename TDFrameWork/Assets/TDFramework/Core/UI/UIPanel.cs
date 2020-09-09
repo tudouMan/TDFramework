@@ -11,22 +11,32 @@ using UnityEngine.ResourceManagement.AsyncOperations;
 
 namespace TDFramework.UI
 {
+
     public interface IUIData { }
 
-    public class UIPanelData: IUIData
-    {
-
-    }
 
     public abstract class UIPanel:MonoBehaviour,IPanel
     {
+
+        protected UIPanelData mData;
+        public UIPanelData PanelData { get => mData; set => mData = value; }
+
+        public class UIPanelData : IUIData
+        {
+
+        }
+
+
         protected UIPanelInfo mUIPanelInfo;
 
         public UIPanelInfo PanelInfo { get => mUIPanelInfo; set => mUIPanelInfo = value; }
 
         public virtual void OnInit(IUIData uidata=null) { }
 
-        public virtual void OnOpen(IUIData uidata = null) { }
+        public virtual void OnOpen(IUIData uidata = null) 
+        {
+            
+        }
 
         public virtual void OnShow() { }
 
@@ -72,6 +82,7 @@ namespace TDFramework.UI
             OnEventListenerRemoveRegister();
         }
 
+        public virtual void ClearData() { }
     }
 
 }

@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: IlRuntime
+  m_EditorClassIdentifier: 
+  m_GroupName: IlRuntime
+  m_Data:
+    m_SerializedData: []
+  m_GUID: 22de16b7d746f314198aa648e880c407
+  m_SerializeEntries:
+  - m_GUID: 27670c842d970844b82efe38bc976b2e
+    m_Address: HotFix_Project.pdb
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    m_MainAsset: {fileID: 4900000, guid: 27670c842d970844b82efe38bc976b2e, type: 3}
+    m_TargetAsset: {fileID: 4900000, guid: 27670c842d970844b82efe38bc976b2e, type: 3}
+  - m_GUID: 3a3fb5ee80575f54f8ff9c8093da548c
+    m_Address: HotFix_Project.dll
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    m_MainAsset: {fileID: 4900000, guid: 3a3fb5ee80575f54f8ff9c8093da548c, type: 3}
+    m_TargetAsset: {fileID: 4900000, guid: 3a3fb5ee80575f54f8ff9c8093da548c, type: 3}
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: be554cc2c0019e441ae378ab5866526d, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 2d7a4898b5c914f4585ccba6e63be4ed, type: 2}
+    - {fileID: 11400000, guid: d49b87c103e5ba44db3e18785e9ca4b0, type: 2}

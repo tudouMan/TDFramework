@@ -23,14 +23,12 @@ namespace TDFramework.Data
             }
         }
 
-        protected List<P> mDataList;
+        protected List<P> mDataList = new List<P>();
 
-        protected Dictionary<int, P> mDataDic;
+        protected Dictionary<int, P> mDataDic = new Dictionary<int, P>();
 
         public AbstractDBModel()
         {
-            mDataList = new List<P>();
-            mDataDic = new Dictionary<int, P>();
             Load();
         }
 
@@ -73,7 +71,7 @@ namespace TDFramework.Data
                 return null;
         }
 
-        public  T Copy<T>(T RealObject)
+        public  P Copy<P>(P RealObject)where P:AbstractEntity
         {
             using (Stream objectStream = new MemoryStream())
             {
@@ -81,7 +79,7 @@ namespace TDFramework.Data
                 IFormatter formatter = new BinaryFormatter();
                 formatter.Serialize(objectStream, RealObject);
                 objectStream.Seek(0, SeekOrigin.Begin);
-                return (T)formatter.Deserialize(objectStream);
+                return (P)formatter.Deserialize(objectStream);
             }
         }
 

@@ -1,5 +1,12 @@
 {
   "dependencies": {
+    "com.ourpalm.ilruntime": {
+      "version": "1.6.4",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://packages.unity.cn"
+    },
     "com.unity.addressables": {
       "version": "1.8.4",
       "depth": 0,

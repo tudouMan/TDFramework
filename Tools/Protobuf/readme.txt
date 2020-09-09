@@ -1,0 +1,1 @@
+#需要配置环境 F:\TDFramework\Clinet\Tools\Protobuf\protoc\bin  例如环境地址为bin目录

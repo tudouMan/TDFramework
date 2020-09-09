@@ -47,8 +47,8 @@ namespace TDFramework.UI
         [SerializeField] private Camera mUICamera;
         [SerializeField] private Canvas mUICanvas;
         [SerializeField] private Transform[] mUILayers;
-        private Stack<UIPanelInfo> mStacks;
-        private Dictionary<string, IPanel> mLoadPanels;
+        private Stack<UIPanelInfo> mStacks=new Stack<UIPanelInfo>();
+        private Dictionary<string, IPanel> mLoadPanels=new Dictionary<string, IPanel>();
         #endregion
 
 
@@ -62,8 +62,6 @@ namespace TDFramework.UI
 
         public void OnSingletonInit()
         {
-            mLoadPanels = new Dictionary<string, IPanel>();
-            mStacks = new Stack<UIPanelInfo>();
             GetTransformByUILevel(UILevel.Design).gameObject.SetActive(false);
         }
 

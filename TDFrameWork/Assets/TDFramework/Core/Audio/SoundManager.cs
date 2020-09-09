@@ -11,13 +11,12 @@ namespace TDFramework.Audio
 {
     public class SoundManager:MonoSingleton<SoundManager>
     {
-        private List<Sound> mCurSounds;
-        private HeapScriptsPool<Sound> mSoundHeap;
+        private List<Sound> mCurSounds=new List<Sound>();
+        private HeapScriptsPool<Sound> mSoundHeap=new HeapScriptsPool<Sound>();
 
         private SoundManager()
         {
-            mCurSounds = new List<Sound>();
-            mSoundHeap = new HeapScriptsPool<Sound>();
+           
         }
 
         //BgSound

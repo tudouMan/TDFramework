@@ -1,21 +1,51 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using System;
 using TDFramework.UI;
 using UnityEngine.UI;
 
-public class BackView : UIPanel
+namespace TDFramework.UI
 {
-    public override void OnInit(IUIData uidata = null)
+    public class BackViewPanelData : UIPanel.UIPanelData
     {
-        base.OnInit(uidata);
+
     }
 
-    public override void OnOpen(IUIData uidata = null)
+    public class BackView : UIPanel
     {
-        base.OnOpen(uidata);
-        GetComponentInChildren<Text>().text = "Back";
-    }
+        public override void OnInit(IUIData uidata = null)
+        {
+            base.OnInit(uidata);
+        }
 
+        public override void OnOpen(IUIData uidata = null)
+        {
+            base.OnOpen(uidata);
+        }
+
+        public override void OnShow()
+        {
+            base.OnShow();
+        }
+
+        public override void OnClose()
+        {
+            base.OnClose();
+        }
+
+        public override void OnHide()
+        {
+            base.OnHide();
+        }
+
+        public override void OnEventListenerRegister()
+        {
+            base.OnEventListenerRegister();
+        }
+
+        public override void OnEventListenerRemoveRegister()
+        {
+            base.OnEventListenerRemoveRegister();
+        }
+
+    }
 
 }

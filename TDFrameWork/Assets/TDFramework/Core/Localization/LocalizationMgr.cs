@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace TDFramework.Localization
 {
-    public class LocalizationMgr
+    public class LocalizationMgr:Singleton<LocalizationMgr>
     {
         public enum LocalizationType
         {
@@ -17,28 +17,16 @@ namespace TDFramework.Localization
 
         private const string playerprefsName = "LocalizationType";
 
-        private Dictionary<short, string> mTextLocalDic;
-        private Dictionary<short, string> mPicLocalDic;
+        private Dictionary<short, string> mTextLocalDic=new Dictionary<short, string>();
+        private Dictionary<short, string> mPicLocalDic=new Dictionary<short, string>();
         private LocalizationType mCurLocalizationType;
         private Action mRefreshHandle;
-        private static LocalizationMgr instance;
-        public static LocalizationMgr Instance
-        {
-            get
-            {
-                if (instance == null)
-                    instance = new LocalizationMgr();
-
-                return instance;
-            }
-        }
-
+      
         public Action RefreshHandle { get => mRefreshHandle; set => mRefreshHandle = value; }
 
-        public LocalizationMgr()
+        private LocalizationMgr()
         {
-            mPicLocalDic = new Dictionary<short, string>();
-            mTextLocalDic = new Dictionary<short, string>();
+          
         }
 
         public void ChangeLanguageType(LocalizationType _type)
