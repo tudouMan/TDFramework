@@ -60,6 +60,10 @@ namespace TDFramework.Resource
 
         #endregion
 
+
+
+
+
         #region  根据图集加载图片
         /// <summary>
         /// AsyncLoadSpriteByAltas
@@ -128,7 +132,6 @@ namespace TDFramework.Resource
         }
         #endregion
 
-       
 
         #region 卸载资源
         /// <summary>
@@ -163,5 +166,20 @@ namespace TDFramework.Resource
             return Addressables.ReleaseInstance(handle);
         }
         #endregion
+
+        //#region 同步
+     
+        //public T LoadAsset<T>(string _path)
+        //{
+        //    throw new Exception();
+        //}
+
+
+        //public GameObject Instance(string _path)
+        //{
+        //    throw new Exception();
+        //}
+
+        //#endregion
     }
 }

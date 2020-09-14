@@ -10,16 +10,18 @@ namespace TDFramework.EventSystem
 {
     public class CEvent
     {
-        public Enum type;
+        public int type;
         public object data;
 
-        public Enum GetEventId()
+        public int GetEventId()
         {
             return type;
         }
 
     }
-    public static class EventCenter
+
+
+    public  class EventCenter
     {
 
         //Disable the unused variable warning
@@ -28,13 +30,13 @@ namespace TDFramework.EventSystem
         //	static private MessengerHelper mMessengerHelper = ( new GameObject("MessengerHelper") ).AddComponent< MessengerHelper >();
 #pragma warning restore 0414
 
-        static public Dictionary<Enum, Delegate> mEventTable = new Dictionary<Enum, Delegate>();
+         public static  Dictionary<int, Delegate> mEventTable = new Dictionary<int, Delegate>();
         //Message handlers that should never be removed, regardless of calling Cleanup
-        static public List<Enum> mPermanentMessages = new List<Enum>();
+         public static  List<int> mPermanentMessages = new List<int>();
 
 
         //Marks a certain message as permanent.
-        static public void MarkAsPermanent(Enum eventType)
+        public static void MarkAsPermanent(int eventType)
         {
 #if LOG_ALL_MESSAGES
 		XDebug.Log("Messenger MarkAsPermanent \t\"" + eventType + "\"");
@@ -44,21 +46,21 @@ namespace TDFramework.EventSystem
         }
 
 
-        static public void Cleanup()
+        public static void Cleanup()
         {
 #if LOG_ALL_MESSAGES
 		XDebug.Log("MESSENGER Cleanup. Make sure that none of necessary listeners are removed.");
 #endif
 
-            List<Enum> messagesToRemove = new List<Enum>();
+            List<int> messagesToRemove = new List<int>();
 
-            foreach (KeyValuePair<Enum, Delegate> pair in mEventTable)
+            foreach (KeyValuePair<int, Delegate> pair in mEventTable)
             {
                 bool wasFound = false;
 
-                foreach (Enum message in mPermanentMessages)
+                foreach (int message in mPermanentMessages)
                 {
-                    if (pair.Key == message)
+                    if (pair.Key==message)
                     {
                         wasFound = true;
                         break;
@@ -69,23 +71,23 @@ namespace TDFramework.EventSystem
                     messagesToRemove.Add(pair.Key);
             }
 
-            foreach (Enum message in messagesToRemove)
+            foreach (int message in messagesToRemove)
             {
                 mEventTable.Remove(message);
             }
         }
 
-        static public void PrEGameEventEventTable()
+         public static void PrEGameEventEventTable()
         {
 
-            foreach (KeyValuePair<Enum, Delegate> pair in mEventTable)
+            foreach (KeyValuePair<int, Delegate> pair in mEventTable)
             {
                 Debug.Log("\t\t\t" + pair.Key + "\t\t" + pair.Value);
             }
 
         }
 
-        static public void OnListenerAdding(Enum eventType, Delegate listenerBeingAdded)
+         public static void OnListenerAdding(int eventType, Delegate listenerBeingAdded)
         {
 #if LOG_ALL_MESSAGES || LOG_ADD_LISTENER
 		XDebug.Log("MESSENGER OnListenerAdding \t\"" + eventType + "\"\t{" + listenerBeingAdded.Target + " -> " + listenerBeingAdded.Method + "}");
@@ -103,7 +105,7 @@ namespace TDFramework.EventSystem
             }
         }
 
-        static public void OnListenerRemoving(Enum eventType, Delegate listenerBeingRemoved)
+         public static void OnListenerRemoving(int eventType, Delegate listenerBeingRemoved)
         {
 #if LOG_ALL_MESSAGES
 		XDebug.Log("MESSENGER OnListenerRemoving \t\"" + eventType + "\"\t{" + listenerBeingRemoved.Target + " -> " + listenerBeingRemoved.Method + "}");
@@ -128,7 +130,7 @@ namespace TDFramework.EventSystem
             }
         }
 
-        static public void OnListenerRemoved(Enum eventType)
+         public static void OnListenerRemoved(int eventType)
         {
             if (mEventTable[eventType] == null)
             {
@@ -136,7 +138,7 @@ namespace TDFramework.EventSystem
             }
         }
 
-        static public void OnBroadcasting(Enum eventType)
+         public static void OnBroadcasting(int eventType)
         {
 #if REQUIRE_LISTENER
             if (!mEventTable.ContainsKey(eventType))
@@ -145,12 +147,12 @@ namespace TDFramework.EventSystem
 #endif
         }
 
-        static public BroadcastException CreateBroadcastSignatureException(Enum eventType)
+         public static BroadcastException CreateBroadcastSignatureException(int eventType)
         {
             return new BroadcastException(string.Format("Broadcasting message \"{0}\" but listeners have a different signature than the broadcaster.", eventType));
         }
 
-        public class BroadcastException : Exception
+        public  class BroadcastException : Exception
         {
             public BroadcastException(string msg)
                 : base(msg)
@@ -158,7 +160,7 @@ namespace TDFramework.EventSystem
             }
         }
 
-        public class ListenerException : Exception
+        public  class ListenerException : Exception
         {
             public ListenerException(string msg)
                 : base(msg)
@@ -167,48 +169,48 @@ namespace TDFramework.EventSystem
         }
 
         //No parameters
-        static public void AddListener(Enum eventType, CallbackE handler)
+         public static  void AddListener(int eventType, CallbackE handler)
         {
             OnListenerAdding(eventType, handler);
             mEventTable[eventType] = (CallbackE)mEventTable[eventType] + handler;
         }
 
         //Single parameter
-        static public void AddListener<T>(Enum eventType, CallbackE<T> handler)
+         public static void AddListener<T>(int eventType, CallbackE<T> handler)
         {
             OnListenerAdding(eventType, handler);
             mEventTable[eventType] = (CallbackE<T>)mEventTable[eventType] + handler;
         }
 
         //Two parameters
-        static public void AddListener<T, U>(Enum eventType, CallbackE<T, U> handler)
+         public static void AddListener<T, U>(int eventType, CallbackE<T, U> handler)
         {
             OnListenerAdding(eventType, handler);
             mEventTable[eventType] = (CallbackE<T, U>)mEventTable[eventType] + handler;
         }
 
         //Three parameters
-        static public void AddListener<T, U, V>(Enum eventType, CallbackE<T, U, V> handler)
+         public static void AddListener<T, U, V>(int eventType, CallbackE<T, U, V> handler)
         {
             OnListenerAdding(eventType, handler);
             mEventTable[eventType] = (CallbackE<T, U, V>)mEventTable[eventType] + handler;
         }
 
         //Four parameters
-        static public void AddListener<T, U, V, X>(Enum eventType, CallbackE<T, U, V, X> handler)
+         public static void AddListener<T, U, V, X>(int eventType, CallbackE<T, U, V, X> handler)
         {
             OnListenerAdding(eventType, handler);
             mEventTable[eventType] = (CallbackE<T, U, V, X>)mEventTable[eventType] + handler;
         }
 
         //Five parameters
-        static public void AddListener<T, U, V, X, Y>(Enum eventType, CallbackE<T, U, V, X, Y> handler)
+         public static void AddListener<T, U, V, X, Y>(int eventType, CallbackE<T, U, V, X, Y> handler)
         {
             OnListenerAdding(eventType, handler);
             mEventTable[eventType] = (CallbackE<T, U, V, X, Y>)mEventTable[eventType] + handler;
         }
         //Six parameters
-        static public void AddListener<T, U, V, X, Y, Z>(Enum eventType, CallbackE<T, U, V, X, Y, Z> handler)
+         public static void AddListener<T, U, V, X, Y, Z>(int eventType, CallbackE<T, U, V, X, Y, Z> handler)
         {
             OnListenerAdding(eventType, handler);
             mEventTable[eventType] = (CallbackE<T, U, V, X, Y, Z>)mEventTable[eventType] + handler;
@@ -220,7 +222,7 @@ namespace TDFramework.EventSystem
         /// 直接移除所有触发事件，只要事件不是静态的就会被回收
         /// </summary>
         /// <param name="eventType"></param>
-        static public void RemoveAllListener(Enum eventType)
+         public static void RemoveAllListener(int eventType)
         {
             if (mEventTable.ContainsKey(eventType))
             {
@@ -230,7 +232,7 @@ namespace TDFramework.EventSystem
 
 
         //No parameters
-        static public void RemoveListener(Enum eventType, CallbackE handler)
+         public static void RemoveListener(int eventType, CallbackE handler)
         {
             OnListenerRemoving(eventType, handler);
             mEventTable[eventType] = (CallbackE)mEventTable[eventType] - handler;
@@ -238,7 +240,7 @@ namespace TDFramework.EventSystem
         }
 
         //Single parameter
-        static public void RemoveListener<T>(Enum eventType, CallbackE<T> handler)
+         public static void RemoveListener<T>(int eventType, CallbackE<T> handler)
         {
             OnListenerRemoving(eventType, handler);
             mEventTable[eventType] = (CallbackE<T>)mEventTable[eventType] - handler;
@@ -246,7 +248,7 @@ namespace TDFramework.EventSystem
         }
 
         //Two parameters
-        static public void RemoveListener<T, U>(Enum eventType, CallbackE<T, U> handler)
+        public static void RemoveListener<T, U>(int eventType, CallbackE<T, U> handler)
         {
             OnListenerRemoving(eventType, handler);
             mEventTable[eventType] = (CallbackE<T, U>)mEventTable[eventType] - handler;
@@ -254,7 +256,7 @@ namespace TDFramework.EventSystem
         }
 
         //Three parameters
-        static public void RemoveListener<T, U, V>(Enum eventType, CallbackE<T, U, V> handler)
+        public static void RemoveListener<T, U, V>(int eventType, CallbackE<T, U, V> handler)
         {
             OnListenerRemoving(eventType, handler);
             mEventTable[eventType] = (CallbackE<T, U, V>)mEventTable[eventType] - handler;
@@ -262,7 +264,7 @@ namespace TDFramework.EventSystem
         }
 
         //Four parameters
-        static public void RemoveListener<T, U, V, X>(Enum eventType, CallbackE<T, U, V, X> handler)
+        public static void RemoveListener<T, U, V, X>(int eventType, CallbackE<T, U, V, X> handler)
         {
             OnListenerRemoving(eventType, handler);
             mEventTable[eventType] = (CallbackE<T, U, V, X>)mEventTable[eventType] - handler;
@@ -270,7 +272,7 @@ namespace TDFramework.EventSystem
         }
 
         //Five parameters
-        static public void RemoveListener<T, U, V, X, Y>(Enum eventType, CallbackE<T, U, V, X, Y> handler)
+        public static void RemoveListener<T, U, V, X, Y>(int eventType, CallbackE<T, U, V, X, Y> handler)
         {
             OnListenerRemoving(eventType, handler);
             mEventTable[eventType] = (CallbackE<T, U, V, X, Y>)mEventTable[eventType] - handler;
@@ -278,7 +280,7 @@ namespace TDFramework.EventSystem
         }
 
         //Six parameters
-        static public void RemoveListener<T, U, V, X, Y, Z>(Enum eventType, CallbackE<T, U, V, X, Y, Z> handler)
+         public static void RemoveListener<T, U, V, X, Y, Z>(int eventType, CallbackE<T, U, V, X, Y, Z> handler)
         {
             OnListenerRemoving(eventType, handler);
             mEventTable[eventType] = (CallbackE<T, U, V, X, Y, Z>)mEventTable[eventType] - handler;
@@ -287,7 +289,7 @@ namespace TDFramework.EventSystem
 
 
 
-        static public void Broadcast(Enum eventType)
+         public static void Broadcast(int eventType)
         {
 #if LOG_ALL_MESSAGES || LOG_BROADCAST_MESSAGE
 		XDebug.Log("MESSENGER\t" + System.DateTime.Now.ToString("hh:mm:ss.fff") + "\t\t\tInvoking \t\"" + eventType + "\"");
@@ -310,13 +312,13 @@ namespace TDFramework.EventSystem
             }
         }
 
-        static public void SendEvent(CEvent evt)
+         public static void SendEvent(CEvent evt)
         {
             Broadcast<CEvent>(evt.GetEventId(), evt);
         }
 
         //Single parameter
-        static public void Broadcast<T>(Enum eventType, T arg1)
+         public static void Broadcast<T>(int eventType, T arg1)
         {
 #if LOG_ALL_MESSAGES || LOG_BROADCAST_MESSAGE
 		XDebug.Log("MESSENGER\t" + System.DateTime.Now.ToString("hh:mm:ss.fff") + "\t\t\tInvoking \t\"" + eventType + "\"");
@@ -340,7 +342,7 @@ namespace TDFramework.EventSystem
         }
 
         //Two parameters
-        static public void Broadcast<T, U>(Enum eventType, T arg1, U arg2)
+         public static void Broadcast<T, U>(int eventType, T arg1, U arg2)
         {
 #if LOG_ALL_MESSAGES || LOG_BROADCAST_MESSAGE
 		XDebug.Log("MESSENGER\t" + System.DateTime.Now.ToString("hh:mm:ss.fff") + "\t\t\tInvoking \t\"" + eventType + "\"");
@@ -364,7 +366,7 @@ namespace TDFramework.EventSystem
         }
 
         //Three parameters
-        static public void Broadcast<T, U, V>(Enum eventType, T arg1, U arg2, V arg3)
+        public static void Broadcast<T, U, V>(int eventType, T arg1, U arg2, V arg3)
         {
 #if LOG_ALL_MESSAGES || LOG_BROADCAST_MESSAGE
 		XDebug.Log("MESSENGER\t" + System.DateTime.Now.ToString("hh:mm:ss.fff") + "\t\t\tInvoking \t\"" + eventType + "\"");
@@ -388,7 +390,7 @@ namespace TDFramework.EventSystem
         }
 
         //Four parameters
-        static public void Broadcast<T, U, V, X>(Enum eventType, T arg1, U arg2, V arg3, X arg4)
+        public static void Broadcast<T, U, V, X>(int eventType, T arg1, U arg2, V arg3, X arg4)
         {
 #if LOG_ALL_MESSAGES || LOG_BROADCAST_MESSAGE
 		XDebug.Log("MESSENGER\t" + System.DateTime.Now.ToString("hh:mm:ss.fff") + "\t\t\tInvoking \t\"" + eventType + "\"");
@@ -412,7 +414,7 @@ namespace TDFramework.EventSystem
         }
 
         //Five parameters
-        static public void Broadcast<T, U, V, X, Y>(Enum eventType, T arg1, U arg2, V arg3, X arg4, Y arg5)
+         public static void Broadcast<T, U, V, X, Y>(int eventType, T arg1, U arg2, V arg3, X arg4, Y arg5)
         {
 #if LOG_ALL_MESSAGES || LOG_BROADCAST_MESSAGE
         XDebug.Log("MESSENGER\t" + System.DateTime.Now.ToString("hh:mm:ss.fff") + "\t\t\tInvoking \t\"" + eventType + "\"");
@@ -436,7 +438,7 @@ namespace TDFramework.EventSystem
         }
 
         //Six parameters
-        static public void Broadcast<T, U, V, X, Y, Z>(Enum eventType, T arg1, U arg2, V arg3, X arg4, Y arg5, Z arg6)
+         public static void Broadcast<T, U, V, X, Y, Z>(int eventType, T arg1, U arg2, V arg3, X arg4, Y arg5, Z arg6)
         {
 #if LOG_ALL_MESSAGES || LOG_BROADCAST_MESSAGE
         XDebug.Log("MESSENGER\t" + System.DateTime.Now.ToString("hh:mm:ss.fff") + "\t\t\tInvoking \t\"" + eventType + "\"");

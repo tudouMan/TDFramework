@@ -16,25 +16,7 @@ MonoBehaviour:
   m_Data:
     m_SerializedData: []
   m_GUID: 5e0f76cc1ededb74fb7de046085578f8
-  m_SerializeEntries:
-  - m_GUID: 6a921072ef06ff04bb08ad5a4144ee66
-    m_Address: LoadSpace
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    m_MainAsset: {fileID: 8300000, guid: 6a921072ef06ff04bb08ad5a4144ee66, type: 3}
-    m_TargetAsset: {fileID: 8300000, guid: 6a921072ef06ff04bb08ad5a4144ee66, type: 3}
-  - m_GUID: b8b91c2a01358c14ba7713206acb5a2c
-    m_Address: backroom
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    m_MainAsset: {fileID: 8300000, guid: b8b91c2a01358c14ba7713206acb5a2c, type: 3}
-    m_TargetAsset: {fileID: 8300000, guid: b8b91c2a01358c14ba7713206acb5a2c, type: 3}
-  - m_GUID: f8eb68214c419cf4e9438e74e4738589
-    m_Address: monsterBorn
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    m_MainAsset: {fileID: 8300000, guid: f8eb68214c419cf4e9438e74e4738589, type: 3}
-    m_TargetAsset: {fileID: 8300000, guid: f8eb68214c419cf4e9438e74e4738589, type: 3}
+  m_SerializeEntries: []
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: be554cc2c0019e441ae378ab5866526d, type: 2}
   m_SchemaSet:
