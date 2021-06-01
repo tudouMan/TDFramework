@@ -129,7 +129,7 @@ namespace TDFramework.UI
 
         private void CreatPanel(string panelName, UILevel uilevel, IUIData uidata = null)
         {
-            Res.InstanceAsync(panelName, panel =>
+            GameEntry.Res.InstanceAsync(panelName, panel =>
             {
                 IPanel outPanel = null;
                 if (!mLoadPanels.TryGetValue(panelName, out outPanel))

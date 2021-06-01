@@ -20,17 +20,17 @@ namespace TDFramework.Localization
 
             Refresh();
 
-            LocalizationMgr.Instance.RefreshHandle += Refresh;
+            GameEntry.Localization.RefreshHandle += Refresh;
         }
 
         public void Refresh()
         {
-            mSelfText.text= LocalizationMgr.Instance.GetTextByKey(mLocalKey);
+            mSelfText.text= GameEntry.Localization.GetTextByKey(mLocalKey);
         }
 
         private void OnDestroy()
         {
-            LocalizationMgr.Instance.RefreshHandle -= Refresh;
+            GameEntry.Localization.RefreshHandle -= Refresh;
         }
     }
 }

@@ -6,29 +6,22 @@ using System.Threading.Tasks;
 
 namespace TDFramework.Cache
 {
-    [MonoSingletonPath("[Cache]/[本地缓存]")]
-    public class LocalCacheMgr : MonoSingleton<LocalCacheMgr>
+
+    public class LocalCacheMgr:ManagerBase,IDisposable
     {
-        //public TempCache mTempCache;
-
-        public override void OnSingletonInit()
+        public void Dispose()
         {
-            base.OnSingletonInit();
-           // mTempCache = LocalCacheUtil.Read<TempCache>();
-
+            Save();
         }
-
 
         public void Save()
         {
-           // mTempCache.mLevel++;
-           // LocalCacheUtil.Write(mTempCache);
+           
         }
 
-        protected override void OnApplicationQuit()
+        internal override void Init()
         {
-            base.OnApplicationQuit();
-            Save();
+           
         }
     }
 }

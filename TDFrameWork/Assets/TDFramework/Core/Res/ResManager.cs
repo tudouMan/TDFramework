@@ -8,13 +8,8 @@ using UnityEngine.U2D;
 namespace TDFramework.Resource
 {
 
-    [MonoSingletonPath("[Res]/[Manager]")]
-    public class ResManager : MonoSingleton<ResManager>
+    public class ResManager:ManagerBase,IDisposable 
     {
-        private ResManager()
-        {
-
-        }
      
 
         #region 异步加载资源
@@ -165,13 +160,23 @@ namespace TDFramework.Resource
         {
             return Addressables.ReleaseInstance(handle);
         }
+
+        internal override void Init()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Dispose()
+        {
+            throw new NotImplementedException();
+        }
         #endregion
 
-        //#region 同步
-     
+        #region 同步
+
         //public T LoadAsset<T>(string _path)
         //{
-        //    throw new Exception();
+        //    Addressables.load
         //}
 
 
@@ -180,6 +185,6 @@ namespace TDFramework.Resource
         //    throw new Exception();
         //}
 
-        //#endregion
+        #endregion
     }
 }

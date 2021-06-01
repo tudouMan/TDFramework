@@ -7,7 +7,6 @@ using TDFramework;
 using System.Text;
 using System.Net;
 using TDFramework.EventSystem;
-using TDFramework.StateMachine;
 using TDFramework.Extention;
 
 
@@ -29,7 +28,7 @@ public class TempTest : MonoBehaviour
     private void Awake()
     {
         playerCtr = GetComponent<PlayeyCtr>();
-        EventCenter.AddListener<Byte[]>(protoType, AcceptMsg);
+
     }
 
     private void AcceptMsg(byte[] args)
@@ -56,7 +55,7 @@ public class TempTest : MonoBehaviour
 
     private void OnDestroy()
     {
-        EventCenter.RemoveListener<Byte[]>(protoType, AcceptMsg);
+       // EventCenter.RemoveListener<Byte[]>(protoType, AcceptMsg);
     }
 
     public void OnGUI()

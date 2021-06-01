@@ -1,22 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
-using TDFramework.HeapPool;
 using TDFramework.Resource;
 using DG.Tweening;
+using TDFramework.Pool;
 
 namespace TDFramework.Audio
 {
  
-    public class Sound:IHeapObject
+    public class Sound
     {
         private AudioClip mCurAudioClip;
         private AudioSource mCurAudioSource;
         private bool mIsLoop;
-        private HeapScriptsPool<Sound> mSoundHeap;
+
 
         public bool IsPlaying
         {
@@ -44,7 +40,7 @@ namespace TDFramework.Audio
 
         public bool IsLoop { get => mIsLoop; set => mIsLoop = value; }
 
-        public void Play(AudioClip clip,bool isLoop,float vol,AudioSource source=null, HeapScriptsPool<Sound>heap=null)
+        public void Play(AudioClip clip,bool isLoop,float vol,AudioSource source=null)
         {
             mIsLoop = isLoop;
             mCurAudioClip = clip;
@@ -85,8 +81,8 @@ namespace TDFramework.Audio
             if (mCurAudioSource != null)
             {
                 mCurAudioSource.Stop();
-                mSoundHeap.Push(this);
-                SoundManager.Instance.CurSounds.Remove(this);
+                TDFramework.GameEntry.Pool.PushClass<Sound>(this);
+                GameEntry.Sound.Remove(this);
             }
                
         }
@@ -99,7 +95,8 @@ namespace TDFramework.Audio
 
         public void Push()
         {
-            Res.ReleaseAsset<AudioClip>(mCurAudioClip);
+
+            GameEntry.Res.ReleaseAsset<AudioClip>(mCurAudioClip);
         }
 
         public void FadeStop()

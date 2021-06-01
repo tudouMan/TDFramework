@@ -44,7 +44,7 @@ namespace TDFramework.UI
 
         public virtual void OnClose()
         {
-            Res.ReleaseInstance(this.gameObject);
+            GameEntry.Res.ReleaseInstance(this.gameObject);
             GameObject.Destroy(this.gameObject);
             mUIPanelInfo = null;
         }

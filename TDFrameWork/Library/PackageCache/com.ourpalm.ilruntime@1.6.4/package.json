@@ -1,0 +1,31 @@
+{
+  "name": "com.ourpalm.ilruntime",
+  "displayName": "ILRuntime",
+  "version": "1.6.4",
+  "unity": "2018.1",
+  "description": "ILRuntime\nC#热更解译器\n中文在线文档: https://ourpalm.github.io/ILRuntime/\n\rQQ群：512079820\n## 更新记录\r\n### V1.6.4\r\n- 修正一个使用委托返回经过值类型绑定过的值类型时造成的栈损坏问题\r\n- 修正一个自动生成跨域继承适配器代码时，无参数虚函数适配代码执行的报错\r\n- 修正一个自动生成跨域继承适配器代码对接口方法生成后，某些情况下导致StackOverflow无限递归的Bug\r\n- 修正Type.ToString结果和原生不一致的问题\r\n- 修正泛型嵌套数组T[][]字段初始化时的报错问题\r\n- 修正一个泛型方法匹配的Bug\r\n- 修正一个泛型数组作为参数时方法匹配的错误\r\n- 删掉一个C#7语法使用以提高兼容性\r\n\r\n### V1.6.3\r\n- 修复对泛型字段赋值导致栈损坏的Bug\r\n- 修复由跨域继承适配器代码生成器自动生成的代码，导致运行时进入错误的类方法的Bug\r\n- 修复一个在静态方法中实例化对象导致运行出错的Bug\r\n- 修复一个某些情况下静态构造函数没有执行的Bug\r\n- 修复一个加载多DLL，引用字段导致的运行时报错\r\n- 修复值类型绑定Enum字段分配内存时被意外装箱的Bug\r\n- 修复一个CLR自动分析绑定在某个特定情况下遗漏分析的Bug\r\n- 移除所有编译警告\r\n- 修复一个由于Unity的Bug导致的导入ILRuntime包时的报错\r\n\r\n### V1.6.2\r\n- 修正值类型部分情况下++, +=之类操作符失效的Bug\r\n- 修正将值类型成员变量传入方法，并在该方法里对这个参数赋值报错的Bug\r\n- 修复一个Async Await卡主的bug\r\n\r\n### V1.6.1\r\n- 去掉部分C#7的用法以增加unity2019以前版本的兼容性\r\n\r\n### V1.6\r\n- 增加了跨域继承适配器的工具类，简化适配器编写\r\n- 增加了跨域继承适配器的自动生成模版，做到半自动生成\r\n- 优化了热更存取主工程类字段的性能\r\n- 优化了热更内方法调用的性能\r\n- 累积Bug修复",
+  "keywords": [
+    "ILRuntime",
+    "ilrt",
+    "hotfix"
+  ],
+  "author": {
+    "name": "Ourpalm",
+    "email": "example@ourpal.com",
+    "url": "https://github.com/Ourpalm/ILRuntime"
+  },
+  "category": "Hotfix",
+  "samples": [
+    {
+      "displayName": "Demo",
+      "description": "示例中包含了ILRuntime的基础用法，反射的用法，CLR重定向/绑定，值类型绑定，Json序列化等的使用方式",
+      "path": "Samples~/Basic Demo"
+    }
+  ],
+  "type": "library",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:Ourpalm/ILRuntimeU3D.git",
+    "revision": "7df2bbe08e961b6f81873436da9a8995b44c28d7"
+  }
+}

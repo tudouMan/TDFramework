@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace TDFramework.Localization
 {
-    public class LocalizationMgr:Singleton<LocalizationMgr>
+    public class LocalizationMgr:ManagerBase,IDisposable
     {
         public enum LocalizationType
         {
@@ -24,10 +24,7 @@ namespace TDFramework.Localization
       
         public Action RefreshHandle { get => mRefreshHandle; set => mRefreshHandle = value; }
 
-        private LocalizationMgr()
-        {
-          
-        }
+  
 
         public void ChangeLanguageType(LocalizationType _type)
         {
@@ -57,18 +54,7 @@ namespace TDFramework.Localization
         }
 
 
-        public void Init()
-        {
-          
-            LocalizationType _type = LocalizationType.CH;
-            if (!PlayerPrefs.HasKey(playerprefsName) || (LocalizationType)PlayerPrefs.GetInt(playerprefsName)==LocalizationType.None)
-                _type = LocalizationType.EN;
-            else
-                _type = (LocalizationType)PlayerPrefs.GetInt(playerprefsName);
-
-            ChangeLanguageType(_type);
-        }
-
+  
         public string GetTextByKey(short key)
         {
             if (mTextLocalDic == null)
@@ -90,5 +76,20 @@ namespace TDFramework.Localization
             //return picLocalDic[key];
         }
 
+        internal override void Init()
+        {
+            LocalizationType _type = LocalizationType.CH;
+            if (!PlayerPrefs.HasKey(playerprefsName) || (LocalizationType)PlayerPrefs.GetInt(playerprefsName) == LocalizationType.None)
+                _type = LocalizationType.EN;
+            else
+                _type = (LocalizationType)PlayerPrefs.GetInt(playerprefsName);
+
+            ChangeLanguageType(_type);
+        }
+
+        public void Dispose()
+        {
+           
+        }
     }
 }

@@ -15,17 +15,17 @@ namespace TDFramework.Localization
 
             Refresh();
 
-            LocalizationMgr.Instance.RefreshHandle += Refresh;
+            GameEntry.Localization.RefreshHandle += Refresh;
         }
 
         public void Refresh()
         {
-            mSelftImg.sprite = LocalizationMgr.Instance.GetSpriteByKey(mLocalKey);
+            mSelftImg.sprite = GameEntry.Localization.GetSpriteByKey(mLocalKey);
         }
 
         private void OnDestroy()
         {
-            LocalizationMgr.Instance.RefreshHandle -= Refresh;
+            GameEntry.Localization.RefreshHandle -= Refresh;
         }
     }
 }

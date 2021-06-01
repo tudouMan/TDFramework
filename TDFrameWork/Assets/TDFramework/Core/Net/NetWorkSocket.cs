@@ -227,8 +227,7 @@ public class NetWorkSocket : MonoSingleton<NetWorkSocket>
                                 protoCode = ms.ReadUShort();
                                 ms.Read(ProtoContent, 0, ProtoContent.Length);
                                 //获取数据需要派发出去
-                                TDFramework.EventSystem.EventCenter.Broadcast(protoCode, ProtoContent);
-                               
+                                GameEntry.Event.Broadcast(protoCode, ProtoContent);
                             }
                         }
                         else

@@ -21,19 +21,13 @@ public class FrameworkEditor :EditorWindow
     bool mIsFoldoutUI;
     static string mUIInitPath = "/Scripts/UI/";
     static string mUINameSpacePath = "Game.UI";
-
-    static string mSaveUIInitPath = "UIInitPath";
-    static string mSaveUINameSpacePath = "UINameSpacePath";
-
-
+    UIBindPath mUIBindPath;
 
     private void OnEnable()
     {
-        if (PlayerPrefs.HasKey(mSaveUIInitPath))
-            mUIInitPath = PlayerPrefs.GetString(mSaveUIInitPath);
-
-        if (PlayerPrefs.HasKey(mSaveUINameSpacePath))
-            mUINameSpacePath = PlayerPrefs.GetString(mSaveUINameSpacePath);
+        mUIBindPath = Resources.Load<UIBindPath>("UIBindPath");
+        mUIInitPath = mUIBindPath.mUIInitPath;
+        mUINameSpacePath = mUIBindPath.mUINameSpacePath;
     }
 
 
@@ -80,9 +74,9 @@ public class FrameworkEditor :EditorWindow
                     this.ShowNotification(new GUIContent("命名空间带空格"));
                     return;
                 }
-
-                PlayerPrefs.SetString(mSaveUIInitPath, mUIInitPath);
-                PlayerPrefs.SetString(mSaveUINameSpacePath, mUIInitPath);
+                mUIBindPath.mUIInitPath = mUIInitPath;
+                mUIBindPath.mUINameSpacePath = mUINameSpacePath;
+               
             }
         }
 
@@ -101,8 +95,6 @@ public class FrameworkEditor :EditorWindow
         }
         
         string savaPath = mUIInitPath;
-        if (PlayerPrefs.HasKey(mSaveUIInitPath))
-            savaPath = PlayerPrefs.GetString(mSaveUIInitPath);
         savaPath = string.Format(Application.dataPath + mUIInitPath);
         savaPath.CreateDirIfNotExists();
         EditorPrefs.SetBool("UICreatRun", true);
@@ -135,10 +127,6 @@ public class FrameworkEditor :EditorWindow
             contentBuilder.Append("using UnityEngine.UI;");
             contentBuilder.Append(spaceLine);
             contentBuilder.Append(spaceLine);
-
-            if (PlayerPrefs.HasKey(mSaveUINameSpacePath))
-                mUINameSpacePath = PlayerPrefs.GetString(mSaveUINameSpacePath);
-
             contentBuilder.Append($"namespace {mUINameSpacePath}");
             contentBuilder.Append(spaceLine);
             contentBuilder.Append("{");
@@ -292,11 +280,6 @@ public class FrameworkEditor :EditorWindow
         bindBuilder.Append("using UnityEngine.UI;");
         bindBuilder.Append(spaceLine);
         bindBuilder.Append(spaceLine);
-
-
-        if (PlayerPrefs.HasKey(mSaveUINameSpacePath))
-            mUINameSpacePath = PlayerPrefs.GetString(mSaveUINameSpacePath);
-
         bindBuilder.Append($"namespace {mUINameSpacePath}");
         bindBuilder.Append(spaceLine);
         bindBuilder.Append("{");
@@ -382,7 +365,8 @@ public class FrameworkEditor :EditorWindow
             if (!SelectObj.GetComponent(SelectName))
             {
                 var assembly = TDFramework.Extention.ReflectionExtension.GetAssemblyCSharp();
-                System.Type addType = assembly.GetType("TDFramework.UI." + SelectName);
+                string nameSpace = Resources.Load<UIBindPath>("UIBindPath").mUINameSpacePath;
+                System.Type addType = assembly.GetType(nameSpace +"."+ SelectName);
                 SelectObj.AddComponent(addType);
             }
             var component = SelectObj.GetComponent(SelectName);

@@ -7,25 +7,14 @@ using AppDomain = ILRuntime.Runtime.Enviorment.AppDomain;
 
 namespace TDFramework.Runtime
 {
-    public class ILRuntimeMgr:Singleton<ILRuntimeMgr>
+    public class ILRuntimeMgr:ManagerBase,IDisposable
     {
         //大家在正式项目中请全局只创建一个AppDomain
         AppDomain mAppdomain;
 
         public AppDomain MAppdomain { get => mAppdomain; set => mAppdomain = value; }
 
-        private ILRuntimeMgr()
-        {
-
-        }
-
-        public override void OnSingletonInit()
-        {
-            base.OnSingletonInit();
-            mAppdomain = new ILRuntime.Runtime.Enviorment.AppDomain();
-            InitializeILRuntime();
-        }
-
+ 
 
         void InitializeILRuntime()
         {
@@ -60,6 +49,15 @@ namespace TDFramework.Runtime
             callBack?.Invoke();
         }
 
-        
+        internal override void Init()
+        {
+            mAppdomain = new ILRuntime.Runtime.Enviorment.AppDomain();
+            InitializeILRuntime();
+        }
+
+        public void Dispose()
+        {
+            
+        }
     }
 }

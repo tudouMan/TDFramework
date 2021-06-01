@@ -3,21 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TDFramework.HeapPool;
 using TDFramework.Resource;
 using UnityEngine;
 
 namespace TDFramework.Audio
 {
-    public class SoundManager:MonoSingleton<SoundManager>
+    public class SoundManager : ManagerBase, IDisposable
     {
         private List<Sound> mCurSounds=new List<Sound>();
-        private HeapScriptsPool<Sound> mSoundHeap=new HeapScriptsPool<Sound>();
-
-        private SoundManager()
-        {
-           
-        }
 
         //BgSound
         private Sound mBgSound;
@@ -38,36 +31,23 @@ namespace TDFramework.Audio
 
         private void PlayAudio(string soundName, bool isLoop,float vol)
         {
-            if (mSoundHeap.IsPoolSizeFull)
-            {
-                Res.LoadAssetAsync<AudioClip>(soundName, p => 
-                {
-                   Sound sound=mSoundHeap.Pop();
-                   sound.Play(p, isLoop, vol);
-                    if (isLoop)
-                        mBgSound = sound;
-                    mCurSounds.Add(sound);
-                });
 
-            }
-            else
-            {
-                Res.LoadAssetAsync<AudioClip>(soundName, p =>
+            GameEntry.Res.LoadAssetAsync<AudioClip>(soundName, p =>
                 {
-                    GameObject newObj = new GameObject(soundName);
-                    newObj.transform.SetParent(this.transform);
-                    AudioSource source= newObj.AddComponent<AudioSource>();
-                    Sound sound=mSoundHeap.Pop();
-                    sound.Play(p, isLoop, vol, source, mSoundHeap);
+                    Sound sound = GameEntry.Pool.PopClass<Sound>();
+                    sound.Play(p, isLoop, vol);
                     if (isLoop)
                         mBgSound = sound;
                     mCurSounds.Add(sound);
                 });
-            }
         }
 
+        public void Remove(Sound sound)
+        {
+            CurSounds.Remove(sound);
+        }
 
-        private void Update()
+        public void Update()
         {
             for (int i = mCurSounds.Count-1; i >=0 ; i--)
             {
@@ -76,6 +56,16 @@ namespace TDFramework.Audio
                     mCurSounds[i].Stop();
                 }
             }
+        }
+
+        internal override void Init()
+        {
+            
+        }
+
+        public void Dispose()
+        {
+           
         }
     }
 }
