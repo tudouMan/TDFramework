@@ -31,7 +31,6 @@ namespace TDFramework.Audio
 
         private void PlayAudio(string soundName, bool isLoop,float vol)
         {
-
             GameEntry.Res.LoadAssetAsync<AudioClip>(soundName, p =>
                 {
                     Sound sound = GameEntry.Pool.PopClass<Sound>();
@@ -42,13 +41,14 @@ namespace TDFramework.Audio
                 });
         }
 
+
         public void Remove(Sound sound)
         {
             CurSounds.Remove(sound);
         }
 
         public void Update()
-        {
+        {  
             for (int i = mCurSounds.Count-1; i >=0 ; i--)
             {
                 if (mCurSounds[i].IsFinish)

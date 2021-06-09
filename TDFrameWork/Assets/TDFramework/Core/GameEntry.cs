@@ -11,8 +11,11 @@ using TDFramework.Resource;
 
 namespace TDFramework
 {
+    [MonoSingletonPath("GameEntry")]
     public class GameEntry : MonoSingleton<GameEntry>
     {
+
+        
 
 
         public override void OnSingletonInit()

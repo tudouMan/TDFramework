@@ -1,37 +1,33 @@
 ﻿using System;
 using System.Collections.Generic;
+using UnityEngine.AddressableAssets;
 
 namespace TDFramework.Pool
 {
     public class PrefabPool : IDisposable
     {
-        private Dictionary<int, PrefabPoolEntity> poolDic;
+        private Dictionary<string, PrefabPoolEntity> poolDic;
 
         private Dictionary<int, int> poolInspectorDic;
+        private Dictionary<int, string> prefabIdDic;
 
         public PrefabPool()
         {
-            poolDic = new Dictionary<int, PrefabPoolEntity>();
-#if UNITY_EDITOR
-            poolInspectorDic = new Dictionary<int, int>();
-#endif
+            poolDic = new Dictionary<string, PrefabPoolEntity>();
+            prefabIdDic = new Dictionary<int, string>();
         }
 
 
-        public void Pop(string prefabName, Action<UnityEngine.GameObject> complete)
+        public void Pop(string prefabName, Action<UnityEngine.GameObject> completeCallBack)
         {
-
-            
             PrefabPoolEntity pool = null;
-            int prefabId= AddressableManager.GetPrefabId(prefabName);
-            poolDic.TryGetValue(prefabId, out pool);
+            poolDic.TryGetValue(prefabName, out pool);
             if (pool == null)
             {
                 pool = new PrefabPoolEntity();
                 pool.PoolName = prefabName;
-                pool.PrefabId= prefabId;
                 pool.Stack = new Stack<UnityEngine.GameObject>();
-                poolDic[prefabId] = pool;
+                poolDic[prefabName] = pool;
                 
             }
 
@@ -39,18 +35,21 @@ namespace TDFramework.Pool
             if (pool.Stack.Count > 0)
             {
                UnityEngine.GameObject prfab=pool.Stack.Pop();
-               complete?.Invoke(prfab);
-#if UNITY_EDITOR
-                if (poolInspectorDic.ContainsKey(prefabId))
-                    poolInspectorDic[prefabId]--;
-                else
-                    poolInspectorDic[prefabId] =0;
-#endif
+                completeCallBack?.Invoke(prfab);
             }
             else
             {
-                UnityEngine.GameObject  loadPrefab= AddressableManager.InstanceObj(prefabName);
-                complete?.Invoke(loadPrefab);
+                GameEntry.Res.InstanceAsync(prefabName,p=> 
+                {
+                    completeCallBack?.Invoke(p.gameObject);
+                    lock (prefabIdDic)
+                    {
+                        if (!prefabIdDic.ContainsKey(p.GetInstanceID()))
+                            prefabIdDic.Add(p.GetInstanceID(), prefabName);
+                    }
+                  
+                });
+               
             }
 
         }
@@ -58,24 +57,29 @@ namespace TDFramework.Pool
 
         public void Push(UnityEngine.GameObject prefab)
         {
-            int prefabId=prefab.GetInstanceID();
+            if (prefab == null)
+                throw new Exception("this gameobect is null");
+
             PrefabPoolEntity pool = null;
-            poolDic.TryGetValue(prefabId, out pool);
+            string poolName = string.Empty;
+            prefabIdDic.TryGetValue(prefab.GetInstanceID(),out poolName);
+
+            if (string.IsNullOrEmpty(poolName))
+            {
+                GameEntry.Debug.LogError($"not this {prefab.GetInstanceID().ToString()} instanceId prefab");
+                return;
+            }
+                
+            poolDic.TryGetValue(poolName, out pool);
             if (pool == null)
             {
+                GameEntry.Debug.Log($"push this {poolName} pool,pool is not initialize ");
                 pool = new PrefabPoolEntity();
                 pool.Stack = new Stack<UnityEngine.GameObject>();
             }
-
-#if UNITY_EDITOR
-            if (poolInspectorDic.ContainsKey(prefabId))
-                poolInspectorDic[prefabId]++;
-            else
-                poolInspectorDic[prefabId] = 1;
-#endif
-             //Todo进行细分挂显示具体信息
-            //prefab.transform.parent = GameEntry.Instance.transform;
             pool.Stack.Push(prefab);
+
+            GameEntry.Debug.Log($"{poolName}pool size is {pool.Stack.Count.ToString()}");
         }
 
 
@@ -87,27 +91,5 @@ namespace TDFramework.Pool
     }
 
 
-    //TODO
-    public class AddressableManager
-    {
-        public static int GetPrefabId(string name)
-        {
-            return 1000;
-        }
-        public static UnityEngine.GameObject LoadGameObject(string path)
-        {
-            return new UnityEngine.GameObject();
-        }
-
-        public static UnityEngine.GameObject InstanceObj(string path)
-        {
-            return new UnityEngine.GameObject();
-        }
-
-        public static UnityEngine.GameObject LoadGameObject(string path,BaseAction action)
-        {
-            return new UnityEngine.GameObject();
-        }
-
-    }
+   
 }

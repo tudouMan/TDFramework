@@ -46,5 +46,17 @@ namespace TDFramework.Pool
         }
 
         #endregion
+
+        #region PrefabPool
+        public void PopPrefab(string prefabName, Action<UnityEngine.GameObject> completeCallBack)
+        {
+            m_PrefabPool.Pop(prefabName, completeCallBack);
+        }
+
+        public void PushPrefab(UnityEngine.GameObject prefab)
+        {
+            m_PrefabPool.Push(prefab);
+        }
+        #endregion
     }
 }

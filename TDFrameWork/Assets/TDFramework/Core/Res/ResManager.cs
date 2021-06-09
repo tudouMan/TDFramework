@@ -163,12 +163,12 @@ namespace TDFramework.Resource
 
         internal override void Init()
         {
-            throw new NotImplementedException();
+           
         }
 
         public void Dispose()
         {
-            throw new NotImplementedException();
+           
         }
         #endregion
 
