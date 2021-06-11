@@ -74,7 +74,10 @@ namespace TDFramework.UI
             UIManager.Instance.PushPanel<T>();
         }
 
-
+        public static Transform GetTransformByUILevel(UILevel level)
+        {
+            return UIManager.Instance.GetTransformByUILevel(level);
+        }
         public static void BackPanel(string panelName=null)
         {
             UIManager.Instance.BackPanel(panelName);

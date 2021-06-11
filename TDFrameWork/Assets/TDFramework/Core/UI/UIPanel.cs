@@ -8,7 +8,7 @@ using TDFramework.UI;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
-
+using TDFramework.Extention;
 namespace TDFramework.UI
 {
 
@@ -35,7 +35,7 @@ namespace TDFramework.UI
 
         public virtual void OnOpen(IUIData uidata = null) 
         {
-            
+            OnShow();
         }
 
         public virtual void OnShow() { }

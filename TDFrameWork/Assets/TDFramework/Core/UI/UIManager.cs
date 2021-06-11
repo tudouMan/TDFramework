@@ -55,7 +55,7 @@ namespace TDFramework.UI
         public Camera UICamera { get => mUICamera; }
         public Canvas UICanvas { get => mUICanvas; }
 
-        private Transform GetTransformByUILevel(UILevel level)
+        public Transform GetTransformByUILevel(UILevel level)
         {
             return mUILayers[level.GetHashCode()];
         }
@@ -110,21 +110,16 @@ namespace TDFramework.UI
                 throw new Exception("panelName is null");
 
             IPanel loadpanel = null;
-            if(!mLoadPanels.TryGetValue(panelName,out loadpanel))
+            mLoadPanels.TryGetValue(panelName, out loadpanel);
+            if (loadpanel == null)
             {
                 CreatPanel(panelName, uilevel, uidata);
             }
-           
-
-            Observable.EveryUpdate().
-                Where(_ => loadpanel != null )
-                .Subscribe(_ => 
-                {
-                    loadpanel.OnOpen(uidata);
-                    loadpanel.OnShow();
-
-                }).AddTo(this);
-
+            else
+            {
+                loadpanel.OnOpen(uidata);
+            }
+                
         }
 
         private void CreatPanel(string panelName, UILevel uilevel, IUIData uidata = null)
@@ -141,7 +136,9 @@ namespace TDFramework.UI
                   {
                       p.PanelInfo = new UIPanelInfo(uilevel, uidata, panelName);
                       p.OnInit(uidata);
-                      mLoadPanels.Add(panelName, p);
+                      p.OnOpen(uidata);
+                      lock(mLoadPanels)
+                          mLoadPanels.Add(panelName, p);
                      
                   });
 
