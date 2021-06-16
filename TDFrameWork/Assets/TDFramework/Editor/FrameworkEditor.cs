@@ -397,6 +397,7 @@ public class FrameworkEditor :EditorWindow
            
             Debug.Log($"{SelectName}Script creat Success..............");
             EditorPrefs.SetBool("UICreatRun", false);
+            AssetDatabase.SaveAssets();
         }
        
     }
