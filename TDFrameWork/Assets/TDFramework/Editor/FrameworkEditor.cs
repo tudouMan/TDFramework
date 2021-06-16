@@ -348,7 +348,8 @@ public class FrameworkEditor :EditorWindow
 
 
 
-    [UnityEditor.Callbacks.DidReloadScripts]
+    //  [UnityEditor.Callbacks.DidReloadScripts]
+    [InitializeOnLoadMethod]
     static void UICreatRun()
     {
         if (EditorPrefs.GetBool("UICreatRun"))
@@ -489,9 +490,12 @@ public class UIBindInspector : Editor
 
         if (isRefresh)
         {
-            Undo.RecordObject(bind, "modify value");
+            Undo.RegisterCompleteObjectUndo(bind, "modify value");
             EditorUtility.SetDirty(bind);
+            AssetDatabase.SaveAssets();
+
         }
+
     }
 
 
