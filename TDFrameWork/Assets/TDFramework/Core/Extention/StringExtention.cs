@@ -305,5 +305,17 @@ namespace TDFramework.Extention
         {
             return targets.Aggregate(str, (current, t) => current.Replace(t, string.Empty));
         }
+
+        /// <summary>
+        /// 判断字段的名称和节点的名称是否匹配
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="transName"></param>
+        /// <returns></returns>
+        public static bool IsMatch(this string name, string transName)
+        {
+            var temp = name.StartsWith("_") ? name.Substring(1, name.Length - 1) : name;
+            return temp.ToLower().Equals(transName.ToLower());
+        }
     }
 }

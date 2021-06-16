@@ -348,16 +348,14 @@ public class FrameworkEditor :EditorWindow
 
 
 
-    [InitializeOnLoadMethod]
+    [UnityEditor.Callbacks.DidReloadScripts]
     static void UICreatRun()
     {
         if (EditorPrefs.GetBool("UICreatRun"))
         {
-
             GameObject SelectObj = Selection.activeGameObject;
             if (SelectObj == null)
             {
-                Debug.LogError("没有选中物体请选择");
                 return;
             }
             string SelectName = SelectObj.name;
@@ -369,31 +367,40 @@ public class FrameworkEditor :EditorWindow
                 System.Type addType = assembly.GetType(nameSpace +"."+ SelectName);
                 SelectObj.AddComponent(addType);
             }
-            var component = SelectObj.GetComponent(SelectName);
-            System.Type type = component.GetType();
+            var viewType = SelectObj.GetComponent(SelectName);
+            System.Type type = viewType.GetType();
+
+
             foreach (var item in Binds)
             {
                 string propertityName = item.gameObject.name;
+                //获取到分裂类中对应需要设置的属性
                 var fileInfo = type.GetField(propertityName);
                 if (fileInfo != null)
                 {
-                    if (item.gameObject.GetComponent(item.ComponentName) == null)
+                    Component itemComponent = item.gameObject.GetComponent(item.ComponentName);
+                    if (itemComponent == null)
                     {
                         Debug.LogWarning($"Behavior{item.gameObject.name}物体上没有{item.DefaultName()}属性");
                     }
-                    fileInfo.SetValue(component, item.gameObject.GetComponent(item.ComponentName));
+
+                    //设置属性对应的component
+                    fileInfo.SetValue(viewType, itemComponent);
+                    EditorUtility.SetDirty(SelectObj);
                 }
                 else
                     Debug.LogWarning($"字段没有{item.gameObject.name}物体上没有{item.DefaultName()}属性");
 
-            }
 
-            Debug.Log($"{SelectName}Script Build Success..............");
+            }
+        
+           
+            Debug.Log($"{SelectName}Script creat Success..............");
             EditorPrefs.SetBool("UICreatRun", false);
         }
-
        
     }
+
 }
 
 
@@ -489,6 +496,5 @@ public class UIBindInspector : Editor
 
   
 }
-
 
 

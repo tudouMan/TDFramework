@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using UnityEngine;
 
 namespace TDFramework.Extention
 {
@@ -228,6 +229,47 @@ namespace TDFramework.Extention
             if (attrs != null && attrs.Length > 0)
                 return attrs[0];
             return null;
+        }
+
+
+        /// <summary>
+        /// 给字段赋值
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="root"></param>
+        /// <param name="tObj"></param>
+        public static void SetFieldValue<T>(this Transform root, T tObj)
+        {
+            var fields = typeof(T).GetFields(BindingFlags.Instance | BindingFlags.NonPublic)?.Where(p => p.FieldType.IsSubclassOf(typeof(Component))).ToList();
+            RecursiveSetValue(root, fields, tObj);
+        }
+
+        /// <summary>
+        /// 递归函数给类里的字段赋值
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="root"></param>
+        /// <param name="fieldInfos"></param>
+        /// <param name="tObj"></param>
+        private static void RecursiveSetValue<T>(Transform root, List<FieldInfo> fieldInfos, T tObj)
+        {
+            if (fieldInfos == null || fieldInfos.Count == 0) return;
+
+            for (int i = 0; i < root.childCount; i++)
+            {
+                var child = root.GetChild(i);
+                RecursiveSetValue(child, fieldInfos, tObj);
+                for (int j = fieldInfos.Count - 1; j >= 0; j--)
+                {
+                    var fieldInfo = fieldInfos[j];
+                    if (fieldInfo.FieldType.IsSubclassOf(typeof(Component)) && fieldInfo.Name.IsMatch(child.name))
+                    {
+                        var component = child.GetComponent(fieldInfo.FieldType);
+                        fieldInfo.SetValue(tObj, component);
+                        fieldInfos.RemoveAt(j);
+                    }
+                }
+            }
         }
     }
 
