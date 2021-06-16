@@ -374,6 +374,8 @@ public class FrameworkEditor :EditorWindow
 
             foreach (var item in Binds)
             {
+              
+                   
                 string propertityName = item.gameObject.name;
                 //获取到分裂类中对应需要设置的属性
                 var fileInfo = type.GetField(propertityName);
@@ -413,7 +415,7 @@ public class UIBindInspector : Editor
 {
 
     string[] bindTypeStrs = new string[] { "Default", "Custom" };
-    int customTypeIndex = 17;
+  
 
     BindType curBindType;
     string curSelectType;
@@ -438,12 +440,11 @@ public class UIBindInspector : Editor
         "UnityEngine.UI.Dropdown",
         "UnityEngine.UI.ScrollRect",
         "UnityEngine.RectTransform",
-        "UnityEngine.GameObject",
         "UnityEngine.Transform",
         "UnityEngine.CanvasRenderer"
     };
 
-
+    int customTypeIndex = 0;
     public override void OnInspectorGUI()
     {
         bool isRefresh = false;

@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
+
 namespace TDFramework.UI
 {
     public enum BindType
@@ -62,10 +63,9 @@ namespace TDFramework.UI
             if (GetComponent<UnityEngine.UI.Scrollbar>()) return "UnityEngine.UI.Scrollbar";
             if (GetComponent<UnityEngine.UI.Dropdown>()) return "UnityEngine.UI.Dropdown";
             if (GetComponent<UnityEngine.UI.ScrollRect>()) return "UnityEngine.UI.ScrollRect";
-            if (GetComponent<UnityEngine.RectTransform>()) return "UnityEngine.RectTransform";
-            if (GetComponent<UnityEngine.GameObject>()) return "UnityEngine.GameObject";
-            if (GetComponent<UnityEngine.Transform>()) return "UnityEngine.Transform";
-            if (GetComponent<UnityEngine.CanvasRenderer>()) return "UnityEngine.CanvasRenderer";
+            if (GetComponent<UnityEngine.RectTransform>()) return "RectTransform";
+            if (GetComponent<UnityEngine.Transform>()) return "Transform";
+            if (GetComponent<UnityEngine.CanvasRenderer>()) return "CanvasRenderer";
             return string.Empty;
         }
     }
