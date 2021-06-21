@@ -15,9 +15,6 @@ namespace TDFramework
     public class GameEntry : MonoSingleton<GameEntry>
     {
 
-        
-
-
         public override void OnSingletonInit()
         {
             base.OnSingletonInit();
