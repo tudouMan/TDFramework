@@ -69,6 +69,7 @@ namespace TDFramework
             Scene.Init();
             Debug.Init();
             Sound.Init();
+            FSM.Init();
             IL.Init();
             Localization.Init();
             Res.Init();
@@ -81,7 +82,7 @@ namespace TDFramework
             Time.Update();
             Scene.Update();
             Sound.Update();
-            
+            FSM.Update();
         }
 
         protected override void OnDestroy()

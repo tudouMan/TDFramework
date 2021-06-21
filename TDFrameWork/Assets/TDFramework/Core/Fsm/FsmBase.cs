@@ -18,5 +18,7 @@ namespace TDFramework
         }
 
         public virtual void ShutDown() { }
+        
+        public  virtual  void Update(){}
     }
 }

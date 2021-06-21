@@ -16,19 +16,7 @@ MonoBehaviour:
   m_Data:
     m_SerializedData: []
   m_GUID: 22de16b7d746f314198aa648e880c407
-  m_SerializeEntries:
-  - m_GUID: 27670c842d970844b82efe38bc976b2e
-    m_Address: HotFix_Project.pdb
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    m_MainAsset: {fileID: 4900000, guid: 27670c842d970844b82efe38bc976b2e, type: 3}
-    m_TargetAsset: {fileID: 4900000, guid: 27670c842d970844b82efe38bc976b2e, type: 3}
-  - m_GUID: 3a3fb5ee80575f54f8ff9c8093da548c
-    m_Address: HotFix_Project.dll
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    m_MainAsset: {fileID: 4900000, guid: 3a3fb5ee80575f54f8ff9c8093da548c, type: 3}
-    m_TargetAsset: {fileID: 4900000, guid: 3a3fb5ee80575f54f8ff9c8093da548c, type: 3}
+  m_SerializeEntries: []
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: be554cc2c0019e441ae378ab5866526d, type: 2}
   m_SchemaSet:

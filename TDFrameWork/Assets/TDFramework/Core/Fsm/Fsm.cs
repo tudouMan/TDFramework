@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UnityEngine;
 
 namespace TDFramework
 {
@@ -12,27 +13,23 @@ namespace TDFramework
         public T Owner { get;private set; }
 
         private Dictionary<int, FsmState<T>> m_StateDic;
-
-        ////fsm 参数类型管理 TODO
-        //private Dictionary<Type, FsmArgs> m_FsmArgs;
-
-
+        
         private FsmState<T> m_CurState;
 
         public Fsm(T owner,int fsmId, FsmState<T>[]fsmStates):base(fsmId: fsmId)
         {
             m_StateDic = new Dictionary<int, FsmState<T>>();
-           // m_FsmArgs = new Dictionary<Type, FsmArgs>();
+           
             Owner = owner;
             for (int i = 0; i < fsmStates.Length; i++)
             {
                 FsmState<T> state = fsmStates[i];
                 state.Fsm = this;
                 m_StateDic.Add(i, state);
+                Debug.Log("I:"+i.ToString()+"  TYPE:"+state.GetType().ToString());
             }
             m_CurState = fsmStates[0];
             CurStateType = -1;
-
         }
 
 
@@ -64,7 +61,7 @@ namespace TDFramework
         }
 
 
-        public void Update()
+        public override void Update()
         {
             if (m_CurState != null)
                 m_CurState.OnUpdate();
@@ -75,7 +72,7 @@ namespace TDFramework
             if (m_CurState != null)
                 m_CurState.OnExit();
 
-          
+            m_CurState = null;
             foreach (KeyValuePair<int,FsmState<T>>state in m_StateDic)
             {
                 state.Value.OnDestory();

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UnityEngine;
 
 namespace TDFramework
 {
@@ -22,6 +23,7 @@ namespace TDFramework
         {
             m_FsmTempId++;
             Fsm<T> fsm = new Fsm<T>(owner, m_FsmTempId,states);
+            m_FsmDic.Add(m_FsmTempId,fsm);
             return fsm;
         }
 
@@ -38,7 +40,16 @@ namespace TDFramework
                
         }
 
-
+        public void Update()
+        {
+     
+            var enumerator = m_FsmDic.GetEnumerator();
+            while (enumerator.MoveNext())
+            {
+                 enumerator.Current.Value.Update();
+            }
+           
+        }
   
 
         public void Dispose()
