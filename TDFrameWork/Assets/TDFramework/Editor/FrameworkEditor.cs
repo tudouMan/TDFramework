@@ -151,6 +151,10 @@ public class FrameworkEditor :EditorWindow
             contentBuilder.Append(spaceLine);
             contentBuilder.Append(spaceNine);
 
+            // private TestViewData mData;
+            contentBuilder.Append($"private {name}Data mData;");
+            contentBuilder.Append(spaceLine);
+            contentBuilder.Append(spaceNine);
 
             contentBuilder.Append("public override void OnInit(IUIData uidata = null)");
             contentBuilder.Append(spaceLine);
@@ -158,7 +162,7 @@ public class FrameworkEditor :EditorWindow
             contentBuilder.Append("{");
             contentBuilder.Append(spaceLine);
             contentBuilder.Append(spaceTwelve);
-            contentBuilder.Append($"mData = uidata as {uiDataName} ?? new {uiDataName}();");
+            contentBuilder.Append("base.OnInit(uidata);");
             contentBuilder.Append(spaceLine);
             contentBuilder.Append(spaceNine);
             contentBuilder.Append("}");
@@ -173,6 +177,9 @@ public class FrameworkEditor :EditorWindow
             contentBuilder.Append(spaceLine);
             contentBuilder.Append(spaceTwelve);
             contentBuilder.Append("base.OnOpen(uidata);");
+            contentBuilder.Append(spaceLine);
+            contentBuilder.Append(spaceTwelve);
+            contentBuilder.Append($"mData = uidata as {uiDataName} ?? new {uiDataName}();");
             contentBuilder.Append(spaceLine);
             contentBuilder.Append(spaceNine);
             contentBuilder.Append("}");
@@ -400,7 +407,7 @@ public class FrameworkEditor :EditorWindow
            
             Debug.Log($"{SelectName}Script creat Success..............");
             EditorPrefs.SetBool("UICreatRun", false);
-            AssetDatabase.SaveAssets();
+           
         }
        
     }

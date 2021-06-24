@@ -63,8 +63,8 @@ namespace TDFramework.UI
             if (GetComponent<UnityEngine.UI.Scrollbar>()) return "UnityEngine.UI.Scrollbar";
             if (GetComponent<UnityEngine.UI.Dropdown>()) return "UnityEngine.UI.Dropdown";
             if (GetComponent<UnityEngine.UI.ScrollRect>()) return "UnityEngine.UI.ScrollRect";
-            if (GetComponent<UnityEngine.RectTransform>()) return "RectTransform";
-            if (GetComponent<UnityEngine.Transform>()) return "Transform";
+            if (GetComponent<UnityEngine.RectTransform>()) return "UnityEngine.RectTransform";
+            if (GetComponent<UnityEngine.Transform>()) return "UnityEngine.Transform";
             if (GetComponent<UnityEngine.CanvasRenderer>()) return "CanvasRenderer";
             return string.Empty;
         }

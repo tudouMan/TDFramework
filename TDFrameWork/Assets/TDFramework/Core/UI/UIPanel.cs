@@ -17,10 +17,6 @@ namespace TDFramework.UI
 
     public abstract class UIPanel:MonoBehaviour,IPanel
     {
-
-        protected UIPanelData mData;
-        public UIPanelData PanelData { get => mData; set => mData = value; }
-
         public class UIPanelData : IUIData
         {
 
