@@ -16,7 +16,7 @@ namespace TDFramework.Cache
 
         public void Save()
         {
-           
+            GameEntry.Debug.Log("Save LocalCache");
         }
 
         internal override void Init()

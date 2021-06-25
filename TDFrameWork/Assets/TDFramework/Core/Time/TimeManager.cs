@@ -6,29 +6,29 @@ namespace TDFramework
 {
     public class TimeManager : ManagerBase, IDisposable
     {
-        private LinkedList<TimeAction> timeActions;
+        private LinkedList<TimeAction> m_TimeActions;
 
         internal override void Init()
         {
-            timeActions = new LinkedList<TimeAction>();
+            m_TimeActions = new LinkedList<TimeAction>();
         }
 
 
         public void Register(TimeAction action)
         {
-            timeActions.AddLast(action);
+            m_TimeActions.AddLast(action);
         }
 
         public void Remove(TimeAction action)
         {
-            timeActions.Remove(action);
+            m_TimeActions.Remove(action);
             GameEntry.Pool.PushClass<TimeAction>(action);
         }
 
 
         public void RemoveByTimeName(string name)
         {
-            LinkedListNode<TimeAction> cur = timeActions.First;
+            LinkedListNode<TimeAction> cur = m_TimeActions.First;
             while (cur != null)
             {
                 if (cur.Value.Name.Equals(name,StringComparison.CurrentCultureIgnoreCase))
@@ -51,7 +51,7 @@ namespace TDFramework
 
         public void Update()
         {
-            for (LinkedListNode<TimeAction>cur=timeActions.First;cur!=null;cur=cur.Next)
+            for (LinkedListNode<TimeAction>cur=m_TimeActions.First;cur!=null;cur=cur.Next)
             {
                 if(cur.Value.StartAction!=null && (cur.Value.StartAction.Target==null || cur.Value.StartAction.Target.ToString() == "null"))
                 {
@@ -79,7 +79,7 @@ namespace TDFramework
         public void Dispose()
         {
             GameEntry.Debug.Log("TimeManager Dispose");
-            timeActions.Clear();
+            m_TimeActions.Clear();
         }
 
 

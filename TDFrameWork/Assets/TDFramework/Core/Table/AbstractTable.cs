@@ -21,12 +21,12 @@ namespace TDFramework.Table
 
         public abstract string FileName { get; }
 
-        public abstract P ReadData(JsonData jsonData);
+        public abstract P ReadData(JsonData data);
 
         private void Load()
         {
 
-            GameEntry.Res.LoadAssetAsync<TextAsset>(string.Format("Data/{0}.json",FileName) ,fileStr=> 
+            GameEntry.Res.LoadAssetAsync<TextAsset>(FileName,fileStr=> 
             {
                 string jsonData = Tool.StringEncryption.DecryptDES(fileStr.text);
                 JsonData data = JsonMapper.ToObject(jsonData);
@@ -59,13 +59,19 @@ namespace TDFramework.Table
         public P Get(int id,bool isCopy=true)
         {
             if (mDataDic.ContainsKey(id))
-                return Copy<P>(mDataDic[id]);
+            {
+                if (isCopy)
+                    return Copy<P>(mDataDic[id]);
+                else
+                    return mDataDic[id];
+            }
+                
             else
                 return null;
         }
 
 
-      
+        
 
         public  P Copy<P>(P RealObject)where P:TableBase
         {

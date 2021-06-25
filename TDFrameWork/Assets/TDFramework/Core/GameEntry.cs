@@ -60,7 +60,7 @@ namespace TDFramework
             IL = new ILRuntimeMgr();
             Localization = new LocalizationMgr();
             Res = new ResManager();
-
+            LocalCache = new LocalCacheMgr();
             Logger.Init();
             Event.Init();
             Time.Init();
@@ -73,6 +73,7 @@ namespace TDFramework
             IL.Init();
             Localization.Init();
             Res.Init();
+            LocalCache.Init();
         }
 
 
@@ -89,6 +90,12 @@ namespace TDFramework
         {
             base.OnDestroy();
             Logger.SyncLog();
+        }
+
+        protected override void OnApplicationQuit()
+        {
+            LocalCache.Save();
+            base.OnApplicationQuit();
         }
     }
 

@@ -10,13 +10,13 @@ namespace TDFramework.Localization
 {
     public class LocalizationText : MonoBehaviour, INotification
     {
-        private Text mSelfText;
-        [SerializeField] private short mLocalKey;
+        private Text m_SelfText;
+        [SerializeField] private short m_LocalKey;
 
         void Awake()
         {
-            if (mSelfText == null)
-                mSelfText = GetComponentInChildren<Text>();
+            if (m_SelfText == null)
+                m_SelfText = GetComponentInChildren<Text>();
 
             Refresh();
 
@@ -25,7 +25,7 @@ namespace TDFramework.Localization
 
         public void Refresh()
         {
-            mSelfText.text= GameEntry.Localization.GetTextByKey(mLocalKey);
+            m_SelfText.text= GameEntry.Localization.GetTextByKey(m_LocalKey);
         }
 
         private void OnDestroy()

@@ -10,9 +10,9 @@ namespace TDFramework.Runtime
     public class ILRuntimeMgr:ManagerBase,IDisposable
     {
         //大家在正式项目中请全局只创建一个AppDomain
-        AppDomain mAppdomain;
+        private AppDomain m_Appdomain;
 
-        public AppDomain MAppdomain { get => mAppdomain; set => mAppdomain = value; }
+        public AppDomain MAppdomain { get => m_Appdomain; set => m_Appdomain = value; }
 
  
 
@@ -20,7 +20,7 @@ namespace TDFramework.Runtime
         {
 #if DEBUG && (UNITY_EDITOR || UNITY_ANDROID || UNITY_IPHONE)
             //由于Unity的Profiler接口只允许在主线程使用，为了避免出异常，需要告诉ILRuntime主线程的线程ID才能正确将函数运行耗时报告给Profiler
-            mAppdomain.UnityMainThreadID = System.Threading.Thread.CurrentThread.ManagedThreadId;
+            m_Appdomain.UnityMainThreadID = System.Threading.Thread.CurrentThread.ManagedThreadId;
 #endif
             //这里做一些ILRuntime的注册
         }
@@ -37,7 +37,7 @@ namespace TDFramework.Runtime
             var p = new MemoryStream(pdb);
             try
             {
-                mAppdomain.LoadAssembly(fs, p, new ILRuntime.Mono.Cecil.Pdb.PdbReaderProvider());
+                m_Appdomain.LoadAssembly(fs, p, new ILRuntime.Mono.Cecil.Pdb.PdbReaderProvider());
             }
             catch
             {
@@ -51,7 +51,7 @@ namespace TDFramework.Runtime
 
         internal override void Init()
         {
-            mAppdomain = new ILRuntime.Runtime.Enviorment.AppDomain();
+            m_Appdomain = new ILRuntime.Runtime.Enviorment.AppDomain();
             InitializeILRuntime();
         }
 

@@ -10,12 +10,12 @@ namespace TDFramework.Audio
 {
     public class SoundManager : ManagerBase, IDisposable
     {
-        private List<Sound> mCurSounds=new List<Sound>();
+        private List<Sound> m_CurSounds=new List<Sound>();
 
         //BgSound
-        private Sound mBgSound;
+        private Sound m_BgSound;
 
-        public List<Sound> CurSounds { get => mCurSounds; set => mCurSounds = value; }
+        public List<Sound> CurSounds { get => m_CurSounds; set => m_CurSounds = value; }
 
         public void PlaySound(string soundName, float vol)
         {
@@ -24,8 +24,8 @@ namespace TDFramework.Audio
 
         public void PlayMusic(string soundName, float vol)
         {
-            if (mBgSound != null)
-                mBgSound.FadeStop();
+            if (m_BgSound != null)
+                m_BgSound.FadeStop();
             PlayAudio(soundName, true, vol);
         }
 
@@ -36,8 +36,8 @@ namespace TDFramework.Audio
                     Sound sound = GameEntry.Pool.PopClass<Sound>();
                     sound.Play(p, isLoop, vol);
                     if (isLoop)
-                        mBgSound = sound;
-                    mCurSounds.Add(sound);
+                        m_BgSound = sound;
+                    m_CurSounds.Add(sound);
                 });
         }
 
@@ -49,11 +49,11 @@ namespace TDFramework.Audio
 
         public void Update()
         {  
-            for (int i = mCurSounds.Count-1; i >=0 ; i--)
+            for (int i = m_CurSounds.Count-1; i >=0 ; i--)
             {
-                if (mCurSounds[i].IsFinish)
+                if (m_CurSounds[i].IsFinish)
                 {
-                    mCurSounds[i].Stop();
+                    m_CurSounds[i].Stop();
                 }
             }
         }

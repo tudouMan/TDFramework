@@ -10,13 +10,13 @@ namespace TDFramework.Localization
 {
    public class LocalizationTextMeshProText:MonoBehaviour, INotification
     {
-        private TextMeshProUGUI mSelfText;
-        [SerializeField] private short mLocalKey;
+        private TextMeshProUGUI m_SelfText;
+        [SerializeField] private short m_LocalKey;
 
         void Awake()
         {
-            if (mSelfText == null)
-                mSelfText = GetComponentInChildren<TextMeshProUGUI>();
+            if (m_SelfText == null)
+                m_SelfText = GetComponentInChildren<TextMeshProUGUI>();
 
             Refresh();
             GameEntry.Localization.RefreshHandle+= Refresh;
@@ -26,7 +26,7 @@ namespace TDFramework.Localization
         public void Refresh()
         {
            
-            mSelfText.text = GameEntry.Localization.GetTextByKey(mLocalKey);
+            m_SelfText.text = GameEntry.Localization.GetTextByKey(m_LocalKey);
         }
 
         private void OnDestroy()

@@ -9,16 +9,16 @@ namespace TDFramework.Audio
  
     public class Sound
     {
-        private AudioClip mCurAudioClip;
-        private AudioSource mCurAudioSource;
-        private bool mIsLoop;
+        private AudioClip m_CurAudioClip;
+        private AudioSource m_CurAudioSource;
+        private bool m_IsLoop;
 
 
         public bool IsPlaying
         {
             get
             {
-                return mCurAudioSource.isPlaying;
+                return m_CurAudioSource.isPlaying;
             }
         }
 
@@ -26,7 +26,7 @@ namespace TDFramework.Audio
         {
             get
             {
-                return (float)mCurAudioSource.timeSamples / (float)mCurAudioClip.samples;
+                return (float)m_CurAudioSource.timeSamples / (float)m_CurAudioClip.samples;
             }
         }
 
@@ -34,25 +34,25 @@ namespace TDFramework.Audio
         {
             get
             {
-                return !mIsLoop && Progress >= 1;
+                return !m_IsLoop && Progress >= 1;
             }
         }
 
-        public bool IsLoop { get => mIsLoop; set => mIsLoop = value; }
+        public bool IsLoop { get => m_IsLoop; set => m_IsLoop = value; }
 
         public void Play(AudioClip clip,bool isLoop,float vol,AudioSource source=null)
         {
-            mIsLoop = isLoop;
-            mCurAudioClip = clip;
+            m_IsLoop = isLoop;
+            m_CurAudioClip = clip;
             if (source != null)
-                mCurAudioSource = source;
+                m_CurAudioSource = source;
 
-            if (mCurAudioSource != null)
+            if (m_CurAudioSource != null)
             {
-                mCurAudioSource.clip = clip;
-                mCurAudioSource.loop = isLoop;
-                mCurAudioSource.volume = vol;
-                mCurAudioSource.Play();
+                m_CurAudioSource.clip = clip;
+                m_CurAudioSource.loop = isLoop;
+                m_CurAudioSource.volume = vol;
+                m_CurAudioSource.Play();
             }
             else
             {
@@ -63,24 +63,24 @@ namespace TDFramework.Audio
 
         public void Pause()
         {
-            if (mCurAudioSource != null)
+            if (m_CurAudioSource != null)
             {
-                mCurAudioSource.Pause();
+                m_CurAudioSource.Pause();
             }
                
         }
 
         public void ContinuePlay()
         {
-            if (mCurAudioSource != null)
-                mCurAudioSource.Play();
+            if (m_CurAudioSource != null)
+                m_CurAudioSource.Play();
         }
 
         public void Stop()
         {
-            if (mCurAudioSource != null)
+            if (m_CurAudioSource != null)
             {
-                mCurAudioSource.Stop();
+                m_CurAudioSource.Stop();
                 TDFramework.GameEntry.Pool.PushClass<Sound>(this);
                 GameEntry.Sound.Remove(this);
             }
@@ -95,12 +95,12 @@ namespace TDFramework.Audio
 
         public void Push()
         {
-            GameEntry.Res.ReleaseAsset<AudioClip>(mCurAudioClip);
+            GameEntry.Res.ReleaseAsset<AudioClip>(m_CurAudioClip);
         }
 
         public void FadeStop()
         {
-           DG.Tweening.DOTween.To(() => mCurAudioSource.volume, x => mCurAudioSource.volume = x, 0, 0.3f).OnComplete(()=> 
+           DG.Tweening.DOTween.To(() => m_CurAudioSource.volume, x => m_CurAudioSource.volume = x, 0, 0.3f).OnComplete(()=> 
            {
                Stop();
            });

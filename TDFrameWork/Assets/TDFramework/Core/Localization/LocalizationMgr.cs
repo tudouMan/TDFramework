@@ -17,38 +17,38 @@ namespace TDFramework.Localization
 
         private const string playerprefsName = "LocalizationType";
 
-        private Dictionary<short, string> mTextLocalDic=new Dictionary<short, string>();
-        private Dictionary<short, string> mPicLocalDic=new Dictionary<short, string>();
-        private LocalizationType mCurLocalizationType;
-        private Action mRefreshHandle;
+        private Dictionary<short, string> m_TextLocalDic=new Dictionary<short, string>();
+        private Dictionary<short, string> m_PicLocalDic=new Dictionary<short, string>();
+        private LocalizationType m_CurLocalizationType;
+        private Action m_RefreshHandle;
       
-        public Action RefreshHandle { get => mRefreshHandle; set => mRefreshHandle = value; }
+        public Action RefreshHandle { get => m_RefreshHandle; set => m_RefreshHandle = value; }
 
   
 
         public void ChangeLanguageType(LocalizationType _type)
         {
-            if (mCurLocalizationType == _type)
+            if (m_CurLocalizationType == _type)
                 return;
 
-            mTextLocalDic.Clear();
+            m_TextLocalDic.Clear();
             switch (_type)
             {
                 //TODO load data
                 case LocalizationType.CH:
-                    mTextLocalDic.Add(10000, "测试一");
+                    m_TextLocalDic.Add(10000, "测试一");
                     break;
                 case LocalizationType.EN:
-                    mTextLocalDic.Add(10000, "test one");
+                    m_TextLocalDic.Add(10000, "test one");
                     break;
                 case LocalizationType.JP:
-                    mTextLocalDic.Add(10000, "ぬひむもちちの");
+                    m_TextLocalDic.Add(10000, "ぬひむもちちの");
                     break;
                 default:
                     break;
             }
 
-            PlayerPrefs.SetInt(playerprefsName, mCurLocalizationType.GetHashCode());
+            PlayerPrefs.SetInt(playerprefsName, m_CurLocalizationType.GetHashCode());
 
             RefreshHandle?.Invoke();
         }
@@ -57,19 +57,19 @@ namespace TDFramework.Localization
   
         public string GetTextByKey(short key)
         {
-            if (mTextLocalDic == null)
+            if (m_TextLocalDic == null)
                 Init();
-            if (!mTextLocalDic.ContainsKey(key))
+            if (!m_TextLocalDic.ContainsKey(key))
                 return "dic not has this key";
 
-            return mTextLocalDic[key];
+            return m_TextLocalDic[key];
         }
 
         public UnityEngine.Sprite GetSpriteByKey(short key)
         {
-            if (mPicLocalDic == null)
+            if (m_PicLocalDic == null)
                 Init();
-            if (!mPicLocalDic.ContainsKey(key))
+            if (!m_PicLocalDic.ContainsKey(key))
                 throw new Exception("dic not has this key");
 
             return null;

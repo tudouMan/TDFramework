@@ -5,13 +5,13 @@ namespace TDFramework.Localization
 {
     public class LocalizationImage : MonoBehaviour, INotification
     {
-        private UnityEngine.UI.Image mSelftImg;
-        [SerializeField] private short mLocalKey;
+        private UnityEngine.UI.Image m_SelftImg;
+        [SerializeField] private short m_LocalKey;
 
         void Awake()
         {
-            if (mSelftImg == null)
-                mSelftImg = GetComponentInChildren<UnityEngine.UI.Image>();
+            if (m_SelftImg == null)
+                m_SelftImg = GetComponentInChildren<UnityEngine.UI.Image>();
 
             Refresh();
 
@@ -20,7 +20,7 @@ namespace TDFramework.Localization
 
         public void Refresh()
         {
-            mSelftImg.sprite = GameEntry.Localization.GetSpriteByKey(mLocalKey);
+            m_SelftImg.sprite = GameEntry.Localization.GetSpriteByKey(m_LocalKey);
         }
 
         private void OnDestroy()
