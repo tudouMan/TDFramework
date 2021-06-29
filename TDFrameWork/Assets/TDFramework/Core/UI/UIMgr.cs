@@ -82,5 +82,15 @@ namespace TDFramework.UI
         {
             UIManager.Instance.BackPanel(panelName);
         }
+
+        public static bool IsPanelShow(string panelName)
+        {
+          return  UIManager.Instance.IsPanelShow(panelName);
+        }
+
+        public static bool IsPanelShow<T>() where T : IPanel
+        {
+            return UIManager.Instance.IsPanelShow(typeof(T).Name);
+        }
     }
 }

@@ -197,7 +197,7 @@ namespace TDFramework.UI
             if (panel.PanelInfo != null)
             {
                 mStacks.Push(panel.PanelInfo);
-                mLoadPanels.Remove(panel.PanelInfo.mPanelName);
+                mLoadPanels.Remove(panel.PanelInfo.m_PanelName);
                 panel.OnClose();
             }
                
@@ -218,9 +218,23 @@ namespace TDFramework.UI
             if(mStacks!=null && mStacks.Count > 0)
             {
                 var uiPanelData = mStacks.Pop();
-                OpenPanel(uiPanelData.mPanelName, uiPanelData.mPanelLevel, uiPanelData.mPanelData);
+                OpenPanel(uiPanelData.m_PanelName, uiPanelData.m_PanelLevel, uiPanelData.m_PanelData);
             }
            
+        }
+
+        public bool IsPanelShow(string panelName)
+        {
+            IPanel panel = GetPanel(panelName);
+            if (panel != null)
+                return panel.PanelInfo.m_State != PanelState.Close && panel.PanelInfo.m_State != PanelState.Hide;
+            else
+                return false;
+        }
+
+        public bool IsPanelShow<T>()where T : IPanel
+        {
+            return IsPanelShow(typeof(T).Name);
         }
     }
 

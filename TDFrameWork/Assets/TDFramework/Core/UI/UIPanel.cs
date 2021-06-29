@@ -27,19 +27,30 @@ namespace TDFramework.UI
 
         public UIPanelInfo PanelInfo { get => mUIPanelInfo; set => mUIPanelInfo = value; }
 
-        public virtual void OnInit(IUIData uidata=null) { }
+        public virtual void OnInit(IUIData uidata=null) 
+        {
+            mUIPanelInfo.m_State = PanelState.Init;
+        }
 
         public virtual void OnOpen(IUIData uidata = null) 
         {
+            mUIPanelInfo.m_State = PanelState.Open;
             OnShow();
         }
 
-        public virtual void OnShow() { }
+        public virtual void OnShow()
+        {
+            mUIPanelInfo.m_State = PanelState.Show;
+        }
 
-        public virtual void OnHide() { }
+        public virtual void OnHide() 
+        {
+            mUIPanelInfo.m_State = PanelState.Hide;
+        }
 
         public virtual void OnClose()
         {
+            mUIPanelInfo.m_State = PanelState.Close;
             GameEntry.Res.ReleaseInstance(this.gameObject);
             GameObject.Destroy(this.gameObject);
             mUIPanelInfo = null;
@@ -55,12 +66,12 @@ namespace TDFramework.UI
 
         public virtual void CloseSelf()
         {
-            UIManager.Instance.ClosePanel(mUIPanelInfo.mPanelName);
+            UIManager.Instance.ClosePanel(mUIPanelInfo.m_PanelName);
         }
 
         public void Back()
         {
-            UIManager.Instance.BackPanel(mUIPanelInfo.mPanelName);
+            UIManager.Instance.BackPanel(mUIPanelInfo.m_PanelName);
         }
 
         /// <summary>
