@@ -30,7 +30,7 @@ namespace TDFramework.Runtime
         {
             TextAsset dllTex = await Addressables.LoadAssetAsync<TextAsset>(dllName).Task;
             TextAsset pdbTex = await Addressables.LoadAssetAsync<TextAsset>(pdbName).Task;
-
+            
             byte[] dll = dllTex.bytes;
             byte[] pdb = pdbTex.bytes;
             var fs = new MemoryStream(dll);

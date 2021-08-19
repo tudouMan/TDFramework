@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
-
+using UnityEngine.AddressableAssets;
 namespace TDFramework
 {
 
@@ -36,22 +36,18 @@ namespace TDFramework
                 m_LoadCompleteAction?.Invoke(this);
                 return;
             }
-            
+
 #else
-            AddressableManager.LoadGameObject(sceneName,()=> 
-            {
-                m_CurAsync = UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(sceneName, UnityEngine.SceneManagement.LoadSceneMode.Additive);
+           m_CurAsync = UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(sceneName, UnityEngine.SceneManagement.LoadSceneMode.Additive);
                 m_CurAsync.allowSceneActivation = false;
                 if (m_CurAsync == null)
                 {
                     m_LoadCompleteAction?.Invoke(this);
                     return;
                 }
-                
-            });
-
 
 #endif
+          
 
         }
 

@@ -46,7 +46,7 @@ namespace TDFramework.Audio
             m_CurAudioClip = clip;
             if (source != null)
                 m_CurAudioSource = source;
-
+            
             if (m_CurAudioSource != null)
             {
                 m_CurAudioSource.clip = clip;

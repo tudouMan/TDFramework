@@ -14,10 +14,7 @@ namespace TDFramework.Pool
         //类型字典
         private Dictionary<int, Stack<object>> m_ClassObjDic;
 
-        //显示在Inspector数据字典
-#if UNITY_EDITOR
-        private Dictionary<Type, int> m_ClassObjInspectorDic=new Dictionary<Type, int>();
-#endif
+
 
         public ClassObjPool()
         {
@@ -47,20 +44,13 @@ namespace TDFramework.Pool
                 if (stack.Count > 0)
                 {
                     object obj=stack.Pop();
-#if UNITY_EDITOR
-                    Type t = obj.GetType();
-                    if (m_ClassObjInspectorDic.ContainsKey(t))
-                        m_ClassObjInspectorDic[t]--;
-                    else
-                        m_ClassObjInspectorDic[t]=0;
-                    return (T)obj;
-#endif
                 }
                 else
                 {
                     return new T();
                 }
             }
+            return null;
             
         }
 
@@ -79,13 +69,7 @@ namespace TDFramework.Pool
 
                 stack.Push(obj);
 
-#if UNITY_EDITOR
-                Type t = obj.GetType();
-                if (m_ClassObjInspectorDic.ContainsKey(t))
-                    m_ClassObjInspectorDic[t]++;
-                else
-                    m_ClassObjInspectorDic[t] = 1;
-#endif
+
             }
         }
 
@@ -106,24 +90,8 @@ namespace TDFramework.Pool
                     {
                         object obj=stack.Pop();
                         stackTotal--;
-
-#if UNITY_EDITOR
-                        t = obj.GetType();
-                        if (m_ClassObjInspectorDic.ContainsKey(t))
-                            m_ClassObjInspectorDic[t]--;
-                        else
-                            throw new Exception("pool remove class inspector dic error not key:");
-#endif
                     }
 
-#if UNITY_EDITOR
-                    if (stackTotal == 0)
-                    {
-                        if (t != null)
-                            m_ClassObjInspectorDic.Remove(t);
-
-                    }
-#endif
                 }
 
                 GC.Collect();
