@@ -9,16 +9,20 @@ using UnityEngine.AddressableAssets;
 public class Test : MonoBehaviour
 {
     public GameObject m_Obj;
-    public Shader m_Shader;
-    private void Awake()
-    {
-        GameEntry.Instance.OnSingletonInit();
-    }
+  
     private void OnGUI()
     {
         if (GUI.Button(new Rect(100, 100, 100, 100), "set"))
         {
-            GameEntry.Res.InstanceAsync("Cube");
+            //同步加载一个GameObject
+            var op = Addressables.LoadAssetAsync<GameObject>("XXXView");
+            GameObject go = op.WaitForCompletion();
+            m_Obj= GameObject.Instantiate(go);
+
+            //Do work...（运行……）
+
+            Addressables.Release(op);
+
         }
 
     }

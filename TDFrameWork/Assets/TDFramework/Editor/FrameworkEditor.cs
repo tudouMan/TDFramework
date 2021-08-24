@@ -284,8 +284,7 @@ public class FrameworkEditor :EditorWindow
         bindBuilder.Append(spaceLine);
         bindBuilder.Append("using TDFramework.UI;");
         bindBuilder.Append(spaceLine);
-        bindBuilder.Append("using UnityEngine.UI;");
-        bindBuilder.Append(spaceLine);
+       
         bindBuilder.Append(spaceLine);
         bindBuilder.Append($"namespace {mUINameSpacePath}");
         bindBuilder.Append(spaceLine);
@@ -389,6 +388,7 @@ public class FrameworkEditor :EditorWindow
                 if (fileInfo != null)
                 {
                     Component itemComponent = item.gameObject.GetComponent(item.ComponentName);
+                  
                     if (itemComponent == null)
                     {
                         Debug.LogWarning($"Behavior{item.gameObject.name}物体上没有{item.DefaultName()}属性");

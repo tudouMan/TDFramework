@@ -42,6 +42,7 @@ namespace TDFramework.UI
                     return DefaultName();
                 else
                     return SelectTypeName;
+             
             }
         }
 

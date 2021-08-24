@@ -66,15 +66,18 @@ namespace TDFramework.Resource
         /// <param name="path">地址或者Label</param>
         /// <param name="spriteName">图片名</param>
         /// <param name="_loaded">回调</param>
-        public void LoadAsyncSpriteByAltas(string path,string spriteName, Action<Sprite> _loaded = null)
+        public void LoadAsyncSpriteByAltas(string path, string spriteName, Action<Sprite> _loaded = null)
         {
-            Addressables.LoadAssetAsync<SpriteAtlas>(path).Completed += (p) =>
-            {
-                if (p.Status == UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationStatus.Succeeded)
-                    _loaded?.Invoke(p.Result.GetSprite(spriteName));
-                else
-                    throw new Exception("load fail: " + path);
-            };
+            var op = Addressables.LoadAssetAsync<SpriteAtlas>(path);
+            op.Completed += (p) =>
+             {
+                    if (p.Status == UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationStatus.Succeeded)
+                     _loaded?.Invoke(p.Result.GetSprite(spriteName));
+                 else
+                      throw new Exception("load fail: " + path);
+             };
+
+            Addressables.Release(op);
         }
         #endregion
 
@@ -88,17 +91,20 @@ namespace TDFramework.Resource
         /// <param name="completeCallBack">所有加载完回调</param>
         public void LoadAssetsAsyncByLabel<T>(string label,Action<T>_oneLoaded=null,Action<IList<T>>completeCallBack=null)
         {
-            Addressables.LoadAssetsAsync<T>(label, p =>
-            {
-                _oneLoaded?.Invoke(p);
-            }).Completed+=p=> 
-            {
-                if (p.Status == UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationStatus.Succeeded)
-                    completeCallBack?.Invoke(p.Result);
-                else
-                    throw new Exception("load label: " + label);
-            };
+            var op = Addressables.LoadAssetsAsync<T>(label, p =>
+              {
+                  _oneLoaded?.Invoke(p);
+              });
 
+              op.Completed+=p=> 
+                {
+                    if (p.Status == UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationStatus.Succeeded)
+                        completeCallBack?.Invoke(p.Result);
+                    else
+                        throw new Exception("load label: " + label);
+                };
+
+            Addressables.Release(op);
         }
         #endregion
 
@@ -174,16 +180,25 @@ namespace TDFramework.Resource
 
         #region 同步
 
-        //public T LoadAsset<T>(string _path)
-        //{
-        //    Addressables.load
-        //}
+        public T LoadAsset<T>(string path)
+        {
+          
+            var op = Addressables.LoadAssetAsync<T>(path);
+             T go = op.WaitForCompletion();
+            Addressables.Release(op);
+            return go;
+        }
 
 
-        //public GameObject Instance(string _path)
-        //{
-        //    throw new Exception();
-        //}
+        public GameObject Instance(string path,Transform root)
+        { 
+             var op = Addressables.LoadAssetAsync<GameObject>(path);
+            GameObject go = op.WaitForCompletion();
+            if (root != null)
+                go.transform.parent = root;
+            Addressables.Release(op);
+            return go;
+        }
 
         #endregion
     }
