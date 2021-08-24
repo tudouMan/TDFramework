@@ -18,16 +18,28 @@ public class FrameworkEditor :EditorWindow
         EditorWindow.GetWindow<FrameworkEditor>().Show();
     }
 
-    bool mIsFoldoutUI;
-    static string mUIInitPath = "/Scripts/UI/";
-    static string mUINameSpacePath = "Game.UI";
-    UIBindPath mUIBindPath;
+    private bool m_IsFoldoutUIUI;
+    private bool m_IsFoldOutExcel;
+    private static string m_UIInitPath = "/Scripts/UI/";
+    private static string m_UINameSpacePath = "Game.UI";
+    private UIBindPath m_UIBindPath;
+
+
+    #region Excel Parame
+    private string m_ExcelDataLoadPath;
+    private string m_ExcelDataEncrypt;
+    private string m_ExcelDataSavaPath;
+    #endregion
+
 
     private void OnEnable()
     {
-        mUIBindPath = Resources.Load<UIBindPath>("UIBindPath");
-        mUIInitPath = mUIBindPath.mUIInitPath;
-        mUINameSpacePath = mUIBindPath.mUINameSpacePath;
+        m_UIBindPath = Resources.Load<UIBindPath>("UIBindPath");
+        m_UIInitPath = m_UIBindPath.m_UIInitPath;
+        m_UINameSpacePath = m_UIBindPath.m_UINameSpacePath;
+        m_ExcelDataLoadPath = m_UIBindPath.m_ExcelDataPath;
+        m_ExcelDataEncrypt = m_UIBindPath.m_ExcelEncrypt;
+        m_ExcelDataSavaPath = m_UIBindPath.m_ExcelDataSavaPath;
     }
 
 
@@ -35,51 +47,115 @@ public class FrameworkEditor :EditorWindow
     {
         EditorGUILayout.LabelField("TDFramework", GUILayout.Width(200));
 
-        mIsFoldoutUI = EditorGUILayout.Foldout(mIsFoldoutUI, "UI配置");
-        if (mIsFoldoutUI)
+        m_IsFoldoutUIUI = EditorGUILayout.Foldout(m_IsFoldoutUIUI, "UI配置");
+        if (m_IsFoldoutUIUI)
         {
             EditorGUILayout.BeginHorizontal(GUILayout.Height(20));
             EditorGUILayout.LabelField($"当前UI脚本生成路径:", GUILayout.Width(100));
-            mUIInitPath= EditorGUILayout.TextField(mUIInitPath, GUILayout.Width(200));
+            m_UIInitPath= EditorGUILayout.TextField(m_UIInitPath, GUILayout.Width(200));
             EditorGUILayout.EndHorizontal();
 
 
             EditorGUILayout.BeginHorizontal(GUILayout.Height(20));
             EditorGUILayout.LabelField($"当前UI脚本命名空间:", GUILayout.Width(100));
-            mUINameSpacePath = EditorGUILayout.TextField(mUINameSpacePath, GUILayout.Width(200));
+            m_UINameSpacePath = EditorGUILayout.TextField(m_UINameSpacePath, GUILayout.Width(200));
             EditorGUILayout.EndHorizontal();
 
             if (GUILayout.Button("保存", GUILayout.Width(200), GUILayout.Height(30)))
             {
-                if (mUIInitPath.HasChinese())
+                if (m_UIInitPath.HasChinese())
                 {
                     this.ShowNotification(new GUIContent("路径带有中文请检查"));
                     return;
                 }
 
-                if (mUIInitPath.HasSpace())
+                if (m_UIInitPath.HasSpace())
                 {
                     this.ShowNotification(new GUIContent("路径带有空格请检查"));
                     return;
                 }
 
-                if (mUINameSpacePath.HasChinese())
+                if (m_UINameSpacePath.HasChinese())
                 {
                     this.ShowNotification(new GUIContent("命名空间带中文"));
                     return;
                 }
 
-                if (mUINameSpacePath.HasSpace())
+                if (m_UINameSpacePath.HasSpace())
                 {
                     this.ShowNotification(new GUIContent("命名空间带空格"));
                     return;
                 }
-                mUIBindPath.mUIInitPath = mUIInitPath;
-                mUIBindPath.mUINameSpacePath = mUINameSpacePath;
+                m_UIBindPath.m_UIInitPath = m_UIInitPath;
+                m_UIBindPath.m_UINameSpacePath = m_UINameSpacePath;
                
             }
         }
 
+
+        m_IsFoldOutExcel = EditorGUILayout.Foldout(m_IsFoldOutExcel, "Excel配置");
+        if (m_IsFoldOutExcel)
+        {
+            EditorGUILayout.BeginHorizontal(GUILayout.Height(20));
+            EditorGUILayout.LabelField($"数据地址:", GUILayout.Width(100));
+            EditorGUILayout.LabelField(m_ExcelDataLoadPath, GUILayout.Width(300));
+            if (GUILayout.Button("选择解析数据文件夹", GUILayout.Width(150), GUILayout.Height(20)))
+            {
+                string exportPath = EditorUtility.OpenFolderPanel("select path", "", "");
+                if (!exportPath.IsNull())
+                {
+                    m_UIBindPath.m_ExcelDataPath = m_ExcelDataLoadPath = exportPath;
+                }
+            }
+            EditorGUILayout.EndHorizontal();
+
+            EditorGUILayout.BeginHorizontal(GUILayout.Height(20));
+            EditorGUILayout.LabelField($"数据保存地址:", GUILayout.Width(100));
+            EditorGUILayout.LabelField(m_ExcelDataSavaPath, GUILayout.Width(300));
+            if (GUILayout.Button("选择保存数据文件夹", GUILayout.Width(150), GUILayout.Height(20)))
+            {
+                string exportPath = EditorUtility.OpenFolderPanel("select path", "", "");
+                if (!exportPath.IsNull())
+                {
+                    m_UIBindPath.m_ExcelDataSavaPath = m_ExcelDataSavaPath = exportPath;
+                }
+            }
+            EditorGUILayout.EndHorizontal();
+
+
+            EditorGUILayout.BeginHorizontal(GUILayout.Height(20));
+            EditorGUILayout.LabelField($"加密编码:", GUILayout.Width(100));
+            m_ExcelDataEncrypt = EditorGUILayout.TextField(m_ExcelDataEncrypt, GUILayout.Width(200));
+            EditorGUILayout.EndHorizontal();
+
+            if (GUILayout.Button("解析整文件夹", GUILayout.Width(200), GUILayout.Height(30)))
+            {
+                List<string>paths=m_ExcelDataLoadPath.GetDirSubFilePathList(suffix:"xlsx");
+                if (paths != null)
+                {
+                    for (int i = 0; i < paths.Count; i++)
+                    {
+                        ExcelHandle excelHandle = new ExcelHandle(paths[i]);
+                    }
+                    
+                }
+               
+            }
+
+
+            EditorGUILayout.LabelField($"单个解析只需要点击按钮选择对应文件即可:", GUILayout.Width(300));
+            if (GUILayout.Button("单个解析", GUILayout.Width(200), GUILayout.Height(30)))
+            {
+                string exportPath = EditorUtility.OpenFilePanel("select path", "", "xlsx");
+                if (!exportPath.IsNull())
+                {
+                    ExcelHandle excelHandle = new ExcelHandle(exportPath);
+                }
+               
+            }
+        }
+
+        
     }
 
 
@@ -94,8 +170,8 @@ public class FrameworkEditor :EditorWindow
             return;
         }
         
-        string savaPath = mUIInitPath;
-        savaPath = string.Format(Application.dataPath + mUIInitPath);
+        string savaPath = m_UIInitPath;
+        savaPath = string.Format(Application.dataPath + m_UIInitPath);
         savaPath.CreateDirIfNotExists();
         EditorPrefs.SetBool("UICreatRun", true);
         CreatUI(savaPath, selectObj.name, selectObj);
@@ -127,7 +203,7 @@ public class FrameworkEditor :EditorWindow
             contentBuilder.Append("using UnityEngine.UI;");
             contentBuilder.Append(spaceLine);
             contentBuilder.Append(spaceLine);
-            contentBuilder.Append($"namespace {mUINameSpacePath}");
+            contentBuilder.Append($"namespace {m_UINameSpacePath}");
             contentBuilder.Append(spaceLine);
             contentBuilder.Append("{");
             contentBuilder.Append(spaceLine);
@@ -286,7 +362,7 @@ public class FrameworkEditor :EditorWindow
         bindBuilder.Append(spaceLine);
        
         bindBuilder.Append(spaceLine);
-        bindBuilder.Append($"namespace {mUINameSpacePath}");
+        bindBuilder.Append($"namespace {m_UINameSpacePath}");
         bindBuilder.Append(spaceLine);
         bindBuilder.Append("{");
         bindBuilder.Append(spaceLine);
@@ -370,7 +446,7 @@ public class FrameworkEditor :EditorWindow
             if (!SelectObj.GetComponent(SelectName))
             {
                 var assembly = TDFramework.Extention.ReflectionExtension.GetAssemblyCSharp();
-                string nameSpace = Resources.Load<UIBindPath>("UIBindPath").mUINameSpacePath;
+                string nameSpace = Resources.Load<UIBindPath>("UIBindPath").m_UINameSpacePath;
                 System.Type addType = assembly.GetType(nameSpace +"."+ SelectName);
                 SelectObj.AddComponent(addType);
             }

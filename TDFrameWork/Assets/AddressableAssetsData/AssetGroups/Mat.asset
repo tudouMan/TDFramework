@@ -21,22 +21,18 @@ MonoBehaviour:
     m_Address: TestMat
     m_ReadOnly: 0
     m_SerializedLabels: []
-    m_MainAsset: {fileID: 0}
-    m_TargetAsset: {fileID: 0}
   - m_GUID: a1902e3ff7bdb3d41a1a5a09f70df47f
     m_Address: CustomStandard
     m_ReadOnly: 0
     m_SerializedLabels: []
-    m_MainAsset: {fileID: 4800000, guid: a1902e3ff7bdb3d41a1a5a09f70df47f, type: 3}
-    m_TargetAsset: {fileID: 4800000, guid: a1902e3ff7bdb3d41a1a5a09f70df47f, type: 3}
   - m_GUID: 179369d6f09bf374984d36e7e8ee977e
     m_Address: Cube
     m_ReadOnly: 0
     m_SerializedLabels: []
-    m_MainAsset: {fileID: 9161852319887297211, guid: 179369d6f09bf374984d36e7e8ee977e,
-      type: 3}
-    m_TargetAsset: {fileID: 9161852319887297211, guid: 179369d6f09bf374984d36e7e8ee977e,
-      type: 3}
+  - m_GUID: a55fab90b48cebd4dbf8f5319b7d356d
+    m_Address: XXXView
+    m_ReadOnly: 0
+    m_SerializedLabels: []
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: be554cc2c0019e441ae378ab5866526d, type: 2}
   m_SchemaSet:
