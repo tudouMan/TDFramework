@@ -9,6 +9,7 @@ using System.Linq;
 using System.Reflection;
 using UniRx;
 using System.Threading.Tasks;
+using TDFramework;
 
 public class FrameworkEditor :EditorWindow
 {
@@ -29,6 +30,8 @@ public class FrameworkEditor :EditorWindow
     private string m_ExcelDataLoadPath;
     private string m_ExcelDataEncrypt;
     private string m_ExcelDataSavaPath;
+    private string m_EncrptDataStr="";
+    private Vector2 m_EncrptVector2;
     #endregion
 
 
@@ -98,7 +101,7 @@ public class FrameworkEditor :EditorWindow
         {
             EditorGUILayout.BeginHorizontal(GUILayout.Height(20));
             EditorGUILayout.LabelField($"数据地址:", GUILayout.Width(100));
-            EditorGUILayout.LabelField(m_ExcelDataLoadPath, GUILayout.Width(300));
+            m_ExcelDataLoadPath=EditorGUILayout.TextField(m_ExcelDataLoadPath, GUILayout.Width(300));
             if (GUILayout.Button("选择解析数据文件夹", GUILayout.Width(150), GUILayout.Height(20)))
             {
                 string exportPath = EditorUtility.OpenFolderPanel("select path", "", "");
@@ -111,7 +114,7 @@ public class FrameworkEditor :EditorWindow
 
             EditorGUILayout.BeginHorizontal(GUILayout.Height(20));
             EditorGUILayout.LabelField($"数据保存地址:", GUILayout.Width(100));
-            EditorGUILayout.LabelField(m_ExcelDataSavaPath, GUILayout.Width(300));
+            m_ExcelDataSavaPath= EditorGUILayout.TextField(m_ExcelDataSavaPath, GUILayout.Width(300));
             if (GUILayout.Button("选择保存数据文件夹", GUILayout.Width(150), GUILayout.Height(20)))
             {
                 string exportPath = EditorUtility.OpenFolderPanel("select path", "", "");
@@ -135,7 +138,10 @@ public class FrameworkEditor :EditorWindow
                 {
                     for (int i = 0; i < paths.Count; i++)
                     {
-                        ExcelHandle excelHandle = new ExcelHandle(paths[i]);
+                        if (!paths[i].IsNull())
+                        {
+                            ExportData(paths[i], m_ExcelDataSavaPath);
+                        }
                     }
                     
                 }
@@ -147,17 +153,48 @@ public class FrameworkEditor :EditorWindow
             if (GUILayout.Button("单个解析", GUILayout.Width(200), GUILayout.Height(30)))
             {
                 string exportPath = EditorUtility.OpenFilePanel("select path", "", "xlsx");
+              
                 if (!exportPath.IsNull())
                 {
-                    ExcelHandle excelHandle = new ExcelHandle(exportPath);
+                    ExportData(exportPath, m_ExcelDataSavaPath);
                 }
                
             }
+
+
+
+            EditorGUILayout.Space(20);
+            EditorGUILayout.LabelField($"解密文件:", GUILayout.Width(300));
+            m_EncrptVector2 = EditorGUILayout.BeginScrollView(m_EncrptVector2, GUILayout.Width(500),GUILayout.Height(100));
+          
+            EditorGUILayout.LabelField(m_EncrptDataStr, GUILayout.Width(400),GUILayout.Height(400));
+            EditorGUILayout.EndScrollView();
+
+            if (GUILayout.Button("解密查看文件", GUILayout.Width(200), GUILayout.Height(30)))
+            {
+                string exportPath = EditorUtility.OpenFilePanel("select path", "", "json");
+                string dataStr = System.IO.File.ReadAllText(exportPath);
+                dataStr = TDFramework.Tool.StringEncryption.DecryptDES(dataStr);
+                m_EncrptDataStr = dataStr;
+            }
+           
         }
 
         
     }
 
+
+    public static void ExportData(string exportPath,string savaPath)
+    {
+        //-- Load Excel
+        ExcelLoader excel = new ExcelLoader(exportPath, 3, exportPath.GetFileNameWithoutExtend());
+        //-- export
+        JsonExporter exporter = new JsonExporter(excel);
+        exporter.SaveToFile(savaPath + "/" + exportPath.GetFileNameWithoutExtend() + ".json", Encoding.UTF8);
+#if UNITY_EDITOR
+        AssetDatabase.Refresh();
+#endif
+    }
 
     [MenuItem("Assets/创建UI脚本/Creat",false,-10)]
     public static  void CreatUIScripts()

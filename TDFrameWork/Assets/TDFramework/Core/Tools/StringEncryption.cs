@@ -18,7 +18,7 @@ namespace TDFramework.Tool
         /// <summary>
         /// 密匙 必须要是八个字符
         /// </summary>
-        private const string EncryptKey = "Cybatake";
+        private const string EncryptKey = "Kes";
 
         /// <summary>
         /// DES加密字符串

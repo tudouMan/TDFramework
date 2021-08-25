@@ -8,7 +8,7 @@ public class UIBindPath : ScriptableObject
 {
     public string m_UIInitPath = "/Scripts/UI/";
     public string m_UINameSpacePath = "Game.UI";
-    public string m_ExcelDataPath = "";
-    public string m_ExcelEncrypt = "";
-    public string m_ExcelDataSavaPath = "";
+    public string m_ExcelDataPath = "Asset/Data";
+    public string m_ExcelEncrypt = "Encrypt";
+    public string m_ExcelDataSavaPath = "Asset/Data";
 }

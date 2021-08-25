@@ -1,0 +1,17 @@
+﻿[
+  {
+    "level": 1,
+    "size": 0.8,
+    "towersize": 0.8
+  },
+  {
+    "level": 2,
+    "size": 0.0,
+    "towersize": 0.805
+  },
+  {
+    "level": 3,
+    "size": 0.82,
+    "towersize": 0.81
+  }
+]
