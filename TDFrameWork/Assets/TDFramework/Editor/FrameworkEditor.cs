@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
+using UnityEngine.UI;
 using TDFramework.Extention;
 using System.Text;
 using TDFramework.UI;
@@ -23,28 +24,23 @@ public class FrameworkEditor :EditorWindow
     private bool m_IsFoldOutExcel;
     private static string m_UIInitPath = "/Scripts/UI/";
     private static string m_UINameSpacePath = "Game.UI";
-    private UIBindPath m_UIBindPath;
+    private FrameWorkPathConfig m_PathConfig;
 
 
     #region Excel Parame
-    private string m_ExcelDataLoadPath;
-    private string m_ExcelDataEncrypt;
-    private string m_ExcelDataSavaPath;
-    private string m_EncrptDataStr="";
     private Vector2 m_EncrptVector2;
+    private string m_EncrptDataStr;
     #endregion
 
 
     private void OnEnable()
     {
-        m_UIBindPath = Resources.Load<UIBindPath>("UIBindPath");
-        m_UIInitPath = m_UIBindPath.m_UIInitPath;
-        m_UINameSpacePath = m_UIBindPath.m_UINameSpacePath;
-        m_ExcelDataLoadPath = m_UIBindPath.m_ExcelDataPath;
-        m_ExcelDataEncrypt = m_UIBindPath.m_ExcelEncrypt;
-        m_ExcelDataSavaPath = m_UIBindPath.m_ExcelDataSavaPath;
+        m_PathConfig = Resources.Load<FrameWorkPathConfig>("PathConfig");
+        m_UIInitPath = m_PathConfig.m_UIScriptSavaPath;
+        m_UINameSpacePath = m_PathConfig.m_UINameSpacePath;
     }
 
+    
 
     private void OnGUI()
     {
@@ -89,8 +85,8 @@ public class FrameworkEditor :EditorWindow
                     this.ShowNotification(new GUIContent("命名空间带空格"));
                     return;
                 }
-                m_UIBindPath.m_UIInitPath = m_UIInitPath;
-                m_UIBindPath.m_UINameSpacePath = m_UINameSpacePath;
+                m_PathConfig.m_UIScriptSavaPath = m_UIInitPath;
+                m_PathConfig.m_UINameSpacePath = m_UINameSpacePath;
                
             }
         }
@@ -100,47 +96,57 @@ public class FrameworkEditor :EditorWindow
         if (m_IsFoldOutExcel)
         {
             EditorGUILayout.BeginHorizontal(GUILayout.Height(20));
-            EditorGUILayout.LabelField($"数据地址:", GUILayout.Width(100));
-            m_ExcelDataLoadPath=EditorGUILayout.TextField(m_ExcelDataLoadPath, GUILayout.Width(300));
-            if (GUILayout.Button("选择解析数据文件夹", GUILayout.Width(150), GUILayout.Height(20)))
+            EditorGUILayout.LabelField($"Excel地址:", GUILayout.Width(100));
+            EditorGUILayout.LabelField(m_PathConfig.m_ExcelDataPath, GUILayout.Width(300));
+            if (GUILayout.Button("选择Excel文本文件夹", GUILayout.Width(150), GUILayout.Height(20)))
             {
                 string exportPath = EditorUtility.OpenFolderPanel("select path", "", "");
                 if (!exportPath.IsNull())
                 {
-                    m_UIBindPath.m_ExcelDataPath = m_ExcelDataLoadPath = exportPath;
+                    m_PathConfig.m_ExcelDataPath  = exportPath;
                 }
             }
             EditorGUILayout.EndHorizontal();
 
             EditorGUILayout.BeginHorizontal(GUILayout.Height(20));
-            EditorGUILayout.LabelField($"数据保存地址:", GUILayout.Width(100));
-            m_ExcelDataSavaPath= EditorGUILayout.TextField(m_ExcelDataSavaPath, GUILayout.Width(300));
-            if (GUILayout.Button("选择保存数据文件夹", GUILayout.Width(150), GUILayout.Height(20)))
+            EditorGUILayout.LabelField($"解析后数据保存地址:", GUILayout.Width(100));
+            EditorGUILayout.LabelField(m_PathConfig.m_ExcelDataSavaPath, GUILayout.Width(300));
+            if (GUILayout.Button("选择解析后数据文件夹", GUILayout.Width(150), GUILayout.Height(20)))
             {
                 string exportPath = EditorUtility.OpenFolderPanel("select path", "", "");
                 if (!exportPath.IsNull())
                 {
-                    m_UIBindPath.m_ExcelDataSavaPath = m_ExcelDataSavaPath = exportPath;
+                    m_PathConfig.m_ExcelDataSavaPath = exportPath;
                 }
             }
             EditorGUILayout.EndHorizontal();
 
 
+
             EditorGUILayout.BeginHorizontal(GUILayout.Height(20));
-            EditorGUILayout.LabelField($"加密编码:", GUILayout.Width(100));
-            m_ExcelDataEncrypt = EditorGUILayout.TextField(m_ExcelDataEncrypt, GUILayout.Width(200));
+            EditorGUILayout.LabelField($"脚本生成保存地址:", GUILayout.Width(100));
+            EditorGUILayout.LabelField(m_PathConfig.m_CShapScriptsSavaPath, GUILayout.Width(300));
+            if (GUILayout.Button("选择脚本保存文件夹", GUILayout.Width(150), GUILayout.Height(20)))
+            {
+                string exportPath = EditorUtility.OpenFolderPanel("select path", "", "");
+                if (!exportPath.IsNull())
+                {
+                    m_PathConfig.m_CShapScriptsSavaPath = exportPath;
+                }
+            }
             EditorGUILayout.EndHorizontal();
+
 
             if (GUILayout.Button("解析整文件夹", GUILayout.Width(200), GUILayout.Height(30)))
             {
-                List<string>paths=m_ExcelDataLoadPath.GetDirSubFilePathList(suffix:"xlsx");
+                List<string>paths=m_PathConfig.m_ExcelDataPath.GetDirSubFilePathList(suffix:"xlsx");
                 if (paths != null)
                 {
                     for (int i = 0; i < paths.Count; i++)
                     {
                         if (!paths[i].IsNull())
                         {
-                            ExportData(paths[i], m_ExcelDataSavaPath);
+                            ExportData(paths[i], m_PathConfig.m_ExcelDataSavaPath);
                         }
                     }
                     
@@ -156,7 +162,7 @@ public class FrameworkEditor :EditorWindow
               
                 if (!exportPath.IsNull())
                 {
-                    ExportData(exportPath, m_ExcelDataSavaPath);
+                    ExportData(exportPath, m_PathConfig.m_ExcelDataSavaPath);
                 }
                
             }
@@ -166,8 +172,7 @@ public class FrameworkEditor :EditorWindow
             EditorGUILayout.Space(20);
             EditorGUILayout.LabelField($"解密文件:", GUILayout.Width(300));
             m_EncrptVector2 = EditorGUILayout.BeginScrollView(m_EncrptVector2, GUILayout.Width(500),GUILayout.Height(100));
-          
-            EditorGUILayout.LabelField(m_EncrptDataStr, GUILayout.Width(400),GUILayout.Height(400));
+            m_EncrptDataStr= EditorGUILayout.TextArea(m_EncrptDataStr, GUILayout.Width(400),GUILayout.Height(400));
             EditorGUILayout.EndScrollView();
 
             if (GUILayout.Button("解密查看文件", GUILayout.Width(200), GUILayout.Height(30)))
@@ -180,7 +185,7 @@ public class FrameworkEditor :EditorWindow
            
         }
 
-        
+         UnityEditor.EditorUtility.SetDirty(m_PathConfig);
     }
 
 
@@ -191,6 +196,10 @@ public class FrameworkEditor :EditorWindow
         //-- export
         JsonExporter exporter = new JsonExporter(excel);
         exporter.SaveToFile(savaPath + "/" + exportPath.GetFileNameWithoutExtend() + ".json", Encoding.UTF8);
+
+
+        CSharpExporter csharp = new CSharpExporter(excel.Sheets[0], exportPath.GetFileNameWithoutExtend());
+        csharp.CreatCSharpScript();
 #if UNITY_EDITOR
         AssetDatabase.Refresh();
 #endif
@@ -238,6 +247,8 @@ public class FrameworkEditor :EditorWindow
             contentBuilder.Append("using TDFramework.UI;");
             contentBuilder.Append(spaceLine);
             contentBuilder.Append("using UnityEngine.UI;");
+            contentBuilder.Append(spaceLine);
+            contentBuilder.Append("using UnityEngine;");
             contentBuilder.Append(spaceLine);
             contentBuilder.Append(spaceLine);
             contentBuilder.Append($"namespace {m_UINameSpacePath}");
@@ -397,7 +408,10 @@ public class FrameworkEditor :EditorWindow
         bindBuilder.Append(spaceLine);
         bindBuilder.Append("using TDFramework.UI;");
         bindBuilder.Append(spaceLine);
-       
+        
+        bindBuilder.Append("using UnityEngine;");
+        bindBuilder.Append(spaceLine);
+        bindBuilder.Append("using UnityEngine.UI;");
         bindBuilder.Append(spaceLine);
         bindBuilder.Append($"namespace {m_UINameSpacePath}");
         bindBuilder.Append(spaceLine);
@@ -483,7 +497,7 @@ public class FrameworkEditor :EditorWindow
             if (!SelectObj.GetComponent(SelectName))
             {
                 var assembly = TDFramework.Extention.ReflectionExtension.GetAssemblyCSharp();
-                string nameSpace = Resources.Load<UIBindPath>("UIBindPath").m_UINameSpacePath;
+                string nameSpace = Resources.Load<FrameWorkPathConfig>("PathConfig").m_UINameSpacePath;
                 System.Type addType = assembly.GetType(nameSpace +"."+ SelectName);
                 SelectObj.AddComponent(addType);
             }
@@ -494,13 +508,13 @@ public class FrameworkEditor :EditorWindow
             foreach (var item in Binds)
             {
               
-                   
+               
                 string propertityName = item.gameObject.name;
                 //获取到分裂类中对应需要设置的属性
                 var fileInfo = type.GetField(propertityName);
                 if (fileInfo != null)
                 {
-                    Component itemComponent = item.gameObject.GetComponent(item.ComponentName);
+                    Component itemComponent = item.transform.GetComponent(item.ComponentName);
                   
                     if (itemComponent == null)
                     {
@@ -525,6 +539,8 @@ public class FrameworkEditor :EditorWindow
        
     }
 
+    
+
 }
 
 
@@ -547,21 +563,22 @@ public class UIBindInspector : Editor
         "TMPro.TMP_InputField",
         "TMPro.TMP_Dropdown",
         "TMPro.TMP_InputField",
-        "UnityEngine.Canvas",
-        "UnityEngine.CanvasGroup",
-        "UnityEngine.UI.RawImage",
-        "UnityEngine.UI.Button",
-        "UnityEngine.UI.Image",
-        "UnityEngine.UI.Text",
-        "UnityEngine.UI.ToggleGroup",
-        "UnityEngine.UI.Toggle",
-        "UnityEngine.UI.Slider",
-        "UnityEngine.UI.Scrollbar",
-        "UnityEngine.UI.Dropdown",
-        "UnityEngine.UI.ScrollRect",
-        "UnityEngine.RectTransform",
-        "UnityEngine.Transform",
-        "UnityEngine.CanvasRenderer"
+        "Canvas",
+        "CanvasGroup",
+        "RawImage",
+        "Button",
+        "Image",
+        "Text",
+        "ToggleGroup",
+        "Toggle",
+        "Slider",
+        "Scrollbar",
+        "Dropdown",
+        "ScrollRect",
+        "RectTransform",
+        "Transform",
+        "CanvasRenderer",
+        "InputField",
     };
 
     int customTypeIndex = 0;

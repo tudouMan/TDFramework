@@ -10,7 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9569a6b2dcf43854db2abfe7284cb8f9, type: 3}
-  m_Name: UIBindPath
+  m_Name: PathConfig
   m_EditorClassIdentifier: 
-  mUIInitPath: /Scripts/UI/
-  mUINameSpacePath: Game.UI
+  m_UIScriptSavaPath: /Scripts/UI/
+  m_UINameSpacePath: Game.UI
+  m_ExcelDataPath: E:/TDFramework/testData
+  m_ExcelDataSavaPath: E:/TDFramework/TDFrameWork/Assets/TestData
+  m_CShapScriptsSavaPath: E:/TDFramework/TDFrameWork/Assets/Scripts/Data

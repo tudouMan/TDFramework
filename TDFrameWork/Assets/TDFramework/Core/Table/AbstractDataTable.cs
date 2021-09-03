@@ -8,12 +8,12 @@ using TDFramework.Resource;
 
 namespace TDFramework.Table
 {
-    public abstract class AbstractTable<T,P>where T:class,new() where P:TableBase 
+    public abstract class AbstractDataTable<T,P>where T:class,new() where P:TableDataBase 
     {
         protected List<P> mDataList = new List<P>();
         protected Dictionary<int, P> mDataDic = new Dictionary<int, P>();
 
-        public AbstractTable()
+        public AbstractDataTable()
         {
             Load();
         }
@@ -73,7 +73,7 @@ namespace TDFramework.Table
 
         
 
-        public  P Copy<P>(P RealObject)where P:TableBase
+        public  P Copy<P>(P RealObject)where P:TableDataBase
         {
             using (Stream objectStream = new MemoryStream())
             {

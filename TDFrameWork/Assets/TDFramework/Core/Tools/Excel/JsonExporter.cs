@@ -16,14 +16,14 @@ namespace TDFramework
         /// 将DataTable对象，转换成JSON string，并保存到文件中
         /// </summary>
 
-        string mContext = "";
-        int mHeaderRows = 0;
+        string m_Context = "";
+        int m_HeaderRows = 0;
 
-        public string context
+        public string Context
         {
             get
             {
-                return mContext;
+                return m_Context;
             }
         }
 
@@ -33,7 +33,7 @@ namespace TDFramework
         /// <param name="excel">ExcelLoader Object</param>
         public JsonExporter(ExcelLoader excel, bool exportArray = true, int headerRows = 3, bool cellJson = true)
         {
-            mHeaderRows = headerRows - 1;
+            m_HeaderRows = headerRows - 1;
             List<DataTable> validSheets = new List<DataTable>();
             for (int i = 0; i < excel.Sheets.Count; i++)
             {
@@ -54,11 +54,11 @@ namespace TDFramework
                 object sheetValue = convertSheet(validSheets[0], exportArray, cellJson);
 
                 //-- convert to json string
-                mContext = JsonConvert.SerializeObject(sheetValue,jsonSettings);
+                m_Context = JsonConvert.SerializeObject(sheetValue,jsonSettings);
                 Regex reg = new Regex(@"(?i)\\[uU]([0-9a-f]{4})");
-                mContext = reg.Replace(mContext, delegate (Match m) { return ((char)Convert.ToInt32(m.Groups[1].Value, 16)).ToString(); });
+                m_Context = reg.Replace(m_Context, delegate (Match m) { return ((char)Convert.ToInt32(m.Groups[1].Value, 16)).ToString(); });
 
-                UnityEngine.Debug.Log(string.Format("表格名: {0} \nTableName: {1}  \n解析数据为: {2})", excel.DataName, excel.Sheets[0].TableName, mContext));
+                UnityEngine.Debug.Log(string.Format("表格名: {0} \nTableName: {1}  \n解析数据为: {2})", excel.DataName, excel.Sheets[0].TableName, m_Context));
             }
 
         }
@@ -75,7 +75,7 @@ namespace TDFramework
         {
             List<object> values = new List<object>();
 
-            int firstDataRow = mHeaderRows;
+            int firstDataRow = m_HeaderRows;
             for (int i = firstDataRow; i < sheet.Rows.Count; i++)
             {
                 DataRow row = sheet.Rows[i];
@@ -96,7 +96,7 @@ namespace TDFramework
             Dictionary<string, object> importData =
                 new Dictionary<string, object>();
 
-            int firstDataRow = mHeaderRows;
+            int firstDataRow = m_HeaderRows;
             for (int i = firstDataRow; i < sheet.Rows.Count; i++)
             {
                 DataRow row = sheet.Rows[i];
@@ -200,16 +200,13 @@ namespace TDFramework
             {
                 using (TextWriter writer = new StreamWriter(file, encoding))
                 {
-                   // mContext = TDFramework.Tool.StringEncryption.EncryptDES(mContext);
-                    writer.Write(mContext);
+                    m_Context = TDFramework.Tool.StringEncryption.EncryptDES(m_Context);
+                    writer.Write(m_Context);
                 }
                     
             }
         }
 
-        public void ExporteSSharpScript()
-        {
-
-        }
+       
     }
 }

@@ -6,16 +6,11 @@ using TDFramework;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 
-[System.Serializable]
-public class TestData
-{
-    public string Name;
-    public int Age;
-}
+
 
 public class Test : MonoBehaviour
 {
-   
+    
 }
 
 

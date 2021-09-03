@@ -11,8 +11,10 @@ namespace TDFramework
 {
     public class ExcelLoader
     {
-        private DataSet mData;
+        private DataSet m_Data;
         public string DataName { get; set; }
+
+        
 
         //TODO: add Sheet Struct Define
 
@@ -26,9 +28,9 @@ namespace TDFramework
                 using var reader = ExcelReaderFactory.CreateReader(stream);
                 // Use the AsDataSet extension method
                 // The result of each spreadsheet is in result.Tables
-                var result = reader.AsDataSet(createDataSetReadConfig(headerRow));
+                 var result = reader.AsDataSet(createDataSetReadConfig(headerRow));
                 DataName = dataName;
-                this.mData = result;
+                this.m_Data = result; 
             }
 
             if (this.Sheets.Count < 1)
@@ -41,11 +43,11 @@ namespace TDFramework
         {
             get
             {
-                return this.mData.Tables;
+                return this.m_Data.Tables;
             }
         }
 
-        public DataSet MData { get => mData; set => mData = value; }
+        public DataSet MData { get => m_Data; set => m_Data = value; }
 
         private ExcelDataSetConfiguration createDataSetReadConfig(int headerRow)
         {
