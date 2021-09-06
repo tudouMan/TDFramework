@@ -88,14 +88,18 @@ namespace TDFramework
 
 
 
-            #region TableModle
+            #region Table
             content.Clear();
             content.Append("using LitJson;");
             content.Append("\n");
             content.Append("using TDFramework.Table;");
             content.Append("\n");
+            content.Append("using TDFramework.Extention;");
+            content.Append("\n");
             content.Append("namespace TDFramework.Table");
             content.Append("\n");
+           
+
             content.Append(" {");
             content.Append("\n");
             content.Append($"    public partial class {m_DataName.UppercaseFirst()}DataTable : AbstractDataTable<{m_DataName.UppercaseFirst()}DataTable, {m_DataName.UppercaseFirst()}TableEntity>");
@@ -116,16 +120,20 @@ namespace TDFramework
                 string propertityName = m_Table.Columns[i].ToString();
                 string propertityType = m_Table.Rows[0][i].ToString();
 
+                string jsonToType = string.Empty;
+                if (propertityType.Equals("int", StringComparison.CurrentCultureIgnoreCase))
+                    jsonToType = ".ToInt()";
+                else if (propertityType.Equals("float", StringComparison.CurrentCultureIgnoreCase))
+                    jsonToType = ".ToFloat()";
+
+
+
                 if (i == 0)
                     content.Append($"            entity.ID = data[\"{propertityName}\"].ToString().ToInt();");
                 else
-                    content.Append($"            entity.{propertityName} = data[\"{propertityName}\"].ToString().ToInt();");
+                    content.Append($"            entity.{propertityName} = data[\"{propertityName}\"].ToString(){jsonToType};");
 
-                string jsonToType = string.Empty;
-                if (propertityType.Equals("int", StringComparison.CurrentCultureIgnoreCase))
-                    jsonToType = "ToInt()";
-                else if(propertityType.Equals("string", StringComparison.CurrentCultureIgnoreCase))
-                    jsonToType = "ToStr()";
+                content.Append("\n");
             }
 
 
@@ -142,6 +150,39 @@ namespace TDFramework
                 System.IO.File.Delete(savatablePath);
 
             System.IO.File.WriteAllText(savatablePath, content.ToString());
+
+
+
+            content.Clear();
+            content.Append("using LitJson;");
+            content.Append("\n");
+            content.Append("using TDFramework;");
+            content.Append("\n");
+            content.Append("using TDFramework.Extention;");
+            content.Append("\n");
+            content.Append("namespace TDFramework.Table");
+            content.Append("\n");
+            content.Append("{");
+            content.Append("\n");
+            content.Append($"    public partial class {m_DataName.UppercaseFirst()}DataTable");
+            content.Append("\n");
+            content.Append("    {");
+            content.Append("\n");
+            content.Append($"        public void ReadData({m_DataName.UppercaseFirst()}TableEntity entity,JsonData data)");
+            content.Append("\n");
+            content.Append("        {");
+            content.Append("\n");
+            content.Append("\n");
+            content.Append("        }");
+            content.Append("\n");
+            content.Append("    }");
+            content.Append("\n");
+            content.Append("}");
+
+            string savaDesigntablePath = $"{pathConfig.m_CShapScriptsSavaPath}/Table/{m_DataName.UppercaseFirst()}DataTable.Design.cs";
+            if(!System.IO.File.Exists(savaDesigntablePath))
+                System.IO.File.WriteAllText(savaDesigntablePath, content.ToString());
+
             #endregion
         }
 

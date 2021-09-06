@@ -182,7 +182,6 @@ namespace TDFramework.Resource
 
         public T LoadAsset<T>(string path)
         {
-          
             var op = Addressables.LoadAssetAsync<T>(path);
              T go = op.WaitForCompletion();
             Addressables.Release(op);

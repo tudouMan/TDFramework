@@ -25,22 +25,23 @@ namespace TDFramework.Table
 
         private void Load()
         {
-
-            GameEntry.Res.LoadAssetAsync<TextAsset>(FileName,fileStr=> 
+            var handle = GameEntry.Res.LoadAssetAsync<TextAsset>(FileName);
+            handle.Completed += p =>
             {
-                string jsonData = Tool.StringEncryption.DecryptDES(fileStr.text);
-                JsonData data = JsonMapper.ToObject(jsonData);
-                foreach (JsonData item in data)
+                if (p.Result != null)
                 {
-                    P p = ReadData(item);
-                    mDataList.Add(p);
-                    mDataDic.Add(p.ID, p);
+                    string jsonData = Tool.StringEncryption.DecryptDES(p.Result.text);
+                    JsonData data = JsonMapper.ToObject(jsonData);
+                    foreach (JsonData item in data)
+                    {
+                        P tableData = ReadData(item);
+                        mDataList.Add(tableData);
+                        mDataDic.Add(tableData.ID, tableData);
+                    }
                 }
+                UnityEngine.AddressableAssets.Addressables.Release(handle);
+            };
 
-                GameEntry.Res.ReleaseAsset<TextAsset>(fileStr);
-
-            });
-          
         }
 
 

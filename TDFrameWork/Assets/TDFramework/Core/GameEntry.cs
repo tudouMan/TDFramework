@@ -18,7 +18,7 @@ namespace TDFramework
         public override void OnSingletonInit()
         {
             base.OnSingletonInit();
-            InitManager();
+          
         }
 
         public static DebugManager Debug { get; private set; }
@@ -45,6 +45,14 @@ namespace TDFramework
 
         public static ResManager Res { get; private set; }
 
+      
+
+        public void Init()
+        {
+            InitManager();
+        }
+
+        
         private void InitManager()
         {
             Logger = new LoggerManager();
@@ -74,6 +82,7 @@ namespace TDFramework
             Localization.Init();
             Res.Init();
             LocalCache.Init();
+            Debug.Log("GameEntry Init ");
         }
 
 

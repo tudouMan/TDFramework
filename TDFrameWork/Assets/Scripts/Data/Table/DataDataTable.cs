@@ -1,7 +1,6 @@
 using LitJson;
 using TDFramework.Table;
 using TDFramework.Extention;
-
 namespace TDFramework.Table
  {
     public partial class DataDataTable : AbstractDataTable<DataDataTable, DataTableEntity>
@@ -11,6 +10,7 @@ namespace TDFramework.Table
         {
             DataTableEntity entity = new DataTableEntity();
             entity.ID = data["id"].ToString().ToInt();
+            entity.set = data["set"].ToString();
             return entity;
         }
     }

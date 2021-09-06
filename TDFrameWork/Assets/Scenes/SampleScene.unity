@@ -429,8 +429,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dfa0efc0bdbbb004d9fe84290e3a857d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Obj: {fileID: 0}
-  m_Shader: {fileID: 0}
 --- !u!4 &1976214061
 Transform:
   m_ObjectHideFlags: 0
