@@ -13,7 +13,7 @@ using System.Collections.Generic;
 
 namespace TDFramework.Runtime
 {
-    public class ILRuntimeMgr:MonoBehaviour
+    public class ILRuntimeMgr:MonoBehaviour,IDisposable
     {
         //大家在正式项目中请全局只创建一个AppDomain
         private AppDomain m_Appdomain;
@@ -32,8 +32,10 @@ namespace TDFramework.Runtime
             m_Appdomain.RegisterCrossBindingAdaptor(new MonoBehaviourAdapter());
             m_Appdomain.RegisterValueTypeBinder(typeof(Vector3), new Vector3Binder());
 
-            SetupCLRRedirection();
-            SetupCLRRedirection2();
+            SetupCLRRedirectionAddComponent();
+            SetupCLRRedirectionGetComponet();
+
+
         }
 
 
@@ -62,6 +64,8 @@ namespace TDFramework.Runtime
 
             // m_Appdomain.Invoke("Game.HotManager", "Debug", null,null);
 
+
+            //Test IL Fuc
             IType t = m_Appdomain.LoadedTypes["Game.HotManager"];
             Type type = t.ReflectionType;
 
@@ -78,16 +82,18 @@ namespace TDFramework.Runtime
         internal  void Init()
         {
             m_Appdomain = new ILRuntime.Runtime.Enviorment.AppDomain();
-            
             InitializeILRuntime();
         }
 
+
+
         public void Dispose()
         {
-            
+            m_Appdomain = null;
+
         }
 
-        unsafe void SetupCLRRedirection()
+        unsafe void SetupCLRRedirectionAddComponent()
         {
             //这里面的通常应该写在InitializeILRuntime，这里为了演示写这里
             var arr = typeof(GameObject).GetMethods();
@@ -100,7 +106,7 @@ namespace TDFramework.Runtime
             }
         }
 
-        unsafe void SetupCLRRedirection2()
+        unsafe void SetupCLRRedirectionGetComponet()
         {
             //这里面的通常应该写在InitializeILRuntime，这里为了演示写这里
             var arr = typeof(GameObject).GetMethods();
@@ -112,6 +118,7 @@ namespace TDFramework.Runtime
                 }
             }
         }
+
 
         MonoBehaviourAdapter.Adaptor GetComponent(ILType type)
         {

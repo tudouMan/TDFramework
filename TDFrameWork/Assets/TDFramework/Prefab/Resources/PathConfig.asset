@@ -17,3 +17,4 @@ MonoBehaviour:
   m_ExcelDataPath: E:/TDFramework/testData
   m_ExcelDataSavaPath: E:/TDFramework/TDFrameWork/Assets/TestData
   m_CShapScriptsSavaPath: E:/TDFramework/TDFrameWork/Assets/Scripts/Data
+  m_ILAssemblyDefinitionName: HotDefine

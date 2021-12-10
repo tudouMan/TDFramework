@@ -2,7 +2,8 @@
     "name": "HotDefine",
     "rootNamespace": "",
     "references": [
-        "ILRuntime"
+        "ILRuntime",
+        ""
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

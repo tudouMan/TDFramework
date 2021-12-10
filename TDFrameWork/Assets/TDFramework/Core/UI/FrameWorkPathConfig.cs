@@ -11,4 +11,5 @@ public class FrameWorkPathConfig : ScriptableObject
     public string m_ExcelDataPath = "Asset/Data";
     public string m_ExcelDataSavaPath = "Asset/Data";
     public string m_CShapScriptsSavaPath= "Asset/Scripts/Data";
+    public string m_ILAssemblyDefinitionName = "Game_Hot";
 }

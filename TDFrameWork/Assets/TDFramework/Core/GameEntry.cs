@@ -68,9 +68,12 @@ namespace TDFramework
             Scene = new SceneLoaderManager();
             Sound = new SoundManager();
             UI = UIManager.Instance;
+
+            //IL
             UnityEngine.GameObject il = new UnityEngine.GameObject();
+            DontDestroyOnLoad(il);
             IL = il.AddComponent<ILRuntimeMgr>();
-          
+             
             Localization = new LocalizationMgr();
             Res = new ResManager();
             LocalCache = new LocalCacheMgr();
@@ -87,7 +90,7 @@ namespace TDFramework
             Localization.Init();
             Res.Init();
             LocalCache.Init();
-            Debug.Log("GameEntry Init ");
+            Debug.Log("GameEntry Init");
         }
 
 

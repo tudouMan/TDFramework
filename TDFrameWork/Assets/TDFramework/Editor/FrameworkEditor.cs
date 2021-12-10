@@ -11,6 +11,8 @@ using System.Reflection;
 using UniRx;
 using System.Threading.Tasks;
 using TDFramework;
+using System.IO;
+using UnityEditor.AddressableAssets.Settings;
 
 public class FrameworkEditor :EditorWindow
 {
@@ -20,8 +22,10 @@ public class FrameworkEditor :EditorWindow
         EditorWindow.GetWindow<FrameworkEditor>().Show();
     }
 
-    private bool m_IsFoldoutUIUI;
+    private bool m_IsFoldoutUI;
     private bool m_IsFoldOutExcel;
+    private bool m_IsFoldOutIL;
+
     private static string m_UIInitPath = "/Scripts/UI/";
     private static string m_UINameSpacePath = "Game.UI";
     private FrameWorkPathConfig m_PathConfig;
@@ -40,18 +44,18 @@ public class FrameworkEditor :EditorWindow
         m_UINameSpacePath = m_PathConfig.m_UINameSpacePath;
     }
 
-    
+
 
     private void OnGUI()
     {
         EditorGUILayout.LabelField("TDFramework", GUILayout.Width(200));
 
-        m_IsFoldoutUIUI = EditorGUILayout.Foldout(m_IsFoldoutUIUI, "UI配置");
-        if (m_IsFoldoutUIUI)
+        m_IsFoldoutUI = EditorGUILayout.Foldout(m_IsFoldoutUI, "UI配置");
+        if (m_IsFoldoutUI)
         {
             EditorGUILayout.BeginHorizontal(GUILayout.Height(20));
             EditorGUILayout.LabelField($"当前UI脚本生成路径:", GUILayout.Width(100));
-            m_UIInitPath= EditorGUILayout.TextField(m_UIInitPath, GUILayout.Width(200));
+            m_UIInitPath = EditorGUILayout.TextField(m_UIInitPath, GUILayout.Width(200));
             EditorGUILayout.EndHorizontal();
 
 
@@ -87,7 +91,7 @@ public class FrameworkEditor :EditorWindow
                 }
                 m_PathConfig.m_UIScriptSavaPath = m_UIInitPath;
                 m_PathConfig.m_UINameSpacePath = m_UINameSpacePath;
-               
+
             }
         }
 
@@ -103,7 +107,7 @@ public class FrameworkEditor :EditorWindow
                 string exportPath = EditorUtility.OpenFolderPanel("select path", "", "");
                 if (!exportPath.IsNull())
                 {
-                    m_PathConfig.m_ExcelDataPath  = exportPath;
+                    m_PathConfig.m_ExcelDataPath = exportPath;
                 }
             }
             EditorGUILayout.EndHorizontal();
@@ -139,7 +143,7 @@ public class FrameworkEditor :EditorWindow
 
             if (GUILayout.Button("解析整文件夹", GUILayout.Width(200), GUILayout.Height(30)))
             {
-                List<string>paths=m_PathConfig.m_ExcelDataPath.GetDirSubFilePathList(suffix:"xlsx");
+                List<string> paths = m_PathConfig.m_ExcelDataPath.GetDirSubFilePathList(suffix: "xlsx");
                 if (paths != null)
                 {
                     for (int i = 0; i < paths.Count; i++)
@@ -149,9 +153,9 @@ public class FrameworkEditor :EditorWindow
                             ExportData(paths[i], m_PathConfig.m_ExcelDataSavaPath);
                         }
                     }
-                    
+
                 }
-               
+
             }
 
 
@@ -159,20 +163,20 @@ public class FrameworkEditor :EditorWindow
             if (GUILayout.Button("单个解析", GUILayout.Width(200), GUILayout.Height(30)))
             {
                 string exportPath = EditorUtility.OpenFilePanel("select path", "", "xlsx");
-              
+
                 if (!exportPath.IsNull())
                 {
                     ExportData(exportPath, m_PathConfig.m_ExcelDataSavaPath);
                 }
-               
+
             }
 
 
 
             EditorGUILayout.Space(20);
             EditorGUILayout.LabelField($"解密文件:", GUILayout.Width(300));
-            m_EncrptVector2 = EditorGUILayout.BeginScrollView(m_EncrptVector2, GUILayout.Width(500),GUILayout.Height(100));
-            m_EncrptDataStr= EditorGUILayout.TextArea(m_EncrptDataStr, GUILayout.Width(400),GUILayout.Height(400));
+            m_EncrptVector2 = EditorGUILayout.BeginScrollView(m_EncrptVector2, GUILayout.Width(500), GUILayout.Height(100));
+            m_EncrptDataStr = EditorGUILayout.TextArea(m_EncrptDataStr, GUILayout.Width(400), GUILayout.Height(400));
             EditorGUILayout.EndScrollView();
 
             if (GUILayout.Button("解密查看文件", GUILayout.Width(200), GUILayout.Height(30)))
@@ -182,14 +186,71 @@ public class FrameworkEditor :EditorWindow
                 dataStr = TDFramework.Tool.StringEncryption.DecryptDES(dataStr);
                 m_EncrptDataStr = dataStr;
             }
-           
+
         }
 
-         UnityEditor.EditorUtility.SetDirty(m_PathConfig);
+
+        m_IsFoldOutIL = EditorGUILayout.Foldout(m_IsFoldOutIL, "IL配置");
+        if (m_IsFoldOutIL)
+        {
+            EditorGUILayout.BeginHorizontal(GUILayout.Height(30));
+            EditorGUILayout.LabelField($"AssemblyName:", GUILayout.Width(100), GUILayout.Height(20));
+            m_PathConfig.m_ILAssemblyDefinitionName = EditorGUILayout.TextField(m_PathConfig.m_ILAssemblyDefinitionName, GUILayout.Width(200), GUILayout.Height(20));
+            EditorGUILayout.EndHorizontal();
+
+            EditorGUILayout.BeginVertical(GUILayout.Height(300));
+            if (GUILayout.Button("转换DLLPDB:", GUILayout.Width(150), GUILayout.Height(20)))
+            {
+                
+                DirectoryInfo pathInfo = new DirectoryInfo(Application.dataPath);
+                string dllPath = pathInfo.Parent.FullName+ @"\Library\ScriptAssemblies\" + m_PathConfig.m_ILAssemblyDefinitionName + ".dll";
+                if (!File.Exists(dllPath))
+                {
+                    Debug.LogError($"该路径下{pathInfo.Parent.FullName + @"\Library\ScriptAssemblies\"}没有{ m_PathConfig.m_ILAssemblyDefinitionName}.dll 请检查");
+                    return;
+                }
+                string pdbPath = pathInfo.Parent.FullName + @"\Library\ScriptAssemblies\" + m_PathConfig.m_ILAssemblyDefinitionName + ".pdb";
+                if (!File.Exists(pdbPath))
+                {
+                    Debug.LogError($"该路径下{pathInfo.Parent.FullName + @"\Library\ScriptAssemblies\"}没有{ m_PathConfig.m_ILAssemblyDefinitionName}.pdb 请检查");
+                    return;
+                }
+
+
+               
+
+                byte[]dllBytes= File.ReadAllBytes(dllPath);
+                byte[] pdbBytes = File.ReadAllBytes(pdbPath);
+                //2.新建一个文件以".bytes”结尾
+                string toDllPath = Application.dataPath + @"\Res\HotFix\dll_res.bytes";
+                string toPdbPath = Application.dataPath + @"\Res\HotFix\pdb_res.bytes";
+
+                if (File.Exists(toDllPath))
+                    File.Delete(toDllPath);
+                if (File.Exists(toDllPath+".meta"))
+                    File.Delete(toDllPath+".meta");
+
+                if (File.Exists(toPdbPath))
+                    File.Delete(toPdbPath);
+                if (File.Exists(toPdbPath + ".meta"))
+                    File.Delete(toPdbPath + ".meta");
+               
+                File.WriteAllBytes(toDllPath, dllBytes);
+                Debug.Log("----------DLL转换成功 ToPath:"+ toDllPath);
+                File.WriteAllBytes(toPdbPath, pdbBytes);
+                Debug.Log("----------PDB转换成功 ToPath:"+ toPdbPath);
+                UnityEditor.AssetDatabase.Refresh();
+            }
+            EditorGUILayout.EndVertical();
+        }
+
+        UnityEditor.EditorUtility.SetDirty(m_PathConfig);
     }
 
 
-    public static void ExportData(string exportPath,string savaPath)
+
+
+public static void ExportData(string exportPath,string savaPath)
     {
         //-- Load Excel
         ExcelLoader excel = new ExcelLoader(exportPath, 3, exportPath.GetFileNameWithoutExtend());
