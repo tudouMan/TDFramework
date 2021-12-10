@@ -1,7 +1,6 @@
 ﻿using System;
 using UnityEngine;
 using TDFramework.Resource;
-using DG.Tweening;
 using TDFramework.Pool;
 
 namespace TDFramework.Audio
@@ -100,10 +99,10 @@ namespace TDFramework.Audio
 
         public void FadeStop()
         {
-           DG.Tweening.DOTween.To(() => m_CurAudioSource.volume, x => m_CurAudioSource.volume = x, 0, 0.3f).OnComplete(()=> 
-           {
-               Stop();
-           });
+           //DG.Tweening.DOTween.To(() => m_CurAudioSource.volume, x => m_CurAudioSource.volume = x, 0, 0.3f).OnComplete(()=> 
+           //{
+           //    Stop();
+           //});
         }
 
         public void OnInit(object[] parmas = null)

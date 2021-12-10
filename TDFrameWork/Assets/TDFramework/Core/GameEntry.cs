@@ -40,7 +40,10 @@ namespace TDFramework
         public static ILRuntimeMgr IL { get; private set; }
 
         public static LocalCacheMgr LocalCache { get; private set; }
-
+        private void OnLevelWasLoaded(int level)
+        {
+            
+        }
         public static LocalizationMgr Localization { get; private set; }
 
         public static ResManager Res { get; private set; }
@@ -65,7 +68,9 @@ namespace TDFramework
             Scene = new SceneLoaderManager();
             Sound = new SoundManager();
             UI = UIManager.Instance;
-            IL = new ILRuntimeMgr();
+            UnityEngine.GameObject il = new UnityEngine.GameObject();
+            IL = il.AddComponent<ILRuntimeMgr>();
+          
             Localization = new LocalizationMgr();
             Res = new ResManager();
             LocalCache = new LocalCacheMgr();

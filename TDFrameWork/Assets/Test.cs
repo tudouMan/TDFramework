@@ -11,8 +11,8 @@ using Sirenix.OdinInspector;
 public class Test : MonoBehaviour
 {
 
-    public Dictionary<int, UnityEngine.GameObject> Dic = new Dictionary<int, GameObject>();
 
+    public GameObject obj;
  
 
     private void Awake()
@@ -20,40 +20,38 @@ public class Test : MonoBehaviour
         GameEntry.Instance.Init();
     }
 
-    [Button("Set")]
-    private void Set()
-    {
 
-    }
 
     private void OnGUI()
     {
         if(GUI.Button(new Rect(100, 100, 100, 100), "set"))
         {
-            int outside = 0;
-            MethdInvoke[] methds = new MethdInvoke[2];
-            for (int index = 0; index < 2; index++)
-            {
-                int inside=0;
-                methds[index] = delegate 
-                {
-                    Debug.Log($"outside:{outside.ToString()} inside:{inside.ToString()}");
-                    inside++;
-                    outside++;
-                };
-            }
-
-
-            methds[0]();
-            methds[0]();
-            methds[0]();
-            methds[1]();
-            methds[1]();
+            GameEntry.IL.RuntimeFunc("Assets/HotFix/testdll_res.bytes", "Assets/HotFix/testpdb_res.bytes", null);
         }
     }
 
 
-    public delegate void MethdInvoke();
+
+    [ContextMenu("Transpose")]
+    private void TransposeBytes()
+    {
+           
+       
+      
+     
+        //1.使用File.ReadAllBytes加载数据流并用一个变量临时暂存下
+        byte[]dllBytes= File.ReadAllBytes(@"E:\TDFramework\TDFrameWork\Library\ScriptAssemblies\HotDefine.dll");
+        byte[] psbBytes = File.ReadAllBytes(@"E:\TDFramework\TDFrameWork\Library\ScriptAssemblies\HotDefine.pdb");
+        //2.新建一个文件以".bytes”结尾
+        File.WriteAllBytes(@"E:\TDFramework\TDFrameWork\Assets\HotFix\testdll_res.bytes", dllBytes);
+        File.WriteAllBytes(@"E:\TDFramework\TDFrameWork\Assets\HotFix\testpdb_res.bytes", psbBytes);
+
+#if UNITY_EDITOR
+        UnityEditor.AssetDatabase.Refresh();
+#endif
+
+    }
+
 
 
 }
