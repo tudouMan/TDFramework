@@ -75,3 +75,7 @@ crashlytics-build.properties
 TDFrameWork/Temp/
 TDFrameWork/Library/Artifacts/c6/c6569a8541397e400ba120826f825fd5
 TDFrameWork/Library/
+/TDFrameWork/Logs
+/TDFrameWork/obj
+/TDFrameWork/UserSettings
+/TDFrameWork/.idea
