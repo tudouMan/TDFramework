@@ -22,6 +22,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels:
     - IL
+  - m_GUID: 142c7a2acc106d64896578027e24db06
+    m_Address: pdb_res
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - IL
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: be554cc2c0019e441ae378ab5866526d, type: 2}
   m_SchemaSet:

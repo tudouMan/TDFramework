@@ -225,16 +225,16 @@ public class FrameworkEditor :EditorWindow
                 string toDllPath = Application.dataPath + @"\Res\HotFix\dll_res.bytes";
                 string toPdbPath = Application.dataPath + @"\Res\HotFix\pdb_res.bytes";
 
-                
-                if (File.Exists(toDllPath))
-                    File.Delete(toDllPath);
-               
+                if (Directory.Exists(Application.dataPath + @"\Res\HotFix"))
+                {
+                    var dir = new System.IO.DirectoryInfo(Application.dataPath + @"\Res\HotFix");
+                    dir.Attributes = dir.Attributes & ~FileAttributes.ReadOnly;
+                    dir.Delete(true);
 
-                if (File.Exists(toPdbPath))
-                    File.Delete(toPdbPath);
-               
-               
+                }
+                  
 
+                Directory.CreateDirectory(Application.dataPath + @"\Res\HotFix");
                 File.WriteAllBytes(toDllPath, dllBytes);
                 Debug.Log("----------DLL转换成功 ToPath:"+ toDllPath);
                 File.WriteAllBytes(toPdbPath, pdbBytes);
