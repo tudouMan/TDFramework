@@ -74,7 +74,7 @@ namespace TDFramework.Table
 
         
 
-        public  P Copy<P>(P RealObject)where P:TableDataBase
+        public  Item Copy<Item>(Item RealObject)where Item : TableDataBase
         {
             using (Stream objectStream = new MemoryStream())
             {
@@ -82,7 +82,7 @@ namespace TDFramework.Table
                 IFormatter formatter = new BinaryFormatter();
                 formatter.Serialize(objectStream, RealObject);
                 objectStream.Seek(0, SeekOrigin.Begin);
-                return (P)formatter.Deserialize(objectStream);
+                return (Item)formatter.Deserialize(objectStream);
             }
         }
 

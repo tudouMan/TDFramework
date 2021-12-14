@@ -1,19 +1,17 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.IO;
+﻿using MySql.Data.MySqlClient;
+using System;
+using System.Data;
 using TDFramework;
+using TDFramework.Net.Mysql;
 using UnityEngine;
-using UnityEngine.AddressableAssets;
-using Sirenix.Serialization;
-using Sirenix.OdinInspector;
+
 
 public class Test : MonoBehaviour
 {
 
 
     public GameObject obj;
- 
+    public  string CONNECTIONSTRING = "datasource=127.0.0.1;port=3306;database=game;user=root;pwd=123456;";
 
     private void Awake()
     {
@@ -22,26 +20,17 @@ public class Test : MonoBehaviour
 
 
 
-    private void OnGUI()
+
+    [ContextMenu("Test")]
+    private void TestData()
     {
-        if(GUI.Button(new Rect(100, 100, 100, 100), "set"))
-        {
-          //  GameEntry.IL.RuntimeFunc("Assets/HotFix/dll_res", "Assets/HotFix/pdb_res", null);
-        }
-    }
+        DatabaseManager data = new DatabaseManager();
+        DatabaseManager.Init();
 
-
-
-    [ContextMenu("Transpose")]
-    private void TransposeBytes()
-    {
-           
+        bool isConnect = data.TestConnection();
+        Debug.Log("Connect Is :" + isConnect);
         
-
     }
-
-
-
 }
 
 

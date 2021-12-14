@@ -54,7 +54,6 @@ public class AssetEvent : UnityEditor.AssetModificationProcessor
         var assetPdb = AssetDatabase.LoadAssetAtPath<TextAsset>("Assets/Res/HotFix/pdb_res.bytes");
         if (assetPdb != null)
         {
-            Debug.Log("creat path:" + path);
             string str = AssetDatabase.GetAssetPath(assetPdb);
             var guid = AssetDatabase.AssetPathToGUID(str); //获得GUID
             var entry = setting.CreateOrMoveEntry(guid, group); //通过GUID创建entry

@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using LitJson;
 using TDFramework;
-
+using UnityEngine.Networking;
 
 [MonoSingletonPath("[Net]/[Http]")]
 public class NetWorkHttp : MonoSingleton<NetWorkHttp>
@@ -88,7 +88,8 @@ public class NetWorkHttp : MonoSingleton<NetWorkHttp>
     /// <param name="url"></param>
     private void GetUrl(string url)
     {
-        WWW data = new WWW(url);  //GET方式请求的内容会附在url的后面一起做为URL向服务器发送请求（请求的内容使用&符号隔开）
+        //GET方式请求的内容会附在url的后面一起做为URL向服务器发送请求（请求的内容使用&符号隔开）
+        UnityWebRequest data = new UnityWebRequest(url);
         StartCoroutine(Request(data));
     }
 
@@ -101,40 +102,28 @@ public class NetWorkHttp : MonoSingleton<NetWorkHttp>
     /// </summary>
     /// <param name="data"></param>
     /// <returns></returns>
-    private IEnumerator Request(WWW data)
+    private IEnumerator Request(UnityWebRequest webRequest)
     {
-        yield return data;
+        yield return webRequest.SendWebRequest();
 
         m_IsBusy = false;
 
-        if (string.IsNullOrEmpty(data.error))
+        if  (webRequest.result == UnityWebRequest.Result.ProtocolError || webRequest.result == UnityWebRequest.Result.ConnectionError)
         {
-            if (data.text == "null")
-            {
-                m_CallBackArgs.HasError = true;
-                m_CallBackArgs.ErrorInfo = "查询不到数据";
-                m_CallBack(m_CallBackArgs);
-            }
-            else
-            {
-                if (m_CallBack != null)
-                {
-                    m_CallBackArgs.HasError = false;
-                    m_CallBackArgs.Value = data.text;
-                    m_CallBackArgs.ErrorInfo = string.Empty;
-                    m_CallBack(m_CallBackArgs);//执行当前委托
-                }
-            }
-        }
+            m_CallBackArgs.HasError = true;
+            m_CallBackArgs.ErrorInfo = "查询不到数据";
+            m_CallBack(m_CallBackArgs);
+
+        }   
         else
         {
             if (m_CallBack != null)
             {
-                m_CallBackArgs.HasError = true;
-                m_CallBackArgs.ErrorInfo = data.error;
-                m_CallBack(m_CallBackArgs);
+                m_CallBackArgs.HasError = false;
+                m_CallBackArgs.Value = webRequest.downloadHandler.text;
+                m_CallBackArgs.ErrorInfo = string.Empty;
+                m_CallBack(m_CallBackArgs);//执行当前委托
             }
-
         }
     }
     #endregion
@@ -147,11 +136,12 @@ public class NetWorkHttp : MonoSingleton<NetWorkHttp>
 
         //给表单添加值
         form.AddField("", json);
-
-        WWW data = new WWW(url, form);
-
-        StartCoroutine(Request(data));
+        UnityWebRequest wenquest = UnityWebRequest.Post(url, form);
+        StartCoroutine(Request(wenquest));
     }
+
+
+ 
     #endregion
 
     #region 回调数据

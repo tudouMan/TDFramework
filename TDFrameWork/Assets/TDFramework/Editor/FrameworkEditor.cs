@@ -250,7 +250,7 @@ public class FrameworkEditor :EditorWindow
 
 
 
-public static void ExportData(string exportPath,string savaPath)
+    public static void ExportData(string exportPath, string savaPath)
     {
         //-- Load Excel
         ExcelLoader excel = new ExcelLoader(exportPath, 3, exportPath.GetFileNameWithoutExtend());
@@ -266,8 +266,8 @@ public static void ExportData(string exportPath,string savaPath)
 #endif
     }
 
-    [MenuItem("Assets/创建UI脚本/Creat",false,-10)]
-    public static  void CreatUIScripts()
+    [MenuItem("Assets/创建UI脚本/Creat", false, -10)]
+    public static void CreatUIScripts()
     {
 
         GameObject selectObj = Selection.activeGameObject;
@@ -276,7 +276,7 @@ public static void ExportData(string exportPath,string savaPath)
             Debug.LogError("没有选中物体请选择");
             return;
         }
-        
+
         string savaPath = m_UIInitPath;
         savaPath = string.Format(Application.dataPath + m_UIInitPath);
         savaPath.CreateDirIfNotExists();
@@ -286,8 +286,8 @@ public static void ExportData(string exportPath,string savaPath)
 
 
 
- 
-    public static  void CreatUI(string path,string name,GameObject selectObj)
+
+    public static void CreatUI(string path, string name, GameObject selectObj)
     {
         string spaceLine = "\n";
         string uiDataName = $"{name}Data";
@@ -295,12 +295,12 @@ public static void ExportData(string exportPath,string savaPath)
         string spaceFour = "    ";
         string spaceNine = "        ";
         string spaceTwelve = "            ";
-       
+
         if (!System.IO.File.Exists(path + name + ".cs"))
         {
             #region CS
             StringBuilder contentBuilder = new StringBuilder();
-           
+
 
             //using title
             contentBuilder.Append("using System;");
@@ -462,14 +462,14 @@ public static void ExportData(string exportPath,string savaPath)
 
 
         #region DeSign
-        var binds =selectObj.GetComponentsInChildren<UIBind>();
+        var binds = selectObj.GetComponentsInChildren<UIBind>();
         StringBuilder bindBuilder = new StringBuilder();
 
         bindBuilder.Append("using System;");
         bindBuilder.Append(spaceLine);
         bindBuilder.Append("using TDFramework.UI;");
         bindBuilder.Append(spaceLine);
-        
+
         bindBuilder.Append("using UnityEngine;");
         bindBuilder.Append(spaceLine);
         bindBuilder.Append("using UnityEngine.UI;");
@@ -493,7 +493,7 @@ public static void ExportData(string exportPath,string savaPath)
             bindBuilder.Append(spaceNine);
             bindBuilder.Append($"public { item.ComponentName} {item.gameObject.name};");
         }
-     
+
 
 
 
@@ -537,7 +537,7 @@ public static void ExportData(string exportPath,string savaPath)
 
         AssetDatabase.Refresh();
         #endregion
-        
+
     }
 
 
@@ -559,7 +559,7 @@ public static void ExportData(string exportPath,string savaPath)
             {
                 var assembly = TDFramework.Extention.ReflectionExtension.GetAssemblyCSharp();
                 string nameSpace = Resources.Load<FrameWorkPathConfig>("PathConfig").m_UINameSpacePath;
-                System.Type addType = assembly.GetType(nameSpace +"."+ SelectName);
+                System.Type addType = assembly.GetType(nameSpace + "." + SelectName);
                 SelectObj.AddComponent(addType);
             }
             var viewType = SelectObj.GetComponent(SelectName);
@@ -568,15 +568,15 @@ public static void ExportData(string exportPath,string savaPath)
 
             foreach (var item in Binds)
             {
-              
-               
+
+
                 string propertityName = item.gameObject.name;
                 //获取到分裂类中对应需要设置的属性
                 var fileInfo = type.GetField(propertityName);
                 if (fileInfo != null)
                 {
                     Component itemComponent = item.transform.GetComponent(item.ComponentName);
-                  
+
                     if (itemComponent == null)
                     {
                         Debug.LogWarning($"Behavior{item.gameObject.name}物体上没有{item.DefaultName()}属性");
@@ -591,16 +591,16 @@ public static void ExportData(string exportPath,string savaPath)
 
 
             }
-        
-           
+
+
             Debug.Log($"{SelectName}Script creat Success..............");
             EditorPrefs.SetBool("UICreatRun", false);
-           
+
         }
-       
+
     }
 
-    
+
 
 }
 
