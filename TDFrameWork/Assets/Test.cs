@@ -10,8 +10,6 @@ public class Test : MonoBehaviour
 {
 
 
-    public GameObject obj;
-    public  string CONNECTIONSTRING = "datasource=127.0.0.1;port=3306;database=game;user=root;pwd=123456;";
 
     private void Awake()
     {
@@ -29,7 +27,16 @@ public class Test : MonoBehaviour
 
         bool isConnect = data.TestConnection();
         Debug.Log("Connect Is :" + isConnect);
-        
+        DataSet userDataTable=  DatabaseManager.Select("User");
+        DataTableCollection users = userDataTable.Tables;
+        for (int i = 0; i < users.Count; i++)
+        {
+            var name = users[i].Rows[0]["name"];
+            var level= users[i].Rows[0]["level"];
+            Debug.Log($"user name:{name} user level:{level}");
+        }
+       
+
     }
 }
 
