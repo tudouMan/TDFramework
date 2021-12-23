@@ -26,7 +26,7 @@ namespace TDFramework
                 FsmState<T> state = fsmStates[i];
                 state.Fsm = this;
                 m_StateDic.Add(i, state);
-                Debug.Log("I:"+i.ToString()+"  TYPE:"+state.GetType().ToString());
+                GameEntry.Debug.Log("I:"+i.ToString()+"  TYPE:"+state.GetType().ToString());
             }
             m_CurState = fsmStates[0];
             CurStateType = -1;

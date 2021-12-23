@@ -1,71 +1,67 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TDFramework.Resource;
 using UnityEngine;
+using FMOD.Studio;
 
+
+//*******使用FMOD第三方进行播放播放Sound*********
+//master bank.strings.bank和master bank.bank必须加载，作为stream模式载入的资源会自动加载此文件，但是作为assetbundle时，需要自己加载，切记
 namespace TDFramework.Audio
 {
     public class SoundManager : ManagerBase, IDisposable
     {
-        private List<Sound> m_CurSounds=new List<Sound>();
+        private Dictionary<string, EventInstance> m_SoundsDic;
 
-        //BgSound
-        private Sound m_BgSound;
 
-        public List<Sound> CurSounds { get => m_CurSounds; set => m_CurSounds = value; }
-
-        public void PlaySound(string soundName, float vol)
+        public void PlaySound(string guid, bool isLoop, float vol, EVENT_CALLBACK callBack = null)
         {
-            PlayAudio(soundName, false, vol);
+            PlayAudio(guid, false, vol);
         }
+
 
         public void PlayMusic(string soundName, float vol)
         {
-            if (m_BgSound != null)
-                m_BgSound.FadeStop();
             PlayAudio(soundName, true, vol);
         }
 
-        private void PlayAudio(string soundName, bool isLoop,float vol)
+        private void PlayAudio(string guid, bool isLoop, float vol, EVENT_CALLBACK callBack = null)
         {
-            GameEntry.Res.LoadAssetAsync<AudioClip>(soundName, p =>
+            GameEntry.Res.LoadAssetAsync<TextAsset>(guid, p =>
                 {
-                    Sound sound = GameEntry.Pool.PopClass<Sound>();
-                    sound.Play(p, isLoop, vol);
-                    if (isLoop)
-                        m_BgSound = sound;
-                    m_CurSounds.Add(sound);
+                    FMODUnity.RuntimeManager.LoadBank(p);
+                    EventInstance clipInfo = FMODUnity.RuntimeManager.CreateInstance(guid);
+                    clipInfo.set3DAttributes(FMODUnity.RuntimeUtils.To3DAttributes(Vector3.zero));
+                    clipInfo.setVolume(vol);
+                    clipInfo.setCallback(callBack);
+                    clipInfo.start();
                 });
         }
 
 
-        public void Remove(Sound sound)
+        public void Remove(string sound)
         {
-            CurSounds.Remove(sound);
+            if (m_SoundsDic.ContainsKey(sound))
+            {
+                EventInstance clip=   m_SoundsDic[sound];
+                clip.stop(STOP_MODE.IMMEDIATE);
+                m_SoundsDic.Remove(sound);
+                FMODUnity.RuntimeManager.UnloadBank(sound);
+            } 
         }
 
-        public void Update()
-        {  
-            for (int i = m_CurSounds.Count-1; i >=0 ; i--)
-            {
-                if (m_CurSounds[i].IsFinish)
-                {
-                    m_CurSounds[i].Stop();
-                }
-            }
-        }
+       
 
         internal override void Init()
         {
-            
+            m_SoundsDic = new Dictionary<string, EventInstance>();
         }
 
         public void Dispose()
         {
-           
+
         }
+
+ 
+
     }
 }

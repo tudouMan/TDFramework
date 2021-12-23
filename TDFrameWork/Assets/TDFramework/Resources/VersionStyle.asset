@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b82284e8159d1446b1d675cf3423cb9, type: 3}
   m_Name: VersionStyle
   m_EditorClassIdentifier: 
-  build: 0
+  build: 7
   iosBuild: 0
   JobName: Test
   isLoadAB: 0

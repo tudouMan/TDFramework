@@ -70,11 +70,6 @@ public class NetWorkHttp : MonoSingleton<NetWorkHttp>
                 dic["DeviceIdentifier"] = DeviceUtil.DeviceIdentifier;
                 //设备型号
                 dic["DeviceModel"] = DeviceUtil.DeviceModel;
-                //签名
-                //long t = GlobeInit.Instance.CurrServerTime;
-                //dic["sign"] = MFEncryptUtil.Md5(string.Format("{0}:{1}",t, DeviceUtil.DeviceIdentifier));
-                //时间戳
-                //dic["t"] = t;
             }
             PostUrl(url, dic == null ? "" : JsonMapper.ToJson(dic));
         }

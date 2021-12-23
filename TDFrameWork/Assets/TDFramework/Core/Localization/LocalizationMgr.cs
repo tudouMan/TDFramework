@@ -49,7 +49,6 @@ namespace TDFramework.Localization
             }
 
             PlayerPrefs.SetInt(playerprefsName, m_CurLocalizationType.GetHashCode());
-
             RefreshHandle?.Invoke();
         }
 
@@ -89,7 +88,9 @@ namespace TDFramework.Localization
 
         public void Dispose()
         {
-           
+            m_TextLocalDic.Clear();
+            m_PicLocalDic.Clear();
+            m_RefreshHandle = null;
         }
     }
 }

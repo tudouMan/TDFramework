@@ -33,7 +33,7 @@ namespace TDFramework.Table
 
         private void LoadAllData()
         {
-            m_TestTable = new DataDataTable();
+          //  m_TestTable = new DataDataTable();
         }
 
        

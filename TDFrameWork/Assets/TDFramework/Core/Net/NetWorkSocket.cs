@@ -286,11 +286,7 @@ public class NetWorkSocket : MonoSingleton<NetWorkSocket>
             mCheckSendQueue = OnCheckSendQueueCallBack;
             Debug.Log("连接成功");
             ReceiveMsg();
-
-            if(OnConnectOk!=null)
-            {
-                OnConnectOk();//连接成功后执行委托
-            }
+            OnConnectOk?.Invoke();
         }
         catch (Exception ex)
         {

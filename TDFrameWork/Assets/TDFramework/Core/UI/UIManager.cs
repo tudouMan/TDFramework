@@ -75,7 +75,7 @@ namespace TDFramework.UI
                     instance = FindObjectOfType<UIManager>();
                     if (instance == null)
                     {
-                       GameObject uiRoot=GameObject.Instantiate(Resources.Load<GameObject>("UIRoot"));
+                       GameObject uiRoot=GameObject.Instantiate(Resources.Load<GameObject>("Prefab/UIRoot"));
                         uiRoot.name = "UIRoot";
                         DontDestroyOnLoad(uiRoot);
                         instance = MonoSingletonProperty<UIManager>.Instance;

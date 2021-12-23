@@ -40,10 +40,8 @@ namespace TDFramework
         public static ILRuntimeMgr IL { get; private set; }
 
         public static LocalCacheMgr LocalCache { get; private set; }
-        private void OnLevelWasLoaded(int level)
-        {
-            
-        }
+
+
         public static LocalizationMgr Localization { get; private set; }
 
         public static ResManager Res { get; private set; }
@@ -99,7 +97,6 @@ namespace TDFramework
         {
             Time.Update();
             Scene.Update();
-            Sound.Update();
             FSM.Update();
         }
 

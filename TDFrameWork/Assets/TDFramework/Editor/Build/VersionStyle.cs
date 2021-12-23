@@ -26,6 +26,8 @@ namespace TDFramework
         }
 
 
+        public string CompanyName { get=>"TUDOU"; }
+
         public bool isLoadAB = false;
         public bool isTestLoadAB
         {

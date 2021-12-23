@@ -65,7 +65,7 @@ public class BuildAPK
 
     private static List<string> SceneNames = new List<string> 
     {
-      "Assets/Game/Scenes/Main.unity"
+      "Assets/Scenes/SampleScene.unity"
     };
 
  
@@ -89,6 +89,13 @@ public class BuildAPK
         BuildAndroid();
     }
 
+    [MenuItem("TDFramework/一键打包/BuildWindows")]
+    public static void Build_WindowsPlay()
+    {
+        resetStyle();
+        BuildWindows();
+    }
+
     [MenuItem("TDFramework/一键打包/Build_GooglePlay/il2cpp_GM")]
     public static void Build_GooglePlay_GM()
     {
@@ -96,6 +103,8 @@ public class BuildAPK
         VersionStyle.Instance.IsGM = true;
         BuildAndroid();
     }
+
+
 
     [MenuItem("TDFramework/一键打包/Build_GooglePlay/ABB")]
     public static void Build_GooglePlay2()
@@ -116,6 +125,7 @@ public class BuildAPK
     {
         if (EditorUserBuildSettings.activeBuildTarget != BuildTarget.Android)
             EditorUserBuildSettings.SwitchActiveBuildTarget(BuildTargetGroup.Android, BuildTarget.Android);
+
         SetPlayerSetting();
         VersionStyle style = VersionStyle.Instance;
         string gameName = style.JobName + "_" + style.FullVersion + "_" + style.Channel.ToString() + "_" + System.DateTime.Now.ToString("MM-dd-HH-mm");
@@ -184,6 +194,31 @@ public class BuildAPK
             fs.Close();
         }
     }
+
+
+    public static void BuildWindows()
+    {
+
+        VersionStyle style = VersionStyle.Instance;
+        PlayerSettings.fullScreenMode = FullScreenMode.MaximizedWindow;
+        PlayerSettings.companyName = style.CompanyName;
+        PlayerSettings.productName = style.JobName;
+        PlayerSettings.resizableWindow = false;
+       
+        string[] levels = UnityEditor.EditorBuildSettingsScene.GetActiveSceneList(EditorBuildSettings.scenes);
+
+        string to = Path.GetFullPath(ApkPath);
+        if (!Directory.Exists(to))
+            Directory.CreateDirectory(to);
+
+        string save = to + style.JobName+".exe";
+    
+        Debug.Log("开始打包：" + save);
+        BuildPipeline.BuildPlayer(levels, save, BuildTarget.StandaloneWindows, BuildOptions.None);
+        Debug.Log("打包结束：" + save);
+
+    }
+
     static void resetStyle()
     {
         VersionStyle style = VersionStyle.Instance;
@@ -244,6 +279,7 @@ public class BuildAPK
             //PlayerSettings.iOS.buildNumber = style.build.ToString();
             PlayerSettings.SetManagedStrippingLevel(BuildTargetGroup.iOS, ManagedStrippingLevel.Low);
         }
+      
         PlayerSettings.bundleVersion = style.FullVersion;
         PlayerSettings.applicationIdentifier = style.bundleIdentifier;
         PlayerSettings.productName = style.productName;

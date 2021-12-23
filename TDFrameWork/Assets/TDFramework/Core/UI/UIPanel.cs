@@ -22,7 +22,6 @@ namespace TDFramework.UI
 
         }
 
-
         protected UIPanelInfo mUIPanelInfo;
 
         public UIPanelInfo PanelInfo { get => mUIPanelInfo; set => mUIPanelInfo = value; }
