@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b82284e8159d1446b1d675cf3423cb9, type: 3}
   m_Name: VersionStyle
   m_EditorClassIdentifier: 
-  build: 7
+  build: 8
   iosBuild: 0
   JobName: Test
   isLoadAB: 0
-  Channel: 0
+  Channel: 3
   IsGM: 0

@@ -11,6 +11,7 @@ public enum eChannel
     Google = 0,
     TapTap = 1,
     Apple = 2,
+    Windos=3
 }
 public class BuildAPK
 {
@@ -80,7 +81,7 @@ public class BuildAPK
     }
 
     public static string ApkPath = Application.dataPath + "/../../build/";
-
+    
 
     [MenuItem("TDFramework/一键打包/Build_GooglePlay/il2cpp")]
     public static void Build_GooglePlay()
@@ -198,21 +199,26 @@ public class BuildAPK
 
     public static void BuildWindows()
     {
-
+        SetPlayerSetting();
+        resetStyleWindows();
         VersionStyle style = VersionStyle.Instance;
-        PlayerSettings.fullScreenMode = FullScreenMode.MaximizedWindow;
+        PlayerSettings.fullScreenMode = FullScreenMode.FullScreenWindow;
         PlayerSettings.companyName = style.CompanyName;
         PlayerSettings.productName = style.JobName;
         PlayerSettings.resizableWindow = false;
-       
+        style.Save();
+        InitScenes();
         string[] levels = UnityEditor.EditorBuildSettingsScene.GetActiveSceneList(EditorBuildSettings.scenes);
-
-        string to = Path.GetFullPath(ApkPath);
+        string verStr = style.FullVersion;
+        string to = Path.GetFullPath(ApkPath+ style.FullVersion+@"\");
         if (!Directory.Exists(to))
             Directory.CreateDirectory(to);
+        
+   
 
-        string save = to + style.JobName+".exe";
-    
+        string gameName = style.JobName + "_" + style.FullVersion + "_" + style.Channel.ToString() + "_" + System.DateTime.Now.ToString("MM-dd-HH-mm");
+        string save = to + gameName + ".exe";
+        
         Debug.Log("开始打包：" + save);
         BuildPipeline.BuildPlayer(levels, save, BuildTarget.StandaloneWindows, BuildOptions.None);
         Debug.Log("打包结束：" + save);
@@ -225,6 +231,14 @@ public class BuildAPK
         style.IsGM = false;
         style.Channel = eChannel.Google;
         EditorUserBuildSettings.buildAppBundle = false;
+    }
+
+
+    static void resetStyleWindows()
+    {
+        VersionStyle style = VersionStyle.Instance;
+        style.IsGM = false;
+        style.Channel = eChannel.Windos;
     }
 
     static string keystore_FileName { get { return "yk"; } }
