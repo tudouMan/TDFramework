@@ -11,6 +11,8 @@ namespace TDFramework.Pool
         private ClassObjPool m_ClassPool;
         private PrefabPool m_PrefabPool;
 
+        public ClassObjPool ClassPool { get => m_ClassPool; set => m_ClassPool = value; }
+        public PrefabPool PrefabPool { get => m_PrefabPool; set => m_PrefabPool = value; }
 
         internal override void Init()
         {
@@ -52,6 +54,8 @@ namespace TDFramework.Pool
         {
             m_PrefabPool.Pop(prefabName, completeCallBack);
         }
+
+       
 
         public void PushPrefab(UnityEngine.GameObject prefab)
         {

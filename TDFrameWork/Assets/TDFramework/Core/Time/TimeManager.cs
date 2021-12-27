@@ -19,8 +19,12 @@ namespace TDFramework
             m_TimeActions.AddLast(action);
         }
 
-        public void Remove(TimeAction action)
+        public void Remove(TimeAction action,bool isCompleteEvent=false)
         {
+            if (action == null)
+                throw new Exception("action is null");
+            if(isCompleteEvent)
+                action.CompleteAction?.Invoke();
             m_TimeActions.Remove(action);
             GameEntry.Pool.PushClass<TimeAction>(action);
         }

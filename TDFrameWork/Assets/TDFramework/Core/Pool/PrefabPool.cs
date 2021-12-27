@@ -6,48 +6,73 @@ namespace TDFramework.Pool
 {
     public class PrefabPool : IDisposable
     {
-        private Dictionary<string, PrefabPoolEntity> poolDic;
+        private Dictionary<string, PrefabPoolEntity> m_PoolDic;
+        private Dictionary<string, int> m_PoolInspectorDic;
+        private Dictionary<int, string> m_PrefabIdDic;
 
-        private Dictionary<int, int> poolInspectorDic;
-        private Dictionary<int, string> prefabIdDic;
+        public Dictionary<string, PrefabPoolEntity> PoolDic { get => m_PoolDic; set => m_PoolDic = value; }
+        public Dictionary<string, int> PoolInspectorDic { get => m_PoolInspectorDic; set => m_PoolInspectorDic = value; }
+        public Dictionary<int, string> PrefabIdDic { get => m_PrefabIdDic; set => m_PrefabIdDic = value; }
 
         public PrefabPool()
         {
-            poolDic = new Dictionary<string, PrefabPoolEntity>();
-            prefabIdDic = new Dictionary<int, string>();
+            m_PoolDic = new Dictionary<string, PrefabPoolEntity>();
+            m_PrefabIdDic = new Dictionary<int, string>();
+            m_PoolInspectorDic = new Dictionary<string, int>();
         }
 
 
         public void Pop(string prefabName, Action<UnityEngine.GameObject> completeCallBack)
         {
             PrefabPoolEntity pool = null;
-            poolDic.TryGetValue(prefabName, out pool);
+            m_PoolDic.TryGetValue(prefabName, out pool);
             if (pool == null)
             {
                 pool = new PrefabPoolEntity();
                 pool.PoolName = prefabName;
                 pool.Stack = new Stack<UnityEngine.GameObject>();
-                poolDic[prefabName] = pool;
-                
+                m_PoolDic[prefabName] = pool;
             }
 
-           
+            
             if (pool.Stack.Count > 0)
             {
-               UnityEngine.GameObject prfab=pool.Stack.Pop();
-                completeCallBack?.Invoke(prfab);
+                UnityEngine.GameObject prefab = pool.Stack.Pop();
+                if (!m_PrefabIdDic.ContainsKey(prefab.GetInstanceID()))
+                    m_PrefabIdDic.Add(prefab.GetInstanceID(), prefabName);
+                else
+                    m_PrefabIdDic[prefab.GetInstanceID()] = prefabName;
+
+                if (m_PoolInspectorDic.ContainsKey(prefabName))
+                    m_PoolInspectorDic[prefabName] -= 1;
+                else
+                    GameEntry.Debug.LogError($"Pool {prefabName} InSpectorDic Is Null ");
+
+                completeCallBack?.Invoke(prefab);
             }
             else
             {
                 GameEntry.Res.InstanceAsync(prefabName,p=> 
                 {
                     completeCallBack?.Invoke(p.gameObject);
-                    lock (prefabIdDic)
+                    lock (m_PrefabIdDic)
                     {
-                        if (!prefabIdDic.ContainsKey(p.GetInstanceID()))
-                            prefabIdDic.Add(p.GetInstanceID(), prefabName);
+                        if (!m_PrefabIdDic.ContainsKey(p.GetInstanceID()))
+                        {
+                            m_PrefabIdDic.Add(p.GetInstanceID(), prefabName);
+                        }
+                        else
+                        {
+                            m_PrefabIdDic[p.GetInstanceID()] = prefabName;
+                        }
+                          
                     }
-                  
+
+                    lock (m_PoolInspectorDic)
+                    {
+                        if (!m_PoolInspectorDic.ContainsKey(prefabName))
+                            m_PoolInspectorDic.Add(prefabName, 0);
+                    }
                 });
                
             }
@@ -62,7 +87,7 @@ namespace TDFramework.Pool
 
             PrefabPoolEntity pool = null;
             string poolName = string.Empty;
-            prefabIdDic.TryGetValue(prefab.GetInstanceID(),out poolName);
+            m_PrefabIdDic.TryGetValue(prefab.GetInstanceID(),out poolName);
 
             if (string.IsNullOrEmpty(poolName))
             {
@@ -70,14 +95,22 @@ namespace TDFramework.Pool
                 return;
             }
                 
-            poolDic.TryGetValue(poolName, out pool);
+            m_PoolDic.TryGetValue(poolName, out pool);
+
             if (pool == null)
             {
                 GameEntry.Debug.Log($"push this {poolName} pool,pool is not initialize ");
                 pool = new PrefabPoolEntity();
                 pool.Stack = new Stack<UnityEngine.GameObject>();
             }
+
             pool.Stack.Push(prefab);
+
+            m_PrefabIdDic.Remove(prefab.GetInstanceID());
+
+            if (m_PoolInspectorDic.ContainsKey(poolName))
+                m_PoolInspectorDic[poolName] -= 1;
+            
 
             GameEntry.Debug.Log($"{poolName}pool size is {pool.Stack.Count.ToString()}");
         }
@@ -86,7 +119,7 @@ namespace TDFramework.Pool
 
         public void Dispose()
         {
-            poolDic.Clear();
+            m_PoolDic.Clear();
         }
     }
 

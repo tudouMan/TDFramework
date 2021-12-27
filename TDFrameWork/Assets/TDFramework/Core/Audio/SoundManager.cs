@@ -12,8 +12,22 @@ namespace TDFramework.Audio
     {
         private Dictionary<string, EventInstance> m_SoundsDic;
 
+        internal void LoadBank(Action onComplete=null)
+        {
+            GameEntry.Res.LoadAssetsAsyncByLabel<TextAsset>("FMOD", results => 
+            {
+                foreach (var item in results)
+                {
+                    FMODUnity.RuntimeManager.LoadBank(item);
+                }
 
-        public void PlaySound(string guid, bool isLoop, float vol, EVENT_CALLBACK callBack = null)
+                onComplete?.Invoke();
+            });
+        }
+
+
+
+        public void PlaySound(string guid, bool isLoop, float vol, EVENT_CALLBACK onComplete = null)
         {
             PlayAudio(guid, false, vol);
         }
@@ -24,17 +38,24 @@ namespace TDFramework.Audio
             PlayAudio(soundName, true, vol);
         }
 
-        private void PlayAudio(string guid, bool isLoop, float vol, EVENT_CALLBACK callBack = null)
+        private void PlayAudio(string guid, bool isLoop, float vol, EVENT_CALLBACK onComplete = null)
         {
-            GameEntry.Res.LoadAssetAsync<TextAsset>(guid, p =>
-                {
-                    FMODUnity.RuntimeManager.LoadBank(p);
-                    EventInstance clipInfo = FMODUnity.RuntimeManager.CreateInstance(guid);
-                    clipInfo.set3DAttributes(FMODUnity.RuntimeUtils.To3DAttributes(Vector3.zero));
-                    clipInfo.setVolume(vol);
-                    clipInfo.setCallback(callBack);
-                    clipInfo.start();
-                });
+            EventInstance clipInfo;
+            if (m_SoundsDic.ContainsKey(guid))
+            {
+                clipInfo = m_SoundsDic[guid];
+            }
+            else
+            {
+                clipInfo = FMODUnity.RuntimeManager.CreateInstance(guid);
+                clipInfo.set3DAttributes(FMODUnity.RuntimeUtils.To3DAttributes(Vector3.zero));
+                m_SoundsDic.Add(guid, clipInfo);
+            }
+
+            clipInfo.setVolume(vol);
+            clipInfo.setCallback(onComplete);
+            clipInfo.start();
+
         }
 
 
@@ -44,9 +65,26 @@ namespace TDFramework.Audio
             {
                 EventInstance clip=   m_SoundsDic[sound];
                 clip.stop(STOP_MODE.IMMEDIATE);
+                clip.release();
                 m_SoundsDic.Remove(sound);
-                FMODUnity.RuntimeManager.UnloadBank(sound);
             } 
+        }
+
+        public void RemoveAll()
+        {
+           var enumerator= m_SoundsDic.GetEnumerator();
+            while (enumerator.MoveNext())
+            {
+                EventInstance eventInstance = enumerator.Current.Value;
+                if (eventInstance.isValid())
+                {
+                    var reselt = eventInstance.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);
+                    eventInstance.release();
+                }
+            }
+           
+            m_SoundsDic.Clear();
+
         }
 
        
@@ -54,11 +92,15 @@ namespace TDFramework.Audio
         internal override void Init()
         {
             m_SoundsDic = new Dictionary<string, EventInstance>();
+          //  LoadBank();
         }
+
+
+
 
         public void Dispose()
         {
-
+         
         }
 
  

@@ -16,7 +16,7 @@ using UnityEditor.AddressableAssets.Settings;
 
 public class FrameworkEditor :EditorWindow
 {
-    [MenuItem("TDFramework/框架配置设定",false,-10)]
+    [MenuItem("TDFramework/框架配置设定")]
     public static void OpenEditor()
     {
         EditorWindow.GetWindow<FrameworkEditor>().Show();

@@ -21,6 +21,10 @@ MonoBehaviour:
     m_Address: Data
     m_ReadOnly: 0
     m_SerializedLabels: []
+  - m_GUID: f5d156006b77d184f86f3d5604e4c668
+    m_Address: PlayerCube
+    m_ReadOnly: 0
+    m_SerializedLabels: []
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: be554cc2c0019e441ae378ab5866526d, type: 2}
   m_SchemaSet:

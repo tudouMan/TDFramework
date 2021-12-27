@@ -55,7 +55,7 @@ namespace TDFramework.Resource
 
         #endregion
 
-
+       
 
 
 
@@ -87,16 +87,11 @@ namespace TDFramework.Resource
         /// </summary>
         /// <typeparam name="T">类型</typeparam>
         /// <param name="label">Label</param>
-        /// <param name="_oneLoaded">加载完一个回调，但是并不知道是哪一个</param>
         /// <param name="completeCallBack">所有加载完回调</param>
-        public void LoadAssetsAsyncByLabel<T>(string label,Action<T>_oneLoaded=null,Action<IList<T>>completeCallBack=null)
+        public void LoadAssetsAsyncByLabel<T>(string label,Action<IList<T>>completeCallBack=null)
         {
-            var op = Addressables.LoadAssetsAsync<T>(label, p =>
-              {
-                  _oneLoaded?.Invoke(p);
-              });
-
-              op.Completed+=p=> 
+            var op = Addressables.LoadAssetsAsync<T>(label, null);
+            op.Completed += p =>
                 {
                     if (p.Status == UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationStatus.Succeeded)
                         completeCallBack?.Invoke(p.Result);

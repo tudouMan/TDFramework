@@ -8,10 +8,7 @@ namespace TDFramework.Pool
 {
     public class PrefabPoolEntity
     {
-        public int PrefabId;
-
         public string PoolName;
-
         public Stack<UnityEngine.GameObject> Stack;
     }
 
