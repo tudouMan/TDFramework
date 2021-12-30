@@ -1,7 +1,0 @@
-syntax = "proto3"; 
-
-message MoveMessage {
-  required  int32 Proto=1;
-  required  int32  PosX=2;
-  required  int32 PosY=3;
-}
