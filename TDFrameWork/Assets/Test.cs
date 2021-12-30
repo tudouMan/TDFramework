@@ -1,6 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 using TDFramework;
+using System;
+using UnityEngine.AddressableAssets;
+using System.IO;
+using System.Reflection;
+using PureScript;
+
 public class Test : MonoBehaviour
 {
 
@@ -13,22 +19,11 @@ public class Test : MonoBehaviour
     {
         if(GUI.Button(new Rect(100, 100, 100, 100), "set"))
         {
-            GameEntry.Pool.PopPrefab("PlayerCube", p => 
-            { 
-                p.transform.localPosition = new Vector3(UnityEngine.Random.Range(1, 10), UnityEngine.Random.Range(1, 10), UnityEngine.Random.Range(1, 10));  
-                Debug.Log(p.name);
-                m_ObjList.Add(p);
-            });
-        }
-
-        if(GUI.Button(new Rect(100, 500, 100, 100), "out"))
-        {
-            foreach (var item in m_ObjList)
-            {
-                GameEntry.Pool.PushPrefab(item);
-            }
+            GameEntry.Runtime.RuntimeFunc("Game.HotManager", "Debug",new object[1] { 1});
         }
     }
+
+   
 }
 
 

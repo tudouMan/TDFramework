@@ -1,14 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TDFramework.Resource;
-using TDFramework.UI;
+﻿using TDFramework.UI;
 using UnityEngine;
-using UnityEngine.AddressableAssets;
-using UnityEngine.ResourceManagement.AsyncOperations;
-using TDFramework.Extention;
+
 namespace TDFramework.UI
 {
 
@@ -22,40 +14,34 @@ namespace TDFramework.UI
 
         }
 
-        protected UIPanelInfo mUIPanelInfo;
+        protected UIPanelInfo m_UIPanelInfo;
 
-        public UIPanelInfo PanelInfo { get => mUIPanelInfo; set => mUIPanelInfo = value; }
+        public UIPanelInfo PanelInfo { get => m_UIPanelInfo; set => m_UIPanelInfo = value; }
 
-        public virtual void OnInit(IUIData uidata=null) 
-        {
-            mUIPanelInfo.m_State = PanelState.Init;
-        }
 
         public virtual void OnOpen(IUIData uidata = null) 
         {
-            mUIPanelInfo.m_State = PanelState.Open;
+            m_UIPanelInfo.m_State = PanelState.Open;
             OnShow();
         }
 
         public virtual void OnShow()
         {
-            mUIPanelInfo.m_State = PanelState.Show;
+            m_UIPanelInfo.m_State = PanelState.Show;
         }
 
         public virtual void OnHide() 
         {
-            mUIPanelInfo.m_State = PanelState.Hide;
+            m_UIPanelInfo.m_State = PanelState.Hide;
         }
 
         public virtual void OnClose()
         {
-            mUIPanelInfo.m_State = PanelState.Close;
+            m_UIPanelInfo.m_State = PanelState.Close;
             GameEntry.Res.ReleaseInstance(this.gameObject);
             GameObject.Destroy(this.gameObject);
-            mUIPanelInfo = null;
+            m_UIPanelInfo = null;
         }
-
-
 
 
         /// <summary>
@@ -65,12 +51,12 @@ namespace TDFramework.UI
 
         public virtual void CloseSelf()
         {
-            UIManager.Instance.ClosePanel(mUIPanelInfo.m_PanelName);
+            UIManager.Instance.ClosePanel(m_UIPanelInfo.m_PanelName);
         }
 
         public void Back()
         {
-            UIManager.Instance.BackPanel(mUIPanelInfo.m_PanelName);
+            UIManager.Instance.BackPanel(m_UIPanelInfo.m_PanelName);
         }
 
         /// <summary>
@@ -97,8 +83,6 @@ namespace TDFramework.UI
 public interface IPanel
 {
     UIPanelInfo PanelInfo { get; set; }
-
-    void OnInit(IUIData uidata = null);
 
     void OnOpen(IUIData uidata = null);
 

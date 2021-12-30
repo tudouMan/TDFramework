@@ -135,7 +135,6 @@ namespace TDFramework.UI
                   .Apply<UIPanel>(p=> 
                   {
                       p.PanelInfo = new UIPanelInfo(uilevel, uidata, panelName);
-                      p.OnInit(uidata);
                       p.OnOpen(uidata);
                       lock(mLoadPanels)
                           mLoadPanels.Add(panelName, p);

@@ -341,17 +341,17 @@ public class FrameworkEditor :EditorWindow
             contentBuilder.Append(spaceLine);
             contentBuilder.Append(spaceNine);
 
-            contentBuilder.Append("public override void OnInit(IUIData uidata = null)");
-            contentBuilder.Append(spaceLine);
-            contentBuilder.Append(spaceNine);
-            contentBuilder.Append("{");
-            contentBuilder.Append(spaceLine);
-            contentBuilder.Append(spaceTwelve);
-            contentBuilder.Append("base.OnInit(uidata);");
-            contentBuilder.Append(spaceLine);
-            contentBuilder.Append(spaceNine);
-            contentBuilder.Append("}");
-            contentBuilder.Append(spaceLine);
+            //contentBuilder.Append("public override void OnInit(IUIData uidata = null)");
+            //contentBuilder.Append(spaceLine);
+            //contentBuilder.Append(spaceNine);
+            //contentBuilder.Append("{");
+            //contentBuilder.Append(spaceLine);
+            //contentBuilder.Append(spaceTwelve);
+            //contentBuilder.Append("base.OnInit(uidata);");
+            //contentBuilder.Append(spaceLine);
+            //contentBuilder.Append(spaceNine);
+            //contentBuilder.Append("}");
+            //contentBuilder.Append(spaceLine);
 
             contentBuilder.Append(spaceLine);
             contentBuilder.Append(spaceNine);

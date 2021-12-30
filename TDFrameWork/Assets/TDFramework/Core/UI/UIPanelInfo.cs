@@ -9,7 +9,6 @@ namespace TDFramework.UI
     public enum PanelState
     {
         Null,
-        Init,
         Open,
         Show,
         Hide,

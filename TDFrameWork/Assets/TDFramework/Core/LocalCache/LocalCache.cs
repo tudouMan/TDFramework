@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.IO;
+using UnityEngine;
 
 namespace TDFramework.Cache
 {
@@ -13,7 +10,6 @@ namespace TDFramework.Cache
 
         public abstract void FirstInitCache();
 
-
         public abstract void ReadCache();
 
         public abstract void WriteCache();
@@ -22,20 +18,30 @@ namespace TDFramework.Cache
 
     public static class LocalCacheUtil
     {
-        public static T Read<T>()where T : LocalCache,new ()
+
+        public static string CachePath = Application.persistentDataPath + "/Cache/";
+
+        public static T Read<T>() where T : LocalCache, new()
         {
 
             string typeName = typeof(T).Name;
             T self = null;
-            if (!UnityEngine.PlayerPrefs.HasKey(typeName))
+            string typePath = $"{CachePath}{typeName}.txt";
+            if (!File.Exists(typePath))
             {
                 self = new T();
                 self.FirstInitCache();
+                if (!Directory.Exists(CachePath))
+                    Directory.CreateDirectory(CachePath);
+                File.Create(typePath);
+
+                
             }
             else
             {
-                string cache = TDFramework.Tool.StringEncryption.DecryptDES(UnityEngine.PlayerPrefs.GetString(typeName));
+                string cache = TDFramework.Tool.StringEncryption.DecryptDES(File.ReadAllText(typePath));
                 self = LitJson.JsonMapper.ToObject<T>(cache);
+                GameEntry.Debug.Log($"CacheType[{typeName}]\n{cache}");
             }
 
             self.ReadCache();
@@ -46,10 +52,17 @@ namespace TDFramework.Cache
         {
             if (self != null)
             {
+                string typeName = typeof(T).Name;
+                string typePath = $"{CachePath}{typeName}.txt";
                 self.WriteCache();
-                string cache=TDFramework.Tool.StringEncryption.EncryptDES(LitJson.JsonMapper.ToJson(self));
-                UnityEngine.PlayerPrefs.SetString(typeof(T).Name, cache);
+                string cacheData = LitJson.JsonMapper.ToJson(self);
+                GameEntry.Debug.Log($"CacheType[{typeName}]\n{cacheData}");
+                string cache = TDFramework.Tool.StringEncryption.EncryptDES(cacheData);
+                File.WriteAllText(typePath, cache);
+
             }
         }
+
+
     }
 }

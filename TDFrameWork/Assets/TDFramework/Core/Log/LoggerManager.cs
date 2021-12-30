@@ -15,7 +15,7 @@ namespace TDFramework
 		private List<string> m_LogArray;
 
 		private string m_LogPath = null;
-		private string ReporterPath = Application.streamingAssetsPath + "//Reporter";
+		private string m_ReporterPath = Application.streamingAssetsPath + "//Reporter";
 		private int m_LogMaxCapacity = 500;
 		private int m_CurrLogCount = 0;
 		private int m_LogBufferMaxNumber = 10;
@@ -26,7 +26,7 @@ namespace TDFramework
 
 			if (string.IsNullOrEmpty(m_LogPath))
 			{
-				m_LogPath = ReporterPath + "//" + DateTime.Now.ToString("yyyy-MM-dd-hh-mm-ss") + "-Start.txt";
+				m_LogPath = m_ReporterPath + "//" + DateTime.Now.ToString("yyyy-MM-dd-hh-mm-ss") + "-Start.txt";
 			}
 		}
 
@@ -34,7 +34,7 @@ namespace TDFramework
 		{
 			if (m_CurrLogCount >= m_LogMaxCapacity)
 			{
-				m_LogPath = ReporterPath + "//" + DateTime.Now.ToString("yyyy-MM-dd-hh-mm-ss") + ".txt";
+				m_LogPath = m_ReporterPath + "//" + DateTime.Now.ToString("yyyy-MM-dd-hh-mm-ss") + ".txt";
 				m_LogMaxCapacity = 0;
 			}
 			m_CurrLogCount++;
@@ -73,7 +73,7 @@ namespace TDFramework
 		#region CreateFile
 		private void CreateFile(string pathAndName, string info)
 		{
-			if (!Directory.Exists(ReporterPath)) Directory.CreateDirectory(ReporterPath);
+			if (!Directory.Exists(m_ReporterPath)) Directory.CreateDirectory(m_ReporterPath);
 
 			StreamWriter sw;
 			FileInfo t = new FileInfo(pathAndName);

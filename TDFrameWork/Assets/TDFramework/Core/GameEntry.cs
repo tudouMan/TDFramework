@@ -1,5 +1,4 @@
-﻿
-using TDFramework.EventSystem;
+﻿using TDFramework.EventSystem;
 using TDFramework.Table;
 using TDFramework.Pool;
 using TDFramework.Audio;
@@ -37,7 +36,7 @@ namespace TDFramework
 
         public static UIManager UI { get; private set; }
 
-        public static ILRuntimeMgr IL { get; private set; }
+        public static RuntimeMgr Runtime { get; private set; }
 
         public static LocalCacheMgr LocalCache { get; private set; }
 
@@ -46,7 +45,7 @@ namespace TDFramework
 
         public static ResManager Res { get; private set; }
 
-      
+        public static FrameWorkPathConfig Config { get; set; }
 
         public void Init()
         {
@@ -56,6 +55,7 @@ namespace TDFramework
         
         private void InitManager()
         {
+            Config = UnityEngine.Resources.Load<FrameWorkPathConfig>("PathConfig");
             Logger = new LoggerManager();
             Debug = new DebugManager();
             Event = new EventCenter();
@@ -66,15 +66,15 @@ namespace TDFramework
             Scene = new SceneLoaderManager();
             Sound = new SoundManager();
             UI = UIManager.Instance;
-
+        
             //IL
-            UnityEngine.GameObject il = new UnityEngine.GameObject();
-            DontDestroyOnLoad(il);
-            IL = il.AddComponent<ILRuntimeMgr>();
+
+            Runtime = new RuntimeMgr();
              
             Localization = new LocalizationMgr();
             Res = new ResManager();
             LocalCache = new LocalCacheMgr();
+            Res.Init();
             Logger.Init();
             Event.Init();
             Time.Init();
@@ -84,9 +84,8 @@ namespace TDFramework
             Debug.Init();
             Sound.Init();
             FSM.Init();
-            IL.Init();
+            Runtime.Init();
             Localization.Init();
-            Res.Init();
             LocalCache.Init();
             Debug.Log("GameEntry Init");
         }

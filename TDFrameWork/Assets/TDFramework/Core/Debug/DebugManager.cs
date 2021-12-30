@@ -53,7 +53,7 @@ namespace TDFramework
             
         }
 
-        public  void Log(object message, DebugColoyType colorType = DebugColoyType.White, int size = 10)
+        public  void Log(object message, DebugColoyType colorType = DebugColoyType.White, int size = 11)
         {
             UnityEngine.Debug.Log($"<size={size}><color=#{m_ColorTypeDic[colorType]}>{message}</color></size>");
         }

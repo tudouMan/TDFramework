@@ -18,15 +18,15 @@ public class NetWorkSocket : MonoSingleton<NetWorkSocket>
     /// <summary>
     /// 发送消息队列
     /// </summary>
-    private Queue<byte[]> mSendQueue = new Queue<byte[]>();
+    private Queue<byte[]> m_SendQueue = new Queue<byte[]>();
 
     /// <summary>
     /// 检查队列的委托
     /// </summary>
-    private Action mCheckSendQueue;
+    private Action m_CheckSendQueue;
 
     //压缩标志位
-    private const int mCompressLen = 200;
+    private const int m_CompressLen = 200;
     #endregion
 
     #region 接受消息所需变量
@@ -283,7 +283,7 @@ public class NetWorkSocket : MonoSingleton<NetWorkSocket>
         try
         {
             m_Client.Connect(new IPEndPoint(IPAddress.Parse(ip), port));
-            mCheckSendQueue = OnCheckSendQueueCallBack;
+            m_CheckSendQueue = OnCheckSendQueueCallBack;
             Debug.Log("连接成功");
             ReceiveMsg();
             OnConnectOk?.Invoke();
@@ -301,13 +301,13 @@ public class NetWorkSocket : MonoSingleton<NetWorkSocket>
     /// </summary>
     private void OnCheckSendQueueCallBack()
     {
-        lock (mSendQueue)
+        lock (m_SendQueue)
         {
             //如果队列中有数据包 则发送数据包
-            if (mSendQueue.Count > 0)
+            if (m_SendQueue.Count > 0)
             {
                 //发送数据包
-                Send(mSendQueue.Dequeue());
+                Send(m_SendQueue.Dequeue());
             }
 
         }
@@ -325,7 +325,7 @@ public class NetWorkSocket : MonoSingleton<NetWorkSocket>
         byte[] retBuffer = null;
 
         //1.判断是否压缩
-        bool isCompress = data.Length > mCompressLen ? true : false;
+        bool isCompress = data.Length > m_CompressLen ? true : false;
         if (isCompress)//进行压缩
         {
             data = ZlibHelper.DeCompressBytes(data);
@@ -354,13 +354,13 @@ public class NetWorkSocket : MonoSingleton<NetWorkSocket>
         //得到封装后的数据包
         byte[] sendBuffer = MakeData(buffer);
 
-        lock (mSendQueue)
+        lock (m_SendQueue)
         {
             //把数据包加入队列
-            mSendQueue.Enqueue(sendBuffer);
+            m_SendQueue.Enqueue(sendBuffer);
 
             //启动委托(执行委托)
-            mCheckSendQueue.BeginInvoke(null, null);//m_CheckSendQueue()相当于m_CheckSendQueue.Invoke()执行委托。begininvoke是异步执行委托
+            m_CheckSendQueue.BeginInvoke(null, null);//m_CheckSendQueue()相当于m_CheckSendQueue.Invoke()执行委托。begininvoke是异步执行委托
         }
     }
     #endregion

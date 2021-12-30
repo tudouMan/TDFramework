@@ -25,12 +25,12 @@ namespace TDFramework.Table
 
         private void Load()
         {
-            var handle = GameEntry.Res.LoadAssetAsync<TextAsset>(FileName);
-            handle.Completed += p =>
+            GameEntry.Res.LoadAssetAsync<TextAsset>(FileName, p =>
             {
-                if (p.Result != null)
+
+                if (p != null)
                 {
-                    string jsonData = Tool.StringEncryption.DecryptDES(p.Result.text);
+                    string jsonData = Tool.StringEncryption.DecryptDES(p.text);
                     JsonData data = JsonMapper.ToObject(jsonData);
                     foreach (JsonData item in data)
                     {
@@ -39,8 +39,10 @@ namespace TDFramework.Table
                         mDataDic.Add(tableData.ID, tableData);
                     }
                 }
-                UnityEngine.AddressableAssets.Addressables.Release(handle);
-            };
+                UnityEngine.AddressableAssets.Addressables.Release(p);
+
+            });
+
 
         }
 

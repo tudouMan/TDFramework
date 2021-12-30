@@ -50,7 +50,7 @@ public class AssetEvent : UnityEditor.AssetModificationProcessor
         }
 
 
-
+         
         var assetPdb = AssetDatabase.LoadAssetAtPath<TextAsset>("Assets/Res/HotFix/pdb_res.bytes");
         if (assetPdb != null)
         {

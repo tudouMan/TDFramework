@@ -182,7 +182,8 @@ namespace TDFramework.Extention
 
         public static GameObject Show(this GameObject selfObj)
         {
-            selfObj.SetActive(true);
+            if (!selfObj.activeSelf)
+                selfObj.SetActive(true);
             return selfObj;
         }
 
@@ -198,7 +199,8 @@ namespace TDFramework.Extention
 
         public static GameObject Hide(this GameObject selfObj)
         {
-            selfObj.SetActive(false);
+            if (selfObj.activeSelf)
+                selfObj.SetActive(false);
             return selfObj;
         }
 
