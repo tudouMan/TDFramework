@@ -9,12 +9,11 @@ using PureScript;
 
 public class Test : MonoBehaviour
 {
-
-    private List<GameObject> m_ObjList = new List<GameObject>();
     private void Start()
     {
         GameEntry.Instance.Init();
     }
+
     private void OnGUI()
     {
         if(GUI.Button(new Rect(100, 100, 100, 100), "set"))
@@ -22,8 +21,6 @@ public class Test : MonoBehaviour
             GameEntry.Runtime.RuntimeFunc("Game.HotManager", "Debug",new object[1] { 1});
         }
     }
-
-   
 }
 
 

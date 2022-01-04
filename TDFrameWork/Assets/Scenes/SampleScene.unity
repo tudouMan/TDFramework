@@ -410,31 +410,13 @@ GameObject:
   m_Component:
   - component: {fileID: 1931820993}
   - component: {fileID: 1931820992}
-  - component: {fileID: 1931820991}
   m_Layer: 0
-  m_Name: GameObject
+  m_Name: TestGameObj
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1931820991
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1931820990}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b9468c5f457ace64f8d4df6d642b107f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  LoadEvent: 0
-  UnloadEvent: 0
-  Banks: []
-  CollisionTag: 
-  PreloadSamples: 0
 --- !u!114 &1931820992
 MonoBehaviour:
   m_ObjectHideFlags: 0
