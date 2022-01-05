@@ -4,15 +4,15 @@ using UnityEngine;
 namespace TDFramework.Cache
 {
     [System.Serializable]
-    public abstract class LocalCache
+    public  class LocalCache
     {
         public LocalCache() { }
 
-        public abstract void FirstInitCache();
+        public virtual void FirstInitCache() { }
 
-        public abstract void ReadCache();
+        public virtual void ReadCache() { }
 
-        public abstract void WriteCache();
+        public virtual void WriteCache() { }
        
     }
 
@@ -34,8 +34,6 @@ namespace TDFramework.Cache
                 if (!Directory.Exists(CachePath))
                     Directory.CreateDirectory(CachePath);
                 File.Create(typePath);
-
-                
             }
             else
             {
@@ -63,6 +61,6 @@ namespace TDFramework.Cache
             }
         }
 
-
+       
     }
 }

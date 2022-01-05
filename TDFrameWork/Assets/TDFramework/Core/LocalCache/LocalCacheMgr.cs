@@ -8,21 +8,24 @@ namespace TDFramework.Cache
     {
 
         public TestLocalCache TestLocalCache;
-        public void Dispose()
-        {
-             
-        }
-
+      
         public void Save()
         {
-            GameEntry.Debug.Log("Save LocalCache");
             LocalCacheUtil.Write<TestLocalCache>(TestLocalCache);
+            GameEntry.Debug.Log("Save LocalCache Done");
         }
 
         internal override void Init()
         {
-            GameEntry.Debug.Log("Init LocalCache");
-            TestLocalCache = LocalCacheUtil.Read<TestLocalCache>();
+           TestLocalCache = LocalCacheUtil.Read<TestLocalCache>();
+        }
+
+        public void Dispose()
+        {
+
         }
     }
+
+
+
 } 
