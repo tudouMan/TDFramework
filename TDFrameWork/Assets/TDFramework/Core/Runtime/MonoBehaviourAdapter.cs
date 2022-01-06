@@ -102,6 +102,33 @@ public class MonoBehaviourAdapter : CrossBindingAdaptor
             }
         }
 
+        IMethod mOnEnableMethod;
+        bool mOnEnableMethodGot;
+        void OnEnable()
+        {
+            if (!mOnEnableMethodGot)
+            {
+                mOnEnableMethod = instance.Type.GetMethod("OnEnable", 0);
+                mOnEnableMethodGot = true;
+            }
+            if (mOnEnableMethod != null)
+            {
+                appdomain.Invoke(mOnEnableMethod, instance, null);
+            }
+        }
+
+
+        IMethod mOnDestroyMethod;
+        bool mOnDestroyMethodGot;
+        void OnDestroy()
+        {
+            if (!mOnDestroyMethodGot)
+            {
+                mOnDestroyMethod= instance.Type.GetMethod("OnDestroy", 0);
+                mOnDestroyMethodGot = true;
+            }
+        }
+
         public override string ToString()
         {
             IMethod m = appdomain.ObjectType.GetMethod("ToString", 0);

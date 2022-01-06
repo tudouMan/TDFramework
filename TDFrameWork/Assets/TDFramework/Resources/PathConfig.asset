@@ -15,7 +15,7 @@ MonoBehaviour:
   m_UIScriptSavaPath: /Scripts/UI/
   m_UINameSpacePath: Game.UI
   m_ExcelDataPath: E:/TDFramework/testData
-  m_ExcelDataSavaPath: E:/TDFramework/TDFrameWork/Assets/TestData
+  m_ExcelDataSavaPath: E:/TDFramework/TDFrameWork/Assets/Res/TestData
   m_CShapScriptsSavaPath: E:/TDFramework/TDFrameWork/Assets/Scripts/Data
   m_ILAssemblyDefinitionName: HotDefine
   m_LoadType: 2

@@ -2,7 +2,7 @@ using TDFramework.Table;
 
 namespace TDFramework
 {
-    public partial class DataTableEntity : TableDataBase
+    public partial class PropDataTableEntity : TableDataBase
     {
     }
 }

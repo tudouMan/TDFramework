@@ -3,9 +3,9 @@ using TDFramework;
 using TDFramework.Extention;
 namespace TDFramework.Table
 {
-    public partial class DataDataTable
+    public partial class PropDataDataTable
     {
-        public void ReadData(DataTableEntity entity,JsonData data)
+        public void ReadData(PropDataTableEntity entity,JsonData data)
         {
 
         }

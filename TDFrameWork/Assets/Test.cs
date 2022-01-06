@@ -18,9 +18,15 @@ public class Test : MonoBehaviour
     {
         if(GUI.Button(new Rect(100, 100, 100, 100), "set"))
         {
-            GameEntry.Runtime.RuntimeFunc("Game.HotManager", "Debug",new object[1] { 1});
+            GameEntry.Time.CreatTimeAction().Init("testTimeAction", 0.1f, 0.3f,5,startAction:()=> { GameEntry.Debug.Log("start"); },
+                runAction: p => { GameEntry.Debug.Log("runtime:" + p.ToString()); },
+                completeAction: () => { GameEntry.Debug.Log("setTime"); }).Run();
         }
+
+       
     }
+
+   
 }
 
 

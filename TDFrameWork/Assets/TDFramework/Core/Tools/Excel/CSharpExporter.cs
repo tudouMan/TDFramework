@@ -106,7 +106,7 @@ namespace TDFramework
             content.Append("\n");
             content.Append("    {");
             content.Append("\n");
-            content.Append($"        public override string FileName => \"{m_DataName}\";");
+            content.Append($"        public override string FileName =>GameEntry.Config.m_LoadType==LoadType.Addressable?\"{m_DataName}\":\"Data/{m_DataName}\";");
             content.Append("\n");
             content.Append($"        public override {m_DataName.UppercaseFirst()}TableEntity ReadData(JsonData data)");
             content.Append("\n");

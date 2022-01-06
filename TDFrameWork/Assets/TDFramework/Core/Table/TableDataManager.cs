@@ -9,7 +9,7 @@ namespace TDFramework.Table
     public class TableDataManager : ManagerBase, IDisposable
     {
         //test
-        public DataDataTable m_TestTable;
+ 
 
         //当前内存中加载Table Count
         private int m_TableCount;
@@ -33,7 +33,12 @@ namespace TDFramework.Table
 
         private void LoadAllData()
         {
-          //  m_TestTable = new DataDataTable();
+            if (GameEntry.Config.m_LoadType == LoadType.Addressable)
+            {
+                GameEntry.Res.LoadAssetsAsyncByLabel<UnityEngine.TextAsset>(ResTableName);
+            }
+          
+           
         }
 
        

@@ -32,25 +32,25 @@ namespace TDFramework.Pool
         {
             lock (m_ClassObjDic)
             {
-               int hash=typeof(T).GetHashCode();
+                int hash = typeof(T).GetHashCode();
                 Stack<object> stack = null;
                 m_ClassObjDic.TryGetValue(hash, out stack);
                 if (stack == null)
                 {
                     stack = new Stack<object>();
-                    m_ClassObjDic[hash]= stack;
+                    m_ClassObjDic[hash] = stack;
                 }
-                    
+
                 if (stack.Count > 0)
                 {
-                    object obj=stack.Pop();
+                    return stack.Pop() as T;
                 }
                 else
                 {
                     return new T();
                 }
             }
-            return null;
+        
             
         }
 
@@ -59,12 +59,22 @@ namespace TDFramework.Pool
             lock (m_ClassObjDic)
             {
                 int hash=typeof(T).GetHashCode();
+               
+
                 Stack<object> stack = null;
                 m_ClassObjDic.TryGetValue(hash, out stack);
                 if (stack == null)
                 {
                     stack = new Stack<object>();
                     m_ClassObjDic[hash] = stack;
+                }
+                else
+                {
+                    if (m_ClassObjCountDic.ContainsKey(hash) && stack.Count>= m_ClassObjCountDic[hash])
+                    {
+                        obj = null;
+                        return;
+                    }
                 }
 
                 stack.Push(obj);

@@ -194,9 +194,11 @@ namespace TDFramework
         /// <param name="jsonPath">输出文件路径</param>
         public void SaveToFile(string filePath, Encoding encoding)
         {
-           
+
+            if (File.Exists(filePath))
+                File.Delete(filePath);
             //-- 保存文件
-            using (FileStream file = new FileStream(filePath, FileMode.Create, FileAccess.Write))
+            using (FileStream file = new FileStream(filePath, FileMode.CreateNew, FileAccess.Write))
             {
                 using (TextWriter writer = new StreamWriter(file, encoding))
                 {
