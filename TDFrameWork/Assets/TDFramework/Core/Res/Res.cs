@@ -6,6 +6,7 @@ namespace TDFramework.Resource
 {
     public interface  Res
     {
+        public void Init(Action complete);
 
         /// <summary>
         ///  异步加载资源

@@ -9,6 +9,7 @@ namespace TDFramework.Resource
     public class ResManager : ManagerBase, IDisposable
     {
         private Res m_Loader;
+        public Action ResLoadCompleteAction;
 
         public void Dispose()
         {
@@ -58,13 +59,17 @@ namespace TDFramework.Resource
         internal override void Init()
         {
             if (GameEntry.Config.m_LoadType == LoadType.Addressable)
+            {
                 m_Loader = new AddressableRes();
+            }  
             else if (GameEntry.Config.m_LoadType == LoadType.Resouces)
                 m_Loader = new ResourcesRes();
             else
                 m_Loader = new ResourcesRes();
 
+            m_Loader.Init(ResLoadCompleteAction);
             GameEntry.Debug.Log($"GameResType Is [{GameEntry.Config.m_LoadType.ToString()}]");
         }
     }
 }
+ 

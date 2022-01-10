@@ -4,11 +4,61 @@ using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.U2D;
 using UnityEngine;
+using UnityEngine.AddressableAssets.ResourceLocators;
+using System.Threading.Tasks;
 
 namespace TDFramework.Resource
 {
     public class AddressableRes : Res
     {
+
+        public void Init(Action complete)
+        {
+            WaitDownLoad(complete);
+        }
+
+        private async void  WaitDownLoad(Action complete)
+        {
+            AsyncOperationHandle<IResourceLocator> initHandle = Addressables.InitializeAsync();
+            await initHandle.Task;
+            var checkHandle=  Addressables.CheckForCatalogUpdates(false);
+            await checkHandle.Task;
+            if (checkHandle.Result.Count > 0)
+            {
+                var updataHandle = Addressables.UpdateCatalogs(checkHandle.Result, false);
+                await updataHandle.Task;
+                List<IResourceLocator>locators= updataHandle.Result;
+                foreach (var locator in locators)
+                {
+                    var sizeHandle = Addressables.GetDownloadSizeAsync(locator.Keys);
+                    await sizeHandle.Task;
+                    long totalDownLoadSize = sizeHandle.Result;
+                    GameEntry.Debug.Log("本次更新大小:" + totalDownLoadSize.ToString());
+                    if (totalDownLoadSize > 0)
+                    {
+                        var downloadHandle = Addressables.DownloadDependenciesAsync(locator.Keys);
+                        while (!downloadHandle.IsDone)
+                        {
+                            await Task.Delay(1);
+                            float percentSlider = downloadHandle.PercentComplete;
+                            GameEntry.Debug.Log("已下载:" + percentSlider.ToString());
+                        }
+                    }
+                    GameEntry.Debug.Log("下载完毕");
+                }
+
+                Addressables.Release(updataHandle);
+            }
+            else
+            {
+                GameEntry.Debug.Log("本次版本没有检测到更新资源");
+            }
+
+            Addressables.Release(checkHandle);
+            complete?.Invoke();
+        }
+
+
         #region 异步加载资源
         /// <summary>
         ///  异步加载资源

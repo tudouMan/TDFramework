@@ -10,6 +10,10 @@ namespace TDFramework.Resource
 {
     public class ResourcesRes : Res
     {
+        public void Init(Action complete)
+        {
+            complete?.Invoke();
+        }
         public GameObject Instance(string path, Transform root)
         {
            return GameObject.Instantiate(LoadAsset<GameObject>(path), root);

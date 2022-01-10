@@ -20,9 +20,14 @@ MonoBehaviour:
   - m_GUID: 868195187b66e2c40b114256e0043bc2
     m_Address: Data
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - Table
   - m_GUID: f5d156006b77d184f86f3d5604e4c668
     m_Address: PlayerCube
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 3c2cf4882dede764985e7b227241421e
+    m_Address: Assets/Res/TestData/PropData.json
     m_ReadOnly: 0
     m_SerializedLabels: []
   m_ReadOnly: 0

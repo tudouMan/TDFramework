@@ -28,19 +28,10 @@ namespace TDFramework.Table
 
         internal override void Init()
         {
-            LoadAllData();
-        }
-
-        private void LoadAllData()
-        {
-            if (GameEntry.Config.m_LoadType == LoadType.Addressable)
-            {
-                GameEntry.Res.LoadAssetsAsyncByLabel<UnityEngine.TextAsset>(ResTableName);
-            }
           
-           
         }
 
+      
        
     }
 }
